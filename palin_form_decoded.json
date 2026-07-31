@@ -1,0 +1,4189 @@
+{
+  "title": "말더듬아동 부모 설문지",
+  "description": "<연구 동의서>\n이 연구는 한국 말더듬 아동의 기질과, 말더듬이 아동에게 미치는 영향 사이의 관계를 알아보기 위한 연구입니다.\n간편 행동억제기질검사(Short Behavioral Inhibition Scale)는 아동의 행동억제 기질을 측정하는 검사이고, 페일린 부모평가지(Palin Parent Rating Scale)는 말더듬이 아동에게 미치는 영향을 측정하는 검사입니다.\n두 검사를 작성해 주시면 결과를 바로 안내해 드립니다.\n이 연구는 자발적으로 참여를 원하시는 분들만 진행되며, 궁금하신 점이 있으면 언제든 연구자에게 연락 주시기 바랍니다. 설문 작성에는 약 10~15분 정도 소요됩니다.\n<참여 자격>\n말더듬 진단을 받은 적이 있는 유치원생 및 초등학생 자녀를 둔 부모님만 참여하실 수 있는 점 양해 부탁드립니다.\n단, 과거에 말더듬 진단을 받았지만 현재는 회복된 아동의 부모님도 참여 가능합니다.\n본 연구에 동의하시면, 응답하신 내용을 저희 연구팀이 수집·보유하는 것에 동의하시는 것으로 간주됩니다.\n아동의 민감정보는 수집하지 않으며, 모든 데이터는 개인을 식별할 수 없는 상태로 안전하게 보관됩니다.\n귀하께서 제공해 주신 정보는 본 연구 목적 외 다른 용도로 사용되지 않으며, 외부에 공개되지 않을 것을 약속드립니다.\n\n최다혜, 이수복 드림",
+  "confirmation_message": "설문에 응해주셔서 감사합니다. ",
+  "locale": "en",
+  "sections": [
+    {
+      "title": "연구 동의",
+      "description": "",
+      "subsections": [],
+      "questions": [
+        {
+          "id": 1536400327,
+          "number": 1,
+          "text": "본 연구에 동의하십니까?",
+          "description": null,
+          "type": "radio",
+          "options": {
+            "groups": [
+              {
+                "group_id": 649258637,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "예",
+                    "score": -2,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "아니오",
+                    "score": -3,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "예",
+                "score": -2,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "아니오",
+                "score": -3,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": null
+          }
+        }
+      ]
+    },
+    {
+      "title": "아동 배경정보",
+      "description": null,
+      "extra": null,
+      "subsections": [],
+      "questions": [
+        {
+          "id": 712970807,
+          "number": 2,
+          "text": "아동이 이전에 언어재활사로부터 말더듬으로 진단받은 적이 있나요?",
+          "description": null,
+          "type": "radio",
+          "options": {
+            "groups": [
+              {
+                "group_id": 239648210,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "예",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "아니오",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": false,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "예",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "아니오",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": false,
+            "scale": null
+          }
+        },
+        {
+          "id": 148068858,
+          "number": 3,
+          "text": "보고자는 아동의  누구신지요?",
+          "description": null,
+          "type": "radio",
+          "options": {
+            "groups": [
+              {
+                "group_id": 480867290,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "어머니",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "아버지",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "어머니",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "아버지",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": null
+          }
+        },
+        {
+          "id": 1227784826,
+          "number": 4,
+          "text": "보고자의 연령은 어떻게 되시는지요?",
+          "description": null,
+          "type": "paragraph",
+          "options": null
+        },
+        {
+          "id": 1525865811,
+          "number": 5,
+          "text": "보고자의 최종 학력은 어떻게 되시는지요?",
+          "description": null,
+          "type": "radio",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1911689830,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "중졸이하",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "고졸",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "대졸",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "대학원졸",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": false,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "중졸이하",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "고졸",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "대졸",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "대학원졸",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": false,
+            "scale": null
+          }
+        },
+        {
+          "id": 1100613129,
+          "number": 6,
+          "text": "아동의 나이는 만으로 몇 살입니까?         년     월       일(      세      개월)",
+          "description": null,
+          "type": "paragraph",
+          "options": null
+        },
+        {
+          "id": 134861503,
+          "number": 7,
+          "text": "아동의 성별은?",
+          "description": null,
+          "type": "radio",
+          "options": {
+            "groups": [
+              {
+                "group_id": 792549956,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "남",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "여",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": false,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "남",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "여",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": false,
+            "scale": null
+          }
+        },
+        {
+          "id": 528139896,
+          "number": 8,
+          "text": "가족 중에 예전에 말을 더듬었거나 현재도 말을 더듬는 사람이 있나요?",
+          "description": null,
+          "type": "radio",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1581415291,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "예",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "아니오",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": false,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "예",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "아니오",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": false,
+            "scale": null
+          }
+        },
+        {
+          "id": 669909246,
+          "number": 9,
+          "text": "과거에 말을 더듬었거나 현재도 말을 더듬는 가족이 있다면 누구인가요?",
+          "description": null,
+          "type": "short_answer",
+          "options": null
+        },
+        {
+          "id": 1016082815,
+          "number": 10,
+          "text": "아동이 말더듬으로 치료를 받은 적이 있습니까?",
+          "description": null,
+          "type": "radio",
+          "options": {
+            "groups": [
+              {
+                "group_id": 917324210,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "예",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "아니오",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": false,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "예",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "아니오",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": false,
+            "scale": null
+          }
+        },
+        {
+          "id": 1529614863,
+          "number": 11,
+          "text": "아동이 말더듬으로 치료를 받을 적이 있다면, 부모교육을 받은 적이 있나요?",
+          "description": null,
+          "type": "radio",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1600778693,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "예",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "아니오",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": false,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "예",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "아니오",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": false,
+            "scale": null
+          }
+        },
+        {
+          "id": 744630384,
+          "number": 12,
+          "text": "아동이 말을 언제 처음 더듬기 시작했나요?       년    월 ",
+          "description": null,
+          "type": "short_answer",
+          "options": null
+        },
+        {
+          "id": 1665081174,
+          "number": 13,
+          "text": "아동의 말더듬이 처음보다 늘어났나요, 줄어들었나요, 아니면 변화없이 유지되고 있나요? ",
+          "description": null,
+          "type": "grid",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1014910320,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "늘어남",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "줄어듬",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "유지됨",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": false,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "늘어남",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "줄어듬",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "유지됨",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": false,
+            "scale": null
+          }
+        },
+        {
+          "id": 1512095907,
+          "number": 14,
+          "text": "아동이 자신이 말을 더듬는다는 것을 알고 있나요? ",
+          "description": null,
+          "type": "radio",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1786781450,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "예",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "아니오",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": false,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "예",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "아니오",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": false,
+            "scale": null
+          }
+        },
+        {
+          "id": 1466102584,
+          "number": 15,
+          "text": "아동이 말더듬 이외에 다른 언어적, 청각적, 심리적, 인지적 문제가 있나요?",
+          "description": null,
+          "type": "radio",
+          "options": {
+            "groups": [
+              {
+                "group_id": 648761311,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "예",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "아니오",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": false,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "예",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "아니오",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": false,
+            "scale": null
+          }
+        },
+        {
+          "id": 1494434037,
+          "number": 16,
+          "text": "아동이 말더듬 이외에 다른 문제가 있다면, 어떤 문제인가요?",
+          "description": null,
+          "type": "short_answer",
+          "options": null
+        }
+      ]
+    },
+    {
+      "title": "Short Behavioral Inhibition Scale (Elizabeth Oyler Defranco & Katerina Ntourou) (5문항)",
+      "description": "아래는 아동의 성격을 나열한 것입니다. 다른 아동에 비해서 당신의 아이를 잘 표현한 문장의 번호를 선택해주세요. 각 문항마다, 1부터 5까지 번호 중 하나에만 선택해주세요. ",
+      "extra": -2,
+      "subsections": [],
+      "questions": [
+        {
+          "id": 2015490662,
+          "number": 17,
+          "text": "1. 낯선 사람이나 물건에 다가가지 않는다.  또는 가까이 다가간다.",
+          "description": null,
+          "type": "grid",
+          "options": {
+            "groups": [
+              {
+                "group_id": 459870454,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "주로 다가가지 않는다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "다가가지 않는 편이다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "평균",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "가까이 다가가는 편이다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "쉽게 다가간다",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "주로 다가가지 않는다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "다가가지 않는 편이다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "평균",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "가까이 다가가는 편이다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "쉽게 다가간다",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": null
+          }
+        },
+        {
+          "id": 1544182638,
+          "number": 18,
+          "text": "2. 부모에게서 떨어지지 않는다. 또는 부모에게서 쉽게 떨어진다. ",
+          "description": null,
+          "type": "grid",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1741484502,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "부모와 떨어지기 어려워한다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "떨어지는데 머뭇거린다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "평균",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "쉽게 떨어지는 편이다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "매우 쉽게 떨어진다",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "부모와 떨어지기 어려워한다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "떨어지는데 머뭇거린다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "평균",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "쉽게 떨어지는 편이다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "매우 쉽게 떨어진다",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": null
+          }
+        },
+        {
+          "id": 1140751121,
+          "number": 19,
+          "text": "3. 낯선 사람과 적응하고 상호소통하기까지 시간이 필요하다.  또는 낯선 사람과 빨리 친해진다. ",
+          "description": null,
+          "type": "grid",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1655957541,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "편해지는데 오랜시간이 걸린다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "머뭇거리며 긴장을 푼다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "평균",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "쉽게 친해지는 편이다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "매우 쉽게 다가가고 친해진다",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "편해지는데 오랜시간이 걸린다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "머뭇거리며 긴장을 푼다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "평균",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "쉽게 친해지는 편이다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "매우 쉽게 다가가고 친해진다",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": null
+          }
+        },
+        {
+          "id": 2129570078,
+          "number": 20,
+          "text": "4. 낯선 사람이 다가오면 놀거나 말하는 것을 멈춘다.  또는  낯선 사람이 다가와도 계속 놀이를 하며 말을 한다. ",
+          "description": null,
+          "type": "grid",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1614926200,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "멈춘다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "조용해지고 머뭇거린다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "평균",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "놀지만 다른 사람을 의식한다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "다른 사람이 다가와도 개의치 않고 논다",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "멈춘다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "조용해지고 머뭇거린다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "평균",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "놀지만 다른 사람을 의식한다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "다른 사람이 다가와도 개의치 않고 논다",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": null
+          }
+        },
+        {
+          "id": 676432939,
+          "number": 21,
+          "text": "5. 그룹에서 다른 아이들이나 선생님으로부터 멀리 떨어져 혼자 있다.  또는  그룹에서 다른 아이들이나 선생님과 쉽게 친해져 함께 논다. ",
+          "description": null,
+          "type": "grid",
+          "options": {
+            "groups": [
+              {
+                "group_id": 2053147772,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "혼자 있다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "조용해지고 머뭇거린다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "평균",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "비교적 쉽게 친해진다",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "매우 쉽게 친해진다",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": null
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "혼자 있다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "조용해지고 머뭇거린다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "평균",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "비교적 쉽게 친해진다",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "매우 쉽게 친해진다",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": null
+          }
+        }
+      ]
+    },
+    {
+      "title": "Palin 부모 평가지(Sharon K. Millard & Stephen Davis) (16문항)",
+      "description": "다음 질문을 잘 읽고 0에서 10까지 정도 중 가장 맞는 답을 선택 주세요. <br>각 질문에 너무 깊게 생각하지 마시고, 바로 떠오르는 답을 적어주세요. 만일 답이 상황에 따라 다르다고 생각되면, 최근 2주간 아이의 행동을 관찰한 것과 스스로 느낀 점을 바탕으로 대답하여 주세요. ",
+      "extra": 2077979346,
+      "subsections": [
+        {
+          "title": "1 . 말더듬이 당신의 아이에게 미치는 영향 "
+        },
+        {
+          "title": "2. 말더듬 정도와 부모의 걱정"
+        },
+        {
+          "title": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
+        },
+        {
+          "title": "귀하의 앞날에 건강과 행운이 가득하시길 기원합니다. 끝까지 설문에 응해주셔서 감사합니다"
+        }
+      ],
+      "questions": [
+        {
+          "id": 1481741321,
+          "number": 22,
+          "text": "1) 아이가 말더듬 때문에 말을 적게 합니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1550078189,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 그렇지 않음",
+                  "high_label": "항상"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 그렇지 않음",
+              "high_label": "항상"
+            }
+          },
+          "subsection": "1 . 말더듬이 당신의 아이에게 미치는 영향 "
+        },
+        {
+          "id": 1575572212,
+          "number": 23,
+          "text": "2) 아이가 얼마나 자신의 말에 좌절감을 느낍니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1035867508,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 그렇지 않음",
+                  "high_label": "매우 그러함"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 그렇지 않음",
+              "high_label": "매우 그러함"
+            }
+          },
+          "subsection": "1 . 말더듬이 당신의 아이에게 미치는 영향 "
+        },
+        {
+          "id": 107897978,
+          "number": 24,
+          "text": "3) 아이가 얼마나 자신의 말더듬에 짜증을 냅니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 2090197173,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 그렇지 않음",
+                  "high_label": "매우 그러함"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 그렇지 않음",
+              "high_label": "매우 그러함"
+            }
+          },
+          "subsection": "1 . 말더듬이 당신의 아이에게 미치는 영향 "
+        },
+        {
+          "id": 914545063,
+          "number": 25,
+          "text": "4) 아이가 얼마나 자신의 말에 대해 불안감을 느낍니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 993365264,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 그렇지 않음",
+                  "high_label": "매우 그러함"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 그렇지 않음",
+              "high_label": "매우 그러함"
+            }
+          },
+          "subsection": "1 . 말더듬이 당신의 아이에게 미치는 영향 "
+        },
+        {
+          "id": 146388951,
+          "number": 26,
+          "text": "5) 아이가 얼마나 자신 있게 말합니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1198829384,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 자신없음",
+                  "high_label": "완전히 자신있음"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 자신없음",
+              "high_label": "완전히 자신있음"
+            }
+          },
+          "subsection": "1 . 말더듬이 당신의 아이에게 미치는 영향 "
+        },
+        {
+          "id": 859143932,
+          "number": 27,
+          "text": "6) 아이가 대체로 얼마나 행복합니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1985414316,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 행복하지 않음",
+                  "high_label": "완전히 행복함"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 행복하지 않음",
+              "high_label": "완전히 행복함"
+            }
+          },
+          "subsection": "1 . 말더듬이 당신의 아이에게 미치는 영향 "
+        },
+        {
+          "id": 1623691428,
+          "number": 28,
+          "text": "7) 아이가 얼마나 자신의 감정을 잘 이야기할 수 있습니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1878392427,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 못함",
+                  "high_label": "완전히 적절하게 함"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 못함",
+              "high_label": "완전히 적절하게 함"
+            }
+          },
+          "subsection": "1 . 말더듬이 당신의 아이에게 미치는 영향 "
+        },
+        {
+          "id": 2094095092,
+          "number": 29,
+          "text": "8) 아이가 말할 때 얼마나 말하는 것을 힘들어합니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 614039271,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 힘들어하지 않음",
+                  "high_label": "매우 힘들어함"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 힘들어하지 않음",
+              "high_label": "매우 힘들어함"
+            }
+          },
+          "subsection": "2. 말더듬 정도와 부모의 걱정"
+        },
+        {
+          "id": 648032736,
+          "number": 30,
+          "text": "9) 아이가 유창할 때가 있습니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 696865237,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 없음",
+                  "high_label": "항상 유창함"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 없음",
+              "high_label": "항상 유창함"
+            }
+          },
+          "subsection": "2. 말더듬 정도와 부모의 걱정"
+        },
+        {
+          "id": 740503268,
+          "number": 31,
+          "text": "10) 아이가 얼마나 자주 말을 더듬습니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 2057535671,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "거의 안 더듬음",
+                  "high_label": "매우 자주"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "거의 안 더듬음",
+              "high_label": "매우 자주"
+            }
+          },
+          "subsection": "2. 말더듬 정도와 부모의 걱정"
+        },
+        {
+          "id": 1050082798,
+          "number": 32,
+          "text": "11) 아이가 얼마나 심하게 말을 더듬습니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 560351433,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 심하지 않음",
+                  "high_label": "매우 심함"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 심하지 않음",
+              "high_label": "매우 심함"
+            }
+          },
+          "subsection": "2. 말더듬 정도와 부모의 걱정"
+        },
+        {
+          "id": 341804199,
+          "number": 33,
+          "text": "12) 당신은 아이의 말더듬에 대해 얼마나 걱정하고 있습니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1222916752,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 걱정하지 않음",
+                  "high_label": "매우 걱정함"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 걱정하지 않음",
+              "high_label": "매우 걱정함"
+            }
+          },
+          "subsection": "2. 말더듬 정도와 부모의 걱정"
+        },
+        {
+          "id": 905335102,
+          "number": 34,
+          "text": "13) 당신은 아이의 말더듬 때문에 얼마나 아이의 미래에 대해 불안해합니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 1206687323,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 ",
+                  "high_label": "매우 "
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 ",
+              "high_label": "매우 "
+            }
+          },
+          "subsection": "2. 말더듬 정도와 부모의 걱정"
+        },
+        {
+          "id": 1048848859,
+          "number": 35,
+          "text": "14) 말더듬이 당신의 가족에 어느 정도 영향을 끼치고 있습니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 654148460,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 ",
+                  "high_label": "매우 "
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 ",
+              "high_label": "매우 "
+            }
+          },
+          "subsection": "2. 말더듬 정도와 부모의 걱정"
+        },
+        {
+          "id": 1520832689,
+          "number": 36,
+          "text": "15) 당신은 무엇이 아이의 말더듬에 영향을 끼치는지 알고 있습니까?",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 274771727,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀  모름",
+                  "high_label": "완전히  알고 있음"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀  모름",
+              "high_label": "완전히  알고 있음"
+            }
+          },
+          "subsection": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
+        },
+        {
+          "id": 1667221451,
+          "number": 37,
+          "text": "16) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? a) 아이가 말을 더듬을 때 적절히 반응하기 ",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 625751020,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 모름",
+                  "high_label": "완전히 자신있음"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 모름",
+              "high_label": "완전히 자신있음"
+            }
+          },
+          "subsection": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
+        },
+        {
+          "id": 1434469522,
+          "number": 38,
+          "text": "16) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? b) 아이의 말더듬에 대한 인식과 걱정에 대처하기",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 224586350,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 모름",
+                  "high_label": "완전히 자신있음"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 모름",
+              "high_label": "완전히 자신있음"
+            }
+          },
+          "subsection": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
+        },
+        {
+          "id": 493302818,
+          "number": 39,
+          "text": "16) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? c) 아이의 자신감을 키워 주기",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 362290424,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 모름",
+                  "high_label": " 완전히 자신있음"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 모름",
+              "high_label": " 완전히 자신있음"
+            }
+          },
+          "subsection": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
+        },
+        {
+          "id": 705539961,
+          "number": 40,
+          "text": "16) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? d) 아이의 유창성을 격려하기 ",
+          "description": null,
+          "type": "dropdown",
+          "options": {
+            "groups": [
+              {
+                "group_id": 332888386,
+                "choices": [
+                  {
+                    "value": 0,
+                    "label": "0",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 1,
+                    "label": "1",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 2,
+                    "label": "2",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 3,
+                    "label": "3",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 4,
+                    "label": "4",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 5,
+                    "label": "5",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 6,
+                    "label": "6",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 7,
+                    "label": "7",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 8,
+                    "label": "8",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 9,
+                    "label": "9",
+                    "score": null,
+                    "is_other": false
+                  },
+                  {
+                    "value": 10,
+                    "label": "10",
+                    "score": null,
+                    "is_other": false
+                  }
+                ],
+                "shuffle": true,
+                "scale": {
+                  "low": 0,
+                  "high": 10,
+                  "low_label": "전혀 모름",
+                  "high_label": "완전히 자신있음"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "value": 0,
+                "label": "0",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 1,
+                "label": "1",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 2,
+                "label": "2",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 3,
+                "label": "3",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 4,
+                "label": "4",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 5,
+                "label": "5",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 6,
+                "label": "6",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 7,
+                "label": "7",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 8,
+                "label": "8",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 9,
+                "label": "9",
+                "score": null,
+                "is_other": false
+              },
+              {
+                "value": 10,
+                "label": "10",
+                "score": null,
+                "is_other": false
+              }
+            ],
+            "shuffle": true,
+            "scale": {
+              "low": 0,
+              "high": 10,
+              "low_label": "전혀 모름",
+              "high_label": "완전히 자신있음"
+            }
+          },
+          "subsection": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
+        },
+        {
+          "id": 1043373993,
+          "number": 41,
+          "text": "전화번호를 입력해주세요.",
+          "description": null,
+          "type": "short_answer",
+          "options": null,
+          "subsection": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
+        }
+      ]
+    }
+  ],
+  "total_questions": 41
+}
