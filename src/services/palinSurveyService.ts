@@ -47,6 +47,28 @@ export interface Factor2Result {
   badgeColor: string;
 }
 
+export interface Factor3Item {
+  qNum: number;
+  text: string;
+  value: number | null;
+  weight: number;
+  weightedValue: number;
+}
+
+export type Factor3LevelKey = 'very_high' | 'high' | 'moderate' | 'low' | 'very_low';
+
+export interface Factor3Result {
+  score: number;
+  weightedSum: number;
+  answeredCount: number;
+  totalItems: number;
+  itemDetails: Factor3Item[];
+  levelKey: Factor3LevelKey;
+  levelLabelEn: string;
+  levelLabelKr: string;
+  badgeColor: string;
+}
+
 export interface PalinScores {
   consentAgreed: boolean;
   sbisTotalScore: number;
@@ -58,6 +80,7 @@ export interface PalinScores {
   totalQuestionsCount: number;
   factor1: Factor1Result;
   factor2: Factor2Result;
+  factor3: Factor3Result;
 }
 
 export function getAllPalinQuestions(): PalinQuestion[] {
@@ -103,6 +126,25 @@ export function getFactor2Level(score: number): {
     return { levelKey: 'low', levelLabelEn: 'Low', levelLabelKr: '낮음', badgeColor: '#10B981' };
   } else {
     return { levelKey: 'very_low', levelLabelEn: 'Very Low', levelLabelKr: '매우 낮음', badgeColor: '#059669' };
+  }
+}
+
+export function getFactor3Level(score: number): {
+  levelKey: Factor3LevelKey;
+  levelLabelEn: string;
+  levelLabelKr: string;
+  badgeColor: string;
+} {
+  if (score >= 6.6) {
+    return { levelKey: 'very_high', levelLabelEn: 'Very High', levelLabelKr: '매우 높음', badgeColor: '#059669' };
+  } else if (score >= 5.6) {
+    return { levelKey: 'high', levelLabelEn: 'High', levelLabelKr: '높음', badgeColor: '#10B981' };
+  } else if (score >= 4.1) {
+    return { levelKey: 'moderate', levelLabelEn: 'Moderate', levelLabelKr: '보통', badgeColor: '#F59E0B' };
+  } else if (score >= 2.2) {
+    return { levelKey: 'low', levelLabelEn: 'Low', levelLabelKr: '낮음', badgeColor: '#F97316' };
+  } else {
+    return { levelKey: 'very_low', levelLabelEn: 'Very Low', levelLabelKr: '매우 낮음', badgeColor: '#EF4444' };
   }
 }
 
@@ -210,6 +252,56 @@ export function calculateFactor2(answers: PalinAnswers): Factor2Result {
   };
 }
 
+export function calculateFactor3(answers: PalinAnswers): Factor3Result {
+  const factor3Questions = [
+    { id: 1520832689, qNum: 36, text: '15) 당신은 무엇이 아이의 말더듬에 영향을 끼치는지 알고 있습니까?', weight: 0.408 },
+    { id: 1667221451, qNum: 37, text: '16a) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? a) 아이가 말을 더듬을 때 적절히 반응하기', weight: 0.771 },
+    { id: 1434469522, qNum: 38, text: '16b) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? b) 아이의 말더듬에 대한 인식과 걱정에 대처하기', weight: 0.882 },
+    { id: 493302818, qNum: 39, text: '16c) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? c) 아이의 자신감을 키워 주기', weight: 0.836 },
+    { id: 705539961, qNum: 40, text: '16d) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? d) 아이의 유창성을 격려하기', weight: 0.873 },
+  ];
+
+  let weightedSum = 0;
+  let answeredCount = 0;
+
+  const itemDetails: Factor3Item[] = factor3Questions.map((q) => {
+    const rawVal = answers[q.id];
+    let val: number | null = null;
+
+    if (typeof rawVal === 'number') {
+      val = rawVal;
+    } else if (typeof rawVal === 'string' && rawVal.trim() !== '' && !isNaN(Number(rawVal))) {
+      val = Number(rawVal);
+    }
+
+    if (val !== null) {
+      weightedSum += val * q.weight;
+      answeredCount++;
+    }
+
+    return {
+      qNum: q.qNum,
+      text: q.text,
+      value: val,
+      weight: q.weight,
+      weightedValue: val !== null ? Number((val * q.weight).toFixed(3)) : 0,
+    };
+  });
+
+  const divisor = answeredCount > 0 ? answeredCount : 5;
+  const score = Number((weightedSum / divisor).toFixed(3));
+  const levelInfo = getFactor3Level(score);
+
+  return {
+    score,
+    weightedSum: Number(weightedSum.toFixed(3)),
+    answeredCount,
+    totalItems: 5,
+    itemDetails,
+    ...levelInfo,
+  };
+}
+
 export function calculatePalinScores(answers: PalinAnswers): PalinScores {
   const allQuestions = getAllPalinQuestions();
   const totalQuestionsCount = allQuestions.length;
@@ -256,6 +348,7 @@ export function calculatePalinScores(answers: PalinAnswers): PalinScores {
 
   const factor1 = calculateFactor1(answers);
   const factor2 = calculateFactor2(answers);
+  const factor3 = calculateFactor3(answers);
 
   return {
     consentAgreed,
@@ -268,6 +361,7 @@ export function calculatePalinScores(answers: PalinAnswers): PalinScores {
     totalQuestionsCount,
     factor1,
     factor2,
+    factor3,
   };
 }
 
@@ -281,7 +375,8 @@ export function generatePalinSummaryText(answers: PalinAnswers): string {
 
   text += `=== 1. 요인 점수 (Factor Scores) ===\n`;
   text += `- Factor 1: ${scores.factor1.score}점 [ 평가: ${scores.factor1.levelLabelKr} / ${scores.factor1.levelLabelEn} ] (응답 문항: ${scores.factor1.answeredCount}/${scores.factor1.totalItems})\n`;
-  text += `- Factor 2: ${scores.factor2.score}점 [ 평가: ${scores.factor2.levelLabelKr} / ${scores.factor2.levelLabelEn} ] (응답 문항: ${scores.factor2.answeredCount}/${scores.factor2.totalItems})\n\n`;
+  text += `- Factor 2: ${scores.factor2.score}점 [ 평가: ${scores.factor2.levelLabelKr} / ${scores.factor2.levelLabelEn} ] (응답 문항: ${scores.factor2.answeredCount}/${scores.factor2.totalItems})\n`;
+  text += `- Factor 3: ${scores.factor3.score}점 [ 평가: ${scores.factor3.levelLabelKr} / ${scores.factor3.levelLabelEn} ] (응답 문항: ${scores.factor3.answeredCount}/${scores.factor3.totalItems})\n\n`;
 
   text += `=== 2. 주요 하위척도 점수 요약 ===\n`;
   text += `- 간편 행동억제기질검사 (SBIS): ${scores.sbisTotalScore}점 / 20점 만점\n`;

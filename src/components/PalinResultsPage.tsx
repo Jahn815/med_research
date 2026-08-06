@@ -44,6 +44,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
   const scores = calculatePalinScores(answers);
   const f1 = scores.factor1;
   const f2 = scores.factor2;
+  const f3 = scores.factor3;
   const currentLang: Language = lang && i18n[lang] ? lang : 'ko';
   const t = i18n[currentLang];
 
@@ -376,19 +377,135 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           </View>
         </View>
 
-        {/* FUTURE FACTORS PLACEHOLDER CARD */}
-        <View style={[styles.infoCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
-          <View style={styles.infoCardHeader}>
-            <Ionicons name="add-circle-outline" size={20} color={theme.accent} />
-            <Text style={[styles.infoCardTitle, { color: theme.textPrimary }]}>
-              {lang === 'en' ? 'Additional Palin Scale Factors' : '추가 요인 계산 영역 (Factor 3...)'}
-            </Text>
+        {/* FACTOR 3 CARD (FEATURED) */}
+        <View style={[styles.factorCard, { backgroundColor: theme.cardBg, borderColor: '#8B5CF6' }]}>
+          <View style={styles.factorHeaderRow}>
+            <View style={styles.factorTitleGroup}>
+              <View style={[styles.factorBadge, { backgroundColor: '#8B5CF6' }]}>
+                <Text style={styles.factorBadgeText}>Factor 3</Text>
+              </View>
+              <Text style={[styles.factorTitle, { color: theme.textPrimary }]}>
+                {lang === 'en' ? 'Factor 3 Weighted Average' : 'Factor 3 가중평균 점수'}
+              </Text>
+            </View>
+            <View style={styles.scoreContainer}>
+              <Text style={[styles.factorScoreValue, { color: '#8B5CF6' }]}>
+                {f3.score}
+              </Text>
+              <View style={[styles.levelBadge, { backgroundColor: f3.badgeColor }]}>
+                <Text style={styles.levelBadgeText}>
+                  {lang === 'en' ? f3.levelLabelEn : f3.levelLabelKr}
+                </Text>
+              </View>
+            </View>
           </View>
-          <Text style={[styles.infoCardDesc, { color: theme.textSecondary }]}>
-            {lang === 'en'
-              ? 'Calculations for the remaining questions in the Palin Parent Rating Scale section will be automatically populated here upon receiving further directions.'
-              : 'Palin 부모평가지의 나머지 문항에 대한 추가 수식 및 요인(Factor) 계산 방법이 전달되는 대로 이곳에 실시간 업데이트됩니다.'}
+
+          {/* Scale Assessment Box */}
+          <View style={[styles.scaleAssessmentCard, { backgroundColor: theme.primaryLight, borderColor: '#8B5CF6' }]}>
+            <View style={styles.scaleAssessmentRow}>
+              <Ionicons name="pricetag" size={16} color="#8B5CF6" />
+              <Text style={[styles.scaleAssessmentTitle, { color: '#8B5CF6' }]}>
+                {lang === 'en' ? 'Factor 3 Category Rating:' : 'Factor 3 평가 카테고리:'}
+              </Text>
+              <View style={[styles.inlineLevelTag, { backgroundColor: f3.badgeColor }]}>
+                <Text style={styles.inlineLevelTagText}>
+                  {lang === 'en' ? f3.levelLabelEn : f3.levelLabelKr}
+                </Text>
+              </View>
+            </View>
+
+            {/* Threshold Legend Bar */}
+            <View style={styles.legendRow}>
+              {[
+                { label: lang === 'en' ? 'Very High' : '매우 높음', range: '>= 6.60', key: 'very_high', color: '#059669' },
+                { label: lang === 'en' ? 'High' : '높음', range: '5.60 - 6.59', key: 'high', color: '#10B981' },
+                { label: lang === 'en' ? 'Moderate' : '보통', range: '4.10 - 5.59', key: 'moderate', color: '#F59E0B' },
+                { label: lang === 'en' ? 'Low' : '낮음', range: '2.20 - 4.09', key: 'low', color: '#F97316' },
+                { label: lang === 'en' ? 'Very Low' : '매우 낮음', range: '< 2.20', key: 'very_low', color: '#EF4444' },
+              ].map((item) => {
+                const isActive = f3.levelKey === item.key;
+                return (
+                  <View
+                    key={item.key}
+                    style={[
+                      styles.legendItem,
+                      {
+                        backgroundColor: isActive ? item.color : theme.chipBg,
+                        borderColor: isActive ? item.color : theme.cardBorder,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.legendLabel,
+                        { color: isActive ? '#FFFFFF' : theme.textPrimary, fontWeight: isActive ? '800' : '600' },
+                      ]}
+                    >
+                      {item.label}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.legendRange,
+                        { color: isActive ? '#FFFFFF' : theme.textMuted },
+                      ]}
+                    >
+                      {item.range}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+
+          {/* Itemized Responses Table */}
+          <Text style={[styles.tableSectionTitle, { color: theme.textPrimary }]}>
+            {lang === 'en' ? 'Q36 - Q40 Individual Response Breakdown:' : 'Q36 ~ Q40 문항별 응답 및 가중치 내역:'}
           </Text>
+
+          <View style={[styles.tableContainer, { borderColor: theme.cardBorder }]}>
+            <View style={[styles.tableHeaderRow, { backgroundColor: theme.chipBg }]}>
+              <Text style={[styles.th, { width: 45, color: theme.textSecondary }]}>문항</Text>
+              <Text style={[styles.th, { flex: 1, color: theme.textSecondary }]}>질문 내용</Text>
+              <Text style={[styles.th, { width: 50, textAlign: 'center', color: theme.textSecondary }]}>응답</Text>
+              <Text style={[styles.th, { width: 55, textAlign: 'center', color: theme.textSecondary }]}>가중치</Text>
+              <Text style={[styles.th, { width: 55, textAlign: 'right', color: theme.textSecondary }]}>가중값</Text>
+            </View>
+
+            {f3.itemDetails.map((item) => {
+              const qIdMap: Record<number, number> = {
+                36: 1520832689,
+                37: 1667221451,
+                38: 1434469522,
+                39: 493302818,
+                40: 705539961,
+              };
+              const targetId = qIdMap[item.qNum];
+              const qText =
+                lang === 'en' && targetId && palinTranslationsEn[targetId]
+                  ? palinTranslationsEn[targetId].text
+                  : item.text;
+
+              return (
+                <View key={item.qNum} style={[styles.tableRow, { borderBottomColor: theme.cardBorder }]}>
+                  <Text style={[styles.td, { width: 45, fontWeight: '700', color: '#8B5CF6' }]}>
+                    Q{item.qNum}
+                  </Text>
+                  <Text style={[styles.td, { flex: 1, color: theme.textPrimary }]} numberOfLines={2}>
+                    {qText}
+                  </Text>
+                  <Text style={[styles.td, { width: 50, textAlign: 'center', fontWeight: '700', color: theme.textPrimary }]}>
+                    {item.value !== null ? item.value : '-'}
+                  </Text>
+                  <Text style={[styles.td, { width: 55, textAlign: 'center', color: theme.textSecondary }]}>
+                    {item.weight}
+                  </Text>
+                  <Text style={[styles.td, { width: 55, textAlign: 'right', fontWeight: '700', color: theme.primary }]}>
+                    {item.value !== null ? item.weightedValue : '-'}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
         </View>
 
         {/* OVERALL SUBSCALES SUMMARY */}
