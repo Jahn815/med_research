@@ -147,7 +147,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
             <View style={styles.scaleAssessmentRow}>
               <Ionicons name="pricetag" size={16} color={theme.primary} />
               <Text style={[styles.scaleAssessmentTitle, { color: theme.primary }]}>
-                {lang === 'en' ? 'Factor 1 Score Rating Scale:' : 'Factor 1 점수 평가 척도:'}
+                {lang === 'en' ? 'Factor 1 Category Rating:' : 'Factor 1 평가 카테고리:'}
               </Text>
               <View style={[styles.inlineLevelTag, { backgroundColor: f1.badgeColor }]}>
                 <Text style={styles.inlineLevelTagText}>
@@ -155,9 +155,6 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
                 </Text>
               </View>
             </View>
-            <Text style={[styles.scaleFormulaCode, { color: theme.textSecondary }]}>
-              = IF(Score &le; 2.79, "very high", IF(Score &le; 4.19, "high", IF(Score &le; 5.59, "moderate", IF(Score &le; 6.69, "low", "very low"))))
-            </Text>
 
             {/* Threshold Legend Bar */}
             <View style={styles.legendRow}>
@@ -199,23 +196,6 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
                   </View>
                 );
               })}
-            </View>
-          </View>
-
-          {/* Formula Explanation */}
-          <View style={[styles.formulaBox, { backgroundColor: theme.chipBg, borderColor: theme.cardBorder }]}>
-            <Text style={[styles.formulaLabel, { color: theme.textSecondary }]}>
-              {lang === 'en' ? 'Calculation Equation:' : '계산 수식 (Weighted Average Equation):'}
-            </Text>
-            <Text style={[styles.formulaCode, { color: theme.primary }]}>
-              = SUM(Q22×0.751, Q23×0.775, Q24×0.786, Q25×0.783, Q26×0.747, Q27×0.59, Q28×0.525) / COUNT(Q22:Q28)
-            </Text>
-            <View style={styles.formulaMetaRow}>
-              <Text style={[styles.formulaMeta, { color: theme.textMuted }]}>
-                {lang === 'en'
-                  ? `Answered Items: ${f1.answeredCount} / 7 (Weighted Sum: ${f1.weightedSum})`
-                  : `응답한 문항 수: ${f1.answeredCount} / 7개 (가중 합계: ${f1.weightedSum})`}
-              </Text>
             </View>
           </View>
 

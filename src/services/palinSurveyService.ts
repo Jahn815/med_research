@@ -184,9 +184,7 @@ export function generatePalinSummaryText(answers: PalinAnswers): string {
   text += `연구 동의 여부: ${scores.consentAgreed ? '동의함 (Yes)' : '미동의 (No)'}\n\n`;
 
   text += `=== 1. 요인 점수 (Factor Scores) ===\n`;
-  text += `- Factor 1 (Q22~Q28 가중평균): ${scores.factor1.score}점 [ 평가: ${scores.factor1.levelLabelKr} / ${scores.factor1.levelLabelEn} ] (응답 문항 수: ${scores.factor1.answeredCount}/${scores.factor1.totalItems})\n`;
-  text += `  수식: SUM(Q22*0.751, Q23*0.775, Q24*0.786, Q25*0.783, Q26*0.747, Q27*0.59, Q28*0.525) / COUNT(Q22:Q28)\n`;
-  text += `  척도: IF(Score<=2.79, "very high", IF(Score<=4.19, "high", IF(Score<=5.59, "moderate", IF(Score<=6.69, "low", "very low"))))\n\n`;
+  text += `- Factor 1: ${scores.factor1.score}점 [ 평가: ${scores.factor1.levelLabelKr} / ${scores.factor1.levelLabelEn} ] (응답 문항: ${scores.factor1.answeredCount}/${scores.factor1.totalItems})\n\n`;
 
   text += `=== 2. 주요 하위척도 점수 요약 ===\n`;
   text += `- 간편 행동억제기질검사 (SBIS): ${scores.sbisTotalScore}점 / 20점 만점\n`;
