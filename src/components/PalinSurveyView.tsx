@@ -44,7 +44,8 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
   const [showReportModal, setShowReportModal] = useState<boolean>(false);
   const [showResultsPage, setShowResultsPage] = useState<boolean>(false);
 
-  const t = i18n[lang];
+  const currentLang: Language = lang && i18n[lang] ? lang : 'ko';
+  const t = i18n[currentLang];
   const currentSection: PalinSection = palinFormSchema.sections[activeSecIndex];
   const allQuestions = useMemo(() => getAllPalinQuestions(), []);
 

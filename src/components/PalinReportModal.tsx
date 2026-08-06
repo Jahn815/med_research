@@ -38,7 +38,8 @@ export const PalinReportModal: React.FC<PalinReportModalProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const scores = calculatePalinScores(answers);
-  const t = i18n[lang];
+  const currentLang: Language = lang && i18n[lang] ? lang : 'ko';
+  const t = i18n[currentLang];
 
   const handleCopyText = () => {
     const text = generatePalinSummaryText(answers);

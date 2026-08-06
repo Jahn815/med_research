@@ -23,7 +23,8 @@ export const Header: React.FC<HeaderProps> = ({
   progressPercent,
   onReset,
 }) => {
-  const t = i18n[lang];
+  const currentLang: Language = lang && i18n[lang] ? lang : 'ko';
+  const t = i18n[currentLang];
 
   return (
     <View style={[styles.container, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>

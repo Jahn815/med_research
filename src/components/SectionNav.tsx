@@ -21,7 +21,8 @@ export const SectionNav: React.FC<SectionNavProps> = ({
   sectionStatus,
   lang = 'ko',
 }) => {
-  const t = i18n[lang];
+  const currentLang: Language = lang && i18n[lang] ? lang : 'ko';
+  const t = i18n[currentLang];
   const sectionTitleMap: Record<SurveySection, string> = {
     info: t.sec1Title,
     onset: t.sec2Title,

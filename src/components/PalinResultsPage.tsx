@@ -43,7 +43,8 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
   const [copied, setCopied] = useState(false);
   const scores = calculatePalinScores(answers);
   const f1 = scores.factor1;
-  const t = i18n[lang];
+  const currentLang: Language = lang && i18n[lang] ? lang : 'ko';
+  const t = i18n[currentLang];
 
   const handleCopyText = () => {
     const text = generatePalinSummaryText(answers);
