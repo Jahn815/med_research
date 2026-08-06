@@ -43,6 +43,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
   const [copied, setCopied] = useState(false);
   const scores = calculatePalinScores(answers);
   const f1 = scores.factor1;
+  const f2 = scores.factor2;
   const currentLang: Language = lang && i18n[lang] ? lang : 'ko';
   const t = i18n[currentLang];
 
@@ -242,12 +243,145 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           </View>
         </View>
 
+        {/* FACTOR 2 CARD (FEATURED) */}
+        <View style={[styles.factorCard, { backgroundColor: theme.cardBg, borderColor: theme.accent }]}>
+          <View style={styles.factorHeaderRow}>
+            <View style={styles.factorTitleGroup}>
+              <View style={[styles.factorBadge, { backgroundColor: theme.accent }]}>
+                <Text style={styles.factorBadgeText}>Factor 2</Text>
+              </View>
+              <Text style={[styles.factorTitle, { color: theme.textPrimary }]}>
+                {lang === 'en' ? 'Factor 2 Weighted Average' : 'Factor 2 가중평균 점수'}
+              </Text>
+            </View>
+            <View style={styles.scoreContainer}>
+              <Text style={[styles.factorScoreValue, { color: theme.accent }]}>
+                {f2.score}
+              </Text>
+              <View style={[styles.levelBadge, { backgroundColor: f2.badgeColor }]}>
+                <Text style={styles.levelBadgeText}>
+                  {lang === 'en' ? f2.levelLabelEn : f2.levelLabelKr}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Scale Assessment Box */}
+          <View style={[styles.scaleAssessmentCard, { backgroundColor: theme.primaryLight, borderColor: theme.accent }]}>
+            <View style={styles.scaleAssessmentRow}>
+              <Ionicons name="pricetag" size={16} color={theme.accent} />
+              <Text style={[styles.scaleAssessmentTitle, { color: theme.accent }]}>
+                {lang === 'en' ? 'Factor 2 Category Rating:' : 'Factor 2 평가 카테고리:'}
+              </Text>
+              <View style={[styles.inlineLevelTag, { backgroundColor: f2.badgeColor }]}>
+                <Text style={styles.inlineLevelTagText}>
+                  {lang === 'en' ? f2.levelLabelEn : f2.levelLabelKr}
+                </Text>
+              </View>
+            </View>
+
+            {/* Threshold Legend Bar */}
+            <View style={styles.legendRow}>
+              {[
+                { label: lang === 'en' ? 'Very High' : '매우 높음', range: '0 - 1.79', key: 'very_high', color: '#EF4444' },
+                { label: lang === 'en' ? 'High' : '높음', range: '1.80 - 2.79', key: 'high', color: '#F97316' },
+                { label: lang === 'en' ? 'Moderate' : '보통', range: '2.80 - 4.19', key: 'moderate', color: '#F59E0B' },
+                { label: lang === 'en' ? 'Low' : '낮음', range: '4.20 - 5.39', key: 'low', color: '#10B981' },
+                { label: lang === 'en' ? 'Very Low' : '매우 낮음', range: '> 5.39', key: 'very_low', color: '#059669' },
+              ].map((item) => {
+                const isActive = f2.levelKey === item.key;
+                return (
+                  <View
+                    key={item.key}
+                    style={[
+                      styles.legendItem,
+                      {
+                        backgroundColor: isActive ? item.color : theme.chipBg,
+                        borderColor: isActive ? item.color : theme.cardBorder,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.legendLabel,
+                        { color: isActive ? '#FFFFFF' : theme.textPrimary, fontWeight: isActive ? '800' : '600' },
+                      ]}
+                    >
+                      {item.label}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.legendRange,
+                        { color: isActive ? '#FFFFFF' : theme.textMuted },
+                      ]}
+                    >
+                      {item.range}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+
+          {/* Itemized Responses Table */}
+          <Text style={[styles.tableSectionTitle, { color: theme.textPrimary }]}>
+            {lang === 'en' ? 'Q29 - Q35 Individual Response Breakdown:' : 'Q29 ~ Q35 문항별 응답 및 가중치 내역:'}
+          </Text>
+
+          <View style={[styles.tableContainer, { borderColor: theme.cardBorder }]}>
+            <View style={[styles.tableHeaderRow, { backgroundColor: theme.chipBg }]}>
+              <Text style={[styles.th, { width: 45, color: theme.textSecondary }]}>문항</Text>
+              <Text style={[styles.th, { flex: 1, color: theme.textSecondary }]}>질문 내용</Text>
+              <Text style={[styles.th, { width: 50, textAlign: 'center', color: theme.textSecondary }]}>응답</Text>
+              <Text style={[styles.th, { width: 55, textAlign: 'center', color: theme.textSecondary }]}>가중치</Text>
+              <Text style={[styles.th, { width: 55, textAlign: 'right', color: theme.textSecondary }]}>가중값</Text>
+            </View>
+
+            {f2.itemDetails.map((item) => {
+              const qIdMap: Record<number, number> = {
+                29: 2094095092,
+                30: 648032736,
+                31: 740503268,
+                32: 1050082798,
+                33: 341804199,
+                34: 905335102,
+                35: 1048848859,
+              };
+              const targetId = qIdMap[item.qNum];
+              const qText =
+                lang === 'en' && targetId && palinTranslationsEn[targetId]
+                  ? palinTranslationsEn[targetId].text
+                  : item.text;
+
+              return (
+                <View key={item.qNum} style={[styles.tableRow, { borderBottomColor: theme.cardBorder }]}>
+                  <Text style={[styles.td, { width: 45, fontWeight: '700', color: theme.accent }]}>
+                    Q{item.qNum}
+                  </Text>
+                  <Text style={[styles.td, { flex: 1, color: theme.textPrimary }]} numberOfLines={2}>
+                    {qText}
+                  </Text>
+                  <Text style={[styles.td, { width: 50, textAlign: 'center', fontWeight: '700', color: theme.textPrimary }]}>
+                    {item.value !== null ? item.value : '-'}
+                  </Text>
+                  <Text style={[styles.td, { width: 55, textAlign: 'center', color: theme.textSecondary }]}>
+                    {item.weight}
+                  </Text>
+                  <Text style={[styles.td, { width: 55, textAlign: 'right', fontWeight: '700', color: theme.primary }]}>
+                    {item.value !== null ? item.weightedValue : '-'}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+        </View>
+
         {/* FUTURE FACTORS PLACEHOLDER CARD */}
         <View style={[styles.infoCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
           <View style={styles.infoCardHeader}>
             <Ionicons name="add-circle-outline" size={20} color={theme.accent} />
             <Text style={[styles.infoCardTitle, { color: theme.textPrimary }]}>
-              {lang === 'en' ? 'Additional Palin Scale Factors' : '추가 요인 계산 영역 (Factor 2, Factor 3...)'}
+              {lang === 'en' ? 'Additional Palin Scale Factors' : '추가 요인 계산 영역 (Factor 3...)'}
             </Text>
           </View>
           <Text style={[styles.infoCardDesc, { color: theme.textSecondary }]}>
@@ -479,12 +613,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '800',
   },
-  scaleFormulaCode: {
-    fontSize: 11,
-    fontWeight: '600',
-    marginBottom: 10,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-  },
   legendRow: {
     flexDirection: 'row',
     gap: 4,
@@ -504,30 +632,6 @@ const styles = StyleSheet.create({
     fontSize: 9,
     marginTop: 2,
     fontWeight: '600',
-  },
-  formulaBox: {
-    padding: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginBottom: 16,
-  },
-  formulaLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  formulaCode: {
-    fontSize: 12,
-    fontWeight: '700',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    lineHeight: 18,
-  },
-  formulaMetaRow: {
-    marginTop: 6,
-  },
-  formulaMeta: {
-    fontSize: 11,
-    fontWeight: '500',
   },
   tableSectionTitle: {
     fontSize: 14,
