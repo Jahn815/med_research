@@ -9,12 +9,17 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ColorTheme } from '../theme/colors';
-import { PalinAnswers, PalinSection, PalinQuestion } from '../types/palinSurvey';
+import { PalinAnswers, PalinSection } from '../types/palinSurvey';
 import {
   palinFormSchema,
   calculatePalinScores,
   getAllPalinQuestions,
 } from '../services/palinSurveyService';
+import { Language, i18n } from '../i18n/translations';
+import {
+  palinSectionTitlesEn,
+  palinSubsectionsEn,
+} from '../i18n/palinTranslationsEn';
 import { PalinQuestionRenderer } from './PalinQuestionRenderer';
 import { PalinReportModal } from './PalinReportModal';
 
@@ -22,17 +27,22 @@ interface PalinSurveyViewProps {
   theme: ColorTheme;
   isDark: boolean;
   onToggleTheme: () => void;
+  lang: Language;
+  onToggleLanguage: () => void;
 }
 
 export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
   theme,
   isDark,
   onToggleTheme,
+  lang,
+  onToggleLanguage,
 }) => {
   const [activeSecIndex, setActiveSecIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<PalinAnswers>({});
   const [showReportModal, setShowReportModal] = useState<boolean>(false);
 
+  const t = i18n[lang];
   const currentSection: PalinSection = palinFormSchema.sections[activeSecIndex];
   const allQuestions = useMemo(() => getAllPalinQuestions(), []);
 
@@ -58,6 +68,14 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
 
   const scores = calculatePalinScores(answers);
 
+  const consentDescriptionEn = `<Research Consent Statement>
+This study investigates the relationship between temperament in Korean children who stutter and the impact of stuttering on the child.
+The Short Behavioral Inhibition Scale (SBIS) measures behavioral inhibition temperament, and the Palin Parent Rating Scale (PPRS) evaluates the impact of stuttering.
+Completion of this survey takes approximately 10-15 minutes.
+<Eligibility>
+Parents of preschool or elementary school children diagnosed with stuttering (or recovered from past stuttering).
+Your responses will be kept strictly anonymous and confidential.`;
+
   return (
     <View style={styles.container}>
       {/* Research Title Header Banner */}
@@ -65,31 +83,41 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
         <View style={styles.headerTop}>
           <View style={[styles.badge, { backgroundColor: theme.badgeBg }]}>
             <Ionicons name="school" size={14} color={theme.primary} style={{ marginRight: 4 }} />
-            <Text style={[styles.badgeText, { color: theme.primary }]}>
-              한국 말더듬 연구 (SBIS & Palin PPRS)
-            </Text>
+            <Text style={[styles.badgeText, { color: theme.primary }]}>{t.researchBadge}</Text>
           </View>
 
-          <TouchableOpacity
-            style={[styles.iconButton, { backgroundColor: theme.chipBg }]}
-            onPress={onToggleTheme}
-            activeOpacity={0.7}
-          >
-            <Ionicons name={isDark ? 'sunny' : 'moon'} size={20} color={theme.textPrimary} />
-          </TouchableOpacity>
+          <View style={styles.headerActionBtns}>
+            {/* Language Switch */}
+            <TouchableOpacity
+              style={[styles.langBtn, { backgroundColor: theme.chipBg, borderColor: theme.cardBorder }]}
+              onPress={onToggleLanguage}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.langBtnText, { color: theme.textPrimary }]}>
+                {lang === 'ko' ? '🇺🇸 EN' : '🇰🇷 KR'}
+              </Text>
+            </TouchableOpacity>
+
+            {/* Theme Switch */}
+            <TouchableOpacity
+              style={[styles.iconButton, { backgroundColor: theme.chipBg }]}
+              onPress={onToggleTheme}
+              activeOpacity={0.7}
+            >
+              <Ionicons name={isDark ? 'sunny' : 'moon'} size={20} color={theme.textPrimary} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <Text style={[styles.mainTitle, { color: theme.textPrimary }]}>
-          {palinFormSchema.title}
+          {lang === 'en' ? 'Stuttering Child Parent Questionnaire' : palinFormSchema.title}
         </Text>
-        <Text style={[styles.subTitle, { color: theme.textSecondary }]}>
-          Palin Parent Rating Scale & Short Behavioral Inhibition Scale
-        </Text>
+        <Text style={[styles.subTitle, { color: theme.textSecondary }]}>{t.appSubtitle}</Text>
 
         {/* Progress Bar */}
         <View style={styles.progressRow}>
           <Text style={[styles.progressLabel, { color: theme.textSecondary }]}>
-            설문 작성 진행률: {progressPercent}% ({scores.totalAnsweredCount}/{scores.totalQuestionsCount} 문항)
+            {t.progressLabel}: {progressPercent}% ({scores.totalAnsweredCount}/{scores.totalQuestionsCount})
           </Text>
           <View style={[styles.progressBarBg, { backgroundColor: theme.chipBg }]}>
             <View
@@ -107,6 +135,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabsContent}>
           {palinFormSchema.sections.map((sec, idx) => {
             const isActive = idx === activeSecIndex;
+            const secTitle = lang === 'en' && palinSectionTitlesEn[idx] ? palinSectionTitlesEn[idx] : sec.title;
             return (
               <TouchableOpacity
                 key={idx}
@@ -129,7 +158,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
                     },
                   ]}
                 >
-                  {sec.title}
+                  {secTitle}
                 </Text>
               </TouchableOpacity>
             );
@@ -140,14 +169,16 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
       {/* Questions Content */}
       <ScrollView contentContainerStyle={styles.questionsContainer} showsVerticalScrollIndicator={false}>
         {/* Consent Info Box for Section 1 */}
-        {activeSecIndex === 0 && palinFormSchema.description && (
+        {activeSecIndex === 0 && (
           <View style={[styles.consentCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
             <View style={styles.consentHeader}>
               <Ionicons name="shield-checkmark" size={22} color={theme.primary} />
-              <Text style={[styles.consentTitle, { color: theme.textPrimary }]}>연구 참여 안내 및 동의서</Text>
+              <Text style={[styles.consentTitle, { color: theme.textPrimary }]}>
+                {lang === 'en' ? 'Research Participation Consent' : '연구 참여 안내 및 동의서'}
+              </Text>
             </View>
             <Text style={[styles.consentBody, { color: theme.textSecondary }]}>
-              {palinFormSchema.description}
+              {lang === 'en' ? consentDescriptionEn : palinFormSchema.description}
             </Text>
           </View>
         )}
@@ -157,33 +188,24 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
           <View style={[styles.warningBox, { backgroundColor: '#FEF2F2', borderColor: '#FCA5A5' }]}>
             <Ionicons name="alert-circle" size={20} color="#DC2626" />
             <Text style={styles.warningText}>
-              연구에 동의하지 않으신 경우, 다음 단계로 진행하실 수 없습니다.
+              {lang === 'en'
+                ? 'Consent is required to proceed with this research study.'
+                : '연구에 동의하지 않으신 경우, 다음 단계로 진행하실 수 없습니다.'}
             </Text>
           </View>
-        )}
-
-        {/* Section Description */}
-        {currentSection.description && (
-          <Text style={[styles.secDescText, { color: theme.textSecondary }]}>
-            {currentSection.description}
-          </Text>
         )}
 
         {/* Subsections if any */}
         {currentSection.subsections && currentSection.subsections.length > 0 && (
           <View style={styles.subsectionsBox}>
-            {currentSection.subsections.map((sub, sidx) => (
-              <View key={sidx} style={[styles.subCard, { backgroundColor: theme.primaryLight }]}>
-                <Text style={[styles.subCardTitle, { color: theme.primary }]}>
-                  {sub.title}
-                </Text>
-                {sub.description && (
-                  <Text style={[styles.subCardDesc, { color: theme.textSecondary }]}>
-                    {sub.description}
-                  </Text>
-                )}
-              </View>
-            ))}
+            {currentSection.subsections.map((sub, sidx) => {
+              const subTitle = lang === 'en' && palinSubsectionsEn[sidx] ? palinSubsectionsEn[sidx] : sub.title;
+              return (
+                <View key={sidx} style={[styles.subCard, { backgroundColor: theme.primaryLight }]}>
+                  <Text style={[styles.subCardTitle, { color: theme.primary }]}>{subTitle}</Text>
+                </View>
+              );
+            })}
           </View>
         )}
 
@@ -195,6 +217,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
             value={answers[q.id]}
             onChange={(val) => handleAnswerChange(q.id, val)}
             theme={theme}
+            lang={lang}
           />
         ))}
 
@@ -206,7 +229,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
               onPress={() => setActiveSecIndex((prev) => prev - 1)}
             >
               <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
-              <Text style={[styles.btnText, { color: theme.textPrimary }]}>이전 영역</Text>
+              <Text style={[styles.btnText, { color: theme.textPrimary }]}>{t.prevSection}</Text>
             </TouchableOpacity>
           )}
 
@@ -215,7 +238,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
               style={[styles.btn, styles.nextBtn, { backgroundColor: theme.primary, flex: 1 }]}
               onPress={() => setActiveSecIndex((prev) => prev + 1)}
             >
-              <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '700' }]}>다음 영역</Text>
+              <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '700' }]}>{t.nextSection}</Text>
               <Ionicons name="chevron-forward" size={18} color="#FFFFFF" />
             </TouchableOpacity>
           ) : (
@@ -224,9 +247,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
               onPress={() => setShowReportModal(true)}
             >
               <Ionicons name="document-text" size={18} color="#FFFFFF" style={{ marginRight: 6 }} />
-              <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '800' }]}>
-                결과 보고서 보기
-              </Text>
+              <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '800' }]}>{t.viewReport}</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -239,6 +260,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
         answers={answers}
         onClose={() => setShowReportModal(false)}
         onReset={handleReset}
+        lang={lang}
       />
     </View>
   );
@@ -271,10 +293,25 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '700',
   },
+  headerActionBtns: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  langBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+  },
+  langBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
+  },
   iconButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -362,10 +399,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     flex: 1,
   },
-  secDescText: {
-    fontSize: 13,
-    marginBottom: 14,
-  },
   subsectionsBox: {
     gap: 8,
     marginBottom: 16,
@@ -377,10 +410,6 @@ const styles = StyleSheet.create({
   subCardTitle: {
     fontSize: 14,
     fontWeight: '700',
-  },
-  subCardDesc: {
-    fontSize: 12,
-    marginTop: 2,
   },
   bottomNavRow: {
     flexDirection: 'row',

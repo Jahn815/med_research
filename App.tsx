@@ -37,6 +37,7 @@ import {
 } from './src/components/QuestionCard';
 import { SummaryModal } from './src/components/SummaryModal';
 import { PalinSurveyView } from './src/components/PalinSurveyView';
+import { Language, i18n } from './src/i18n/translations';
 
 const initialSurveyState: SurveyState = {
   childInfo: {
@@ -70,14 +71,20 @@ type AppSurveyMode = 'palin' | 'standard';
 export default function App() {
   const [surveyMode, setSurveyMode] = useState<AppSurveyMode>('palin');
   const [isDark, setIsDark] = useState<boolean>(false);
+  const [lang, setLang] = useState<Language>('ko');
   const [activeSection, setActiveSection] = useState<SurveySection>('info');
   const [surveyData, setSurveyData] = useState<SurveyState>(initialSurveyState);
   const [showSummaryModal, setShowSummaryModal] = useState<boolean>(false);
 
   const theme: ColorTheme = isDark ? darkTheme : lightTheme;
+  const t = i18n[lang];
 
   const handleToggleTheme = () => {
     setIsDark((prev) => !prev);
+  };
+
+  const handleToggleLanguage = () => {
+    setLang((prev) => (prev === 'ko' ? 'en' : 'ko'));
   };
 
   const handleResetSurvey = () => {
@@ -225,7 +232,7 @@ export default function App() {
                 },
               ]}
             >
-              Palin 부모평가지 & 기질검사 (연구용)
+              {t.palinMode}
             </Text>
           </TouchableOpacity>
 
@@ -254,7 +261,7 @@ export default function App() {
                 },
               ]}
             >
-              임상 선별 설문지
+              {t.standardMode}
             </Text>
           </TouchableOpacity>
         </View>
@@ -265,6 +272,8 @@ export default function App() {
             theme={theme}
             isDark={isDark}
             onToggleTheme={handleToggleTheme}
+            lang={lang}
+            onToggleLanguage={handleToggleLanguage}
           />
         ) : (
           /* MODE 2: STANDARD CLINICAL QUESTIONNAIRE */
@@ -273,6 +282,8 @@ export default function App() {
               theme={theme}
               isDark={isDark}
               onToggleTheme={handleToggleTheme}
+              lang={lang}
+              onToggleLanguage={handleToggleLanguage}
               progressPercent={progressPercent}
               onReset={handleResetSurvey}
             />
@@ -282,6 +293,7 @@ export default function App() {
               activeSection={activeSection}
               onSelectSection={setActiveSection}
               sectionStatus={sectionStatus}
+              lang={lang}
             />
 
             <ScrollView
@@ -293,14 +305,14 @@ export default function App() {
                 <View style={styles.sectionContainer}>
                   <CardWrapper
                     theme={theme}
-                    title="아동 기본 정보"
-                    subtitle="언어치료 평가 및 기록을 위한 기초 정보입니다."
+                    title={lang === 'en' ? 'Child Basic Information' : '아동 기본 정보'}
+                    subtitle={lang === 'en' ? 'Basic information for clinical evaluation.' : '언어치료 평가 및 기록을 위한 기초 정보입니다.'}
                     required
                   >
                     <TextInputField
                       theme={theme}
-                      label="아동 이름"
-                      placeholder="예: 홍길동"
+                      label={t.childName}
+                      placeholder={lang === 'en' ? 'e.g., John Doe' : '예: 홍길동'}
                       value={surveyData.childInfo.childName}
                       onChangeText={(val) => updateChildInfo('childName', val)}
                     />
@@ -309,16 +321,16 @@ export default function App() {
                       <View style={{ flex: 1 }}>
                         <TextInputField
                           theme={theme}
-                          label="생년월일 (YYYY-MM-DD)"
+                          label={lang === 'en' ? 'Birth Date (YYYY-MM-DD)' : '생년월일 (YYYY-MM-DD)'}
                           placeholder="2021-05-15"
                           value={surveyData.childInfo.birthDate}
                           onChangeText={(val) => updateChildInfo('birthDate', val)}
                         />
                       </View>
-                      <View style={{ width: 100 }}>
+                      <View style={{ width: 110 }}>
                         <TextInputField
                           theme={theme}
-                          label="연령 (개월)"
+                          label={t.ageMonths}
                           placeholder="42"
                           value={surveyData.childInfo.ageMonths}
                           onChangeText={(val) => updateChildInfo('ageMonths', val)}
@@ -328,12 +340,12 @@ export default function App() {
                     </View>
 
                     <View style={styles.fieldSpacer}>
-                      <Text style={[styles.fieldLabel, { color: theme.textPrimary }]}>성별 *</Text>
+                      <Text style={[styles.fieldLabel, { color: theme.textPrimary }]}>{t.gender} *</Text>
                       <RadioChips
                         theme={theme}
                         options={[
-                          { label: '남아 (Male)', value: 'male' },
-                          { label: '여아 (Female)', value: 'female' },
+                          { label: lang === 'en' ? 'Male' : '남아 (Male)', value: 'male' },
+                          { label: lang === 'en' ? 'Female' : '여아 (Female)', value: 'female' },
                         ]}
                         selectedValue={surveyData.childInfo.gender}
                         onSelect={(val) => updateChildInfo('gender', val)}
@@ -341,14 +353,14 @@ export default function App() {
                     </View>
 
                     <View style={styles.fieldSpacer}>
-                      <Text style={[styles.fieldLabel, { color: theme.textPrimary }]}>작성자 (아동과의 관계) *</Text>
+                      <Text style={[styles.fieldLabel, { color: theme.textPrimary }]}>{t.respondentRole} *</Text>
                       <RadioChips
                         theme={theme}
                         options={[
-                          { label: '어머니', value: 'mother' },
-                          { label: '아버지', value: 'father' },
-                          { label: '조부모', value: 'grandparent' },
-                          { label: '기타', value: 'other' },
+                          { label: t.mother, value: 'mother' },
+                          { label: t.father, value: 'father' },
+                          { label: t.grandparent, value: 'grandparent' },
+                          { label: t.other, value: 'other' },
                         ]}
                         selectedValue={surveyData.childInfo.respondentRole}
                         onSelect={(val) => updateChildInfo('respondentRole', val)}
@@ -357,8 +369,8 @@ export default function App() {
 
                     <TextInputField
                       theme={theme}
-                      label="작성일자"
-                      placeholder="2026-07-30"
+                      label={t.surveyDate}
+                      placeholder="2026-08-06"
                       value={surveyData.childInfo.surveyDate}
                       onChangeText={(val) => updateChildInfo('surveyDate', val)}
                     />
@@ -370,14 +382,30 @@ export default function App() {
                 <View style={styles.sectionContainer}>
                   <CardWrapper
                     theme={theme}
-                    title="말더듬 시작 시기 및 특징"
-                    subtitle="말더듬이 처음 관찰된 시기와 양상을 선택해주세요."
+                    title={lang === 'en' ? 'Onset & Symptoms' : '말더듬 시작 시기 및 특징'}
+                    subtitle={lang === 'en' ? 'When and how stuttering first began.' : '말더듬이 처음 관찰된 시기와 양상을 선택해주세요.'}
                     required
                   >
-                    <Text style={[styles.fieldLabel, { color: theme.textPrimary }]}>1) 말더듬 시작 시기 *</Text>
+                    <Text style={[styles.fieldLabel, { color: theme.textPrimary }]}>
+                      {lang === 'en' ? '1) Onset Age *' : '1) 말더듬 시작 시기 *'}
+                    </Text>
                     <RadioChips
                       theme={theme}
-                      options={ONSET_AGE_OPTIONS}
+                      options={ONSET_AGE_OPTIONS.map((opt) => ({
+                        ...opt,
+                        label:
+                          lang === 'en'
+                            ? opt.value === 'under_2'
+                              ? 'Before age 2'
+                              : opt.value === '2_to_3'
+                              ? 'Age 2 - 3'
+                              : opt.value === '3_to_4'
+                              ? 'Age 3 - 4'
+                              : opt.value === 'after_4'
+                              ? 'After age 4'
+                              : 'Not sure'
+                            : opt.label,
+                      }))}
                       selectedValue={surveyData.onset.onsetAge}
                       onSelect={(val) => updateOnset('onsetAge', val)}
                     />
@@ -385,13 +413,21 @@ export default function App() {
 
                   <CardWrapper
                     theme={theme}
-                    title="말더듬 시작 양상"
-                    subtitle="증상이 처음에 어떻게 시작되었나요?"
+                    title={lang === 'en' ? 'Onset Pattern' : '말더듬 시작 양상'}
+                    subtitle={lang === 'en' ? 'How did the stuttering start?' : '증상이 처음에 어떻게 시작되었나요?'}
                     required
                   >
                     <RadioChips
                       theme={theme}
-                      options={ONSET_SPEED_OPTIONS}
+                      options={ONSET_SPEED_OPTIONS.map((opt) => ({
+                        ...opt,
+                        label:
+                          lang === 'en'
+                            ? opt.value === 'sudden'
+                              ? 'Sudden (began rapidly within days)'
+                              : 'Gradual (increased slowly over time)'
+                            : opt.label,
+                      }))}
                       selectedValue={surveyData.onset.onsetSpeed}
                       onSelect={(val) => updateOnset('onsetSpeed', val)}
                     />
@@ -399,13 +435,29 @@ export default function App() {
 
                   <CardWrapper
                     theme={theme}
-                    title="관찰되는 주요 증상 (중복 선택 가능)"
-                    subtitle="아동에게 주로 나타나는 말더듬 특성을 모두 선택하세요."
+                    title={lang === 'en' ? 'Observed Symptoms' : '관찰되는 주요 증상 (중복 선택 가능)'}
+                    subtitle={lang === 'en' ? 'Select all stuttering characteristics observed.' : '아동에게 주로 나타나는 말더듬 특성을 모두 선택하세요.'}
                     required
                   >
                     <CheckboxChips
                       theme={theme}
-                      options={SYMPTOM_OPTIONS}
+                      options={SYMPTOM_OPTIONS.map((opt) => ({
+                        ...opt,
+                        label:
+                          lang === 'en'
+                            ? opt.id === 'sound_rep'
+                              ? 'Sound/Syllable Repetition'
+                              : opt.id === 'word_rep'
+                              ? 'Word Repetition'
+                              : opt.id === 'prolongation'
+                              ? 'Sound Prolongation'
+                              : opt.id === 'blocking'
+                              ? 'Blocking (Speech stops)'
+                              : opt.id === 'secondary'
+                              ? 'Secondary Behaviors'
+                              : 'Pitch/Voice Change'
+                            : opt.label,
+                      }))}
                       selectedValues={surveyData.onset.symptoms}
                       onToggle={toggleSymptom}
                     />
@@ -413,13 +465,14 @@ export default function App() {
 
                   <CardWrapper
                     theme={theme}
-                    title="부모님이 느끼시는 말더듬 심도 평가"
-                    subtitle="현재 아동의 말더듬 정도를 1점(경미)~5점(매우 심함)으로 평가해주세요."
+                    title={lang === 'en' ? 'Perceived Severity Rating' : '부모님이 느끼시는 말더듬 심도 평가'}
+                    subtitle={lang === 'en' ? 'Rate your child’s stuttering severity from 1 (Mild) to 5 (Very Severe).' : '현재 아동의 말더듬 정도를 1점(경미)~5점(매우 심함)으로 평가해주세요.'}
                   >
                     <RatingPicker
                       theme={theme}
                       rating={surveyData.onset.severityRating}
                       onRatingChange={(val) => updateOnset('severityRating', val)}
+                      labels={lang === 'en' ? ['Very Mild', 'Mild', 'Moderate', 'Severe', 'Very Severe'] : undefined}
                     />
                   </CardWrapper>
                 </View>
@@ -429,13 +482,31 @@ export default function App() {
                 <View style={styles.sectionContainer}>
                   <CardWrapper
                     theme={theme}
-                    title="말더듬이 심해지는 상황 (다중 선택)"
-                    subtitle="어떤 상황에서 아동의 말 더듬는 현상이 더 자주 나타나나요?"
+                    title={lang === 'en' ? 'Worsening Situations' : '말더듬이 심해지는 상황 (다중 선택)'}
+                    subtitle={lang === 'en' ? 'In which situations does stuttering occur more frequently?' : '어떤 상황에서 아동의 말 더듬는 현상이 더 자주 나타나나요?'}
                     required
                   >
                     <CheckboxChips
                       theme={theme}
-                      options={SITUATION_OPTIONS}
+                      options={SITUATION_OPTIONS.map((opt) => ({
+                        ...opt,
+                        label:
+                          lang === 'en'
+                            ? opt.id === 'excited'
+                              ? 'When excited or happy'
+                              : opt.id === 'angry'
+                              ? 'When angry or throwing a tantrum'
+                              : opt.id === 'fast'
+                              ? 'When trying to speak fast'
+                              : opt.id === 'stranger'
+                              ? 'When speaking to strangers/adults'
+                              : opt.id === 'questioned'
+                              ? 'When answering questions'
+                              : opt.id === 'fatigued'
+                              ? 'When tired or sleepy'
+                              : 'When speaking in front of a group'
+                            : opt.label,
+                      }))}
                       selectedValues={surveyData.situations.worseningSituations}
                       onToggle={toggleWorseningSituation}
                     />
@@ -443,13 +514,27 @@ export default function App() {
 
                   <CardWrapper
                     theme={theme}
-                    title="말더듬 발생 시 아동의 정서/행동 반응 (다중 선택)"
-                    subtitle="말이 막히거나 더듬을 때 아동이 보이는 주된 반응입니다."
+                    title={lang === 'en' ? "Child's Reactions to Stuttering" : '말더듬 발생 시 아동의 정서/행동 반응 (다중 선택)'}
+                    subtitle={lang === 'en' ? "Main reactions shown when experiencing speech blocks or stuttering." : '말이 막히거나 더듬을 때 아동이 보이는 주된 반응입니다.'}
                     required
                   >
                     <CheckboxChips
                       theme={theme}
-                      options={REACTION_OPTIONS}
+                      options={REACTION_OPTIONS.map((opt) => ({
+                        ...opt,
+                        label:
+                          lang === 'en'
+                            ? opt.id === 'give_up'
+                              ? 'Gives up speaking midway'
+                              : opt.id === 'frustrated'
+                              ? 'Shows annoyance or frustration'
+                              : opt.id === 'self_aware'
+                              ? 'Aware of stuttering / checks reactions'
+                              : opt.id === 'substitute'
+                              ? 'Substitutes with another word'
+                              : 'Continues speaking naturally without concern'
+                            : opt.label,
+                      }))}
                       selectedValues={surveyData.situations.childReaction}
                       onToggle={toggleChildReaction}
                     />
@@ -457,12 +542,22 @@ export default function App() {
 
                   <CardWrapper
                     theme={theme}
-                    title="말하기 회피 행동 여부"
-                    subtitle="말을 더듬을까 봐 말을 하지 않거나 피하는 경향이 있나요?"
+                    title={lang === 'en' ? 'Speech Avoidance Behavior' : '말하기 회피 행동 여부'}
+                    subtitle={lang === 'en' ? 'Does your child avoid speaking for fear of stuttering?' : '말을 더듬을까 봐 말을 하지 않거나 피하는 경향이 있나요?'}
                   >
                     <RadioChips
                       theme={theme}
-                      options={AVOIDANCE_OPTIONS}
+                      options={AVOIDANCE_OPTIONS.map((opt) => ({
+                        ...opt,
+                        label:
+                          lang === 'en'
+                            ? opt.value === 'frequent'
+                              ? 'Actively avoids speaking or stays silent'
+                              : opt.value === 'sometimes'
+                              ? 'Occasionally hesitates before speaking'
+                              : 'Does not avoid and speaks actively'
+                            : opt.label,
+                      }))}
                       selectedValue={surveyData.situations.avoidanceBehavior}
                       onSelect={(val) => updateSituations('avoidanceBehavior', val)}
                     />
@@ -474,13 +569,23 @@ export default function App() {
                 <View style={styles.sectionContainer}>
                   <CardWrapper
                     theme={theme}
-                    title="말더듬 가족력 여부"
-                    subtitle="친가나 외가에 말더듬이나 언어 발달 관련 이력이 있는 분이 계신가요?"
+                    title={lang === 'en' ? 'Family History of Stuttering' : '말더듬 가족력 여부'}
+                    subtitle={lang === 'en' ? 'Is there a family history of stuttering or speech delay?' : '친가나 외가에 말더듬이나 언어 발달 관련 이력이 있는 분이 계신가요?'}
                     required
                   >
                     <RadioChips
                       theme={theme}
-                      options={FAMILY_HISTORY_OPTIONS}
+                      options={FAMILY_HISTORY_OPTIONS.map((opt) => ({
+                        ...opt,
+                        label:
+                          lang === 'en'
+                            ? opt.value === 'yes'
+                              ? 'Yes (Maternal or Paternal)'
+                              : opt.value === 'no'
+                              ? 'No'
+                              : 'Not Sure'
+                            : opt.label,
+                      }))}
                       selectedValue={surveyData.family.familyHistory}
                       onSelect={(val) => updateFamily('familyHistory', val)}
                     />
@@ -488,26 +593,26 @@ export default function App() {
 
                   <CardWrapper
                     theme={theme}
-                    title="부모(보호자)의 걱정 정도"
-                    subtitle="아동의 말더듬에 대해 현재 부모님이 느끼는 염려와 스트레스 수준입니다."
+                    title={lang === 'en' ? 'Parent Concern Level' : '부모(보호자)의 걱정 정도'}
+                    subtitle={lang === 'en' ? 'Current level of anxiety or concern regarding your child’s speech.' : '아동의 말더듬에 대해 현재 부모님이 느끼는 염려와 스트레스 수준입니다.'}
                   >
                     <RatingPicker
                       theme={theme}
                       rating={surveyData.family.parentConcernLevel}
                       onRatingChange={(val) => updateFamily('parentConcernLevel', val)}
-                      labels={['걱정 적음', '약간 걱정됨', '보통', '많이 걱정됨', '매우 염려됨']}
+                      labels={lang === 'en' ? ['Low Concern', 'Slight Concern', 'Moderate', 'High Concern', 'Extremely Concerned'] : undefined}
                     />
                   </CardWrapper>
 
                   <CardWrapper
                     theme={theme}
-                    title="언어치료사 전달사항 및 궁금한 점"
-                    subtitle="상담 시 꼭 전달하고 싶거나 문의하고자 하는 내용을 작성해주세요."
+                    title={lang === 'en' ? 'Notes for Speech-Language Pathologist' : '언어치료사 전달사항 및 궁금한 점'}
+                    subtitle={lang === 'en' ? 'Write any specific questions or notes you wish to share during consultation.' : '상담 시 꼭 전달하고 싶거나 문의하고자 하는 내용을 작성해주세요.'}
                   >
                     <TextInputField
                       theme={theme}
-                      label="상담 메모"
-                      placeholder="예: 가정에서 어떻게 대처하면 좋은지, 평가 시 주의사항 등"
+                      label={lang === 'en' ? 'Consultation Notes' : '상담 메모'}
+                      placeholder={lang === 'en' ? 'e.g., How to handle stuttering at home, evaluation prep...' : '예: 가정에서 어떻게 대처하면 좋은지, 평가 시 주의사항 등'}
                       value={surveyData.family.therapistNotes}
                       onChangeText={(val) => updateFamily('therapistNotes', val)}
                       multiline
@@ -526,7 +631,7 @@ export default function App() {
                   activeOpacity={0.8}
                 >
                   <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
-                  <Text style={[styles.navButtonText, { color: theme.textPrimary }]}>이전</Text>
+                  <Text style={[styles.navButtonText, { color: theme.textPrimary }]}>{t.prevStep}</Text>
                 </TouchableOpacity>
               )}
 
@@ -540,7 +645,7 @@ export default function App() {
                 activeOpacity={0.8}
               >
                 <Text style={[styles.navButtonText, { color: '#FFFFFF', fontWeight: '700' }]}>
-                  {currentIndex === sectionKeys.length - 1 ? '결과 보고서 보기' : '다음 단계'}
+                  {currentIndex === sectionKeys.length - 1 ? t.viewReport : t.nextStep}
                 </Text>
                 <Ionicons
                   name={currentIndex === sectionKeys.length - 1 ? 'document-text' : 'chevron-forward'}

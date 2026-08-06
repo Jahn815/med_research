@@ -3,12 +3,15 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 
 import { Ionicons } from '@expo/vector-icons';
 import { ColorTheme } from '../theme/colors';
 import { PalinQuestion } from '../types/palinSurvey';
+import { Language } from '../i18n/translations';
+import { palinTranslationsEn } from '../i18n/palinTranslationsEn';
 
 interface PalinQuestionRendererProps {
   question: PalinQuestion;
   value: string | number | undefined;
   onChange: (val: string | number) => void;
   theme: ColorTheme;
+  lang?: Language;
 }
 
 export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
@@ -16,9 +19,26 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
   value,
   onChange,
   theme,
+  lang = 'ko',
 }) => {
-  const choices = question.options?.choices || [];
-  const scale = question.options?.scale;
+  const enTrans = lang === 'en' ? palinTranslationsEn[question.id] : undefined;
+
+  const questionText = enTrans?.text || question.text.trim();
+  const descriptionText = enTrans?.description || question.description;
+
+  const rawChoices = question.options?.choices || [];
+  const choices = rawChoices.map((c, idx) => ({
+    ...c,
+    label: enTrans?.choices && enTrans.choices[idx] ? enTrans.choices[idx] : c.label,
+  }));
+
+  const scale = question.options?.scale
+    ? {
+        ...question.options.scale,
+        low_label: enTrans?.low_label || question.options.scale.low_label,
+        high_label: enTrans?.high_label || question.options.scale.high_label,
+      }
+    : null;
 
   return (
     <View
@@ -36,12 +56,12 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
         <View style={[styles.qNumBadge, { backgroundColor: theme.primaryLight }]}>
           <Text style={[styles.qNumText, { color: theme.primary }]}>Q{question.number}</Text>
         </View>
-        <Text style={[styles.questionText, { color: theme.textPrimary }]}>{question.text.trim()}</Text>
+        <Text style={[styles.questionText, { color: theme.textPrimary }]}>{questionText}</Text>
       </View>
 
-      {question.description && (
+      {descriptionText && (
         <Text style={[styles.descriptionText, { color: theme.textSecondary }]}>
-          {question.description}
+          {descriptionText}
         </Text>
       )}
 
@@ -97,7 +117,13 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
           question.id === 1100613129;
 
         const placeholder =
-          question.number === 4
+          lang === 'en'
+            ? question.number === 4
+              ? "e.g., 38"
+              : question.number === 6
+              ? "e.g., 2019-05-10 (6 years 2 months)"
+              : "Enter your answer..."
+            : question.number === 4
             ? "예: 38 (숫자 또는 연령 입력)"
             : question.number === 6
             ? "예: 2019년 05월 10일 (6세 2개월)"
@@ -213,7 +239,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
           {value !== undefined && (
             <View style={[styles.selectedScaleBadge, { backgroundColor: theme.primaryLight }]}>
               <Text style={[styles.selectedScaleText, { color: theme.primary }]}>
-                선택된 점수: {value}점
+                {lang === 'en' ? `Selected Score: ${value} / 10` : `선택된 점수: ${value}점`}
               </Text>
             </View>
           )}

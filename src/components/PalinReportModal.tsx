@@ -17,6 +17,7 @@ import {
   generatePalinSummaryText,
   palinFormSchema,
 } from '../services/palinSurveyService';
+import { Language, i18n } from '../i18n/translations';
 
 interface PalinReportModalProps {
   visible: boolean;
@@ -24,6 +25,7 @@ interface PalinReportModalProps {
   answers: PalinAnswers;
   onClose: () => void;
   onReset: () => void;
+  lang?: Language;
 }
 
 export const PalinReportModal: React.FC<PalinReportModalProps> = ({
@@ -32,9 +34,11 @@ export const PalinReportModal: React.FC<PalinReportModalProps> = ({
   answers,
   onClose,
   onReset,
+  lang = 'ko',
 }) => {
   const [copied, setCopied] = useState(false);
   const scores = calculatePalinScores(answers);
+  const t = i18n[lang];
 
   const handleCopyText = () => {
     const text = generatePalinSummaryText(answers);
@@ -59,7 +63,7 @@ export const PalinReportModal: React.FC<PalinReportModalProps> = ({
         <View style={[styles.header, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
           <View style={styles.headerTitleRow}>
             <Ionicons name="ribbon" size={24} color={theme.primary} />
-            <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>Palin 평가지 결과 보고서</Text>
+            <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>{t.palinReportTitle}</Text>
           </View>
           <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
             <Ionicons name="close" size={24} color={theme.textPrimary} />
@@ -69,22 +73,24 @@ export const PalinReportModal: React.FC<PalinReportModalProps> = ({
         <ScrollView contentContainerStyle={styles.scrollContent}>
           {/* Status Card */}
           <View style={[styles.statusCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
-            <Text style={[styles.statusTitle, { color: theme.textPrimary }]}>{palinFormSchema.title}</Text>
+            <Text style={[styles.statusTitle, { color: theme.textPrimary }]}>
+              {lang === 'en' ? 'Stuttering Child Parent Questionnaire' : palinFormSchema.title}
+            </Text>
             <View style={styles.statusRow}>
-              <Text style={[styles.statusLabel, { color: theme.textSecondary }]}>설문 완료 현황:</Text>
+              <Text style={[styles.statusLabel, { color: theme.textSecondary }]}>{t.surveyStatus}:</Text>
               <Text style={[styles.statusValue, { color: theme.primary }]}>
-                {scores.totalAnsweredCount} / {scores.totalQuestionsCount} 문항
+                {scores.totalAnsweredCount} / {scores.totalQuestionsCount}
               </Text>
             </View>
             <View style={styles.statusRow}>
-              <Text style={[styles.statusLabel, { color: theme.textSecondary }]}>연구 동의 여부:</Text>
+              <Text style={[styles.statusLabel, { color: theme.textSecondary }]}>{t.consentStatus}:</Text>
               <Text
                 style={[
                   styles.statusValue,
                   { color: scores.consentAgreed ? theme.success : theme.warning, fontWeight: '700' },
                 ]}
               >
-                {scores.consentAgreed ? '동의함 (Agreed)' : '미동의 (Not Agreed)'}
+                {scores.consentAgreed ? t.agreed : t.notAgreed}
               </Text>
             </View>
           </View>
@@ -93,18 +99,12 @@ export const PalinReportModal: React.FC<PalinReportModalProps> = ({
           <View style={[styles.scoreCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
             <View style={styles.scoreHeader}>
               <Ionicons name="sparkles" size={20} color={theme.accent} />
-              <Text style={[styles.scoreTitle, { color: theme.textPrimary }]}>
-                1. 간편 행동억제기질검사 (SBIS)
-              </Text>
+              <Text style={[styles.scoreTitle, { color: theme.textPrimary }]}>{t.sbisTitle}</Text>
             </View>
-            <Text style={[styles.scoreDesc, { color: theme.textSecondary }]}>
-              Short Behavioral Inhibition Scale (5문항 총점)
-            </Text>
+            <Text style={[styles.scoreDesc, { color: theme.textSecondary }]}>{t.sbisDesc}</Text>
             <View style={styles.bigScoreRow}>
-              <Text style={[styles.bigScore, { color: theme.accent }]}>
-                {scores.sbisTotalScore}
-              </Text>
-              <Text style={[styles.bigScoreMax, { color: theme.textMuted }]}>/ 20점</Text>
+              <Text style={[styles.bigScore, { color: theme.accent }]}>{scores.sbisTotalScore}</Text>
+              <Text style={[styles.bigScoreMax, { color: theme.textMuted }]}>/ 20</Text>
             </View>
           </View>
 
@@ -112,55 +112,41 @@ export const PalinReportModal: React.FC<PalinReportModalProps> = ({
           <View style={[styles.scoreCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
             <View style={styles.scoreHeader}>
               <Ionicons name="analytics" size={20} color={theme.primary} />
-              <Text style={[styles.scoreTitle, { color: theme.textPrimary }]}>
-                2. Palin 부모 평가지 (PPRS) 3대 하위 척도
-              </Text>
+              <Text style={[styles.scoreTitle, { color: theme.textPrimary }]}>{t.pprsTitle}</Text>
             </View>
 
             <View style={styles.subscaleRow}>
               <View style={styles.subscaleInfo}>
-                <Text style={[styles.subscaleName, { color: theme.textPrimary }]}>
-                  하위척도 1: 아이에게 미치는 영향
-                </Text>
-                <Text style={[styles.subscaleSub, { color: theme.textSecondary }]}>
-                  (말하기 감소, 좌절감, 짜증, 불안 등)
-                </Text>
+                <Text style={[styles.subscaleName, { color: theme.textPrimary }]}>{t.pprsSub1}</Text>
+                <Text style={[styles.subscaleSub, { color: theme.textSecondary }]}>{t.pprsSub1Desc}</Text>
               </View>
               <View style={[styles.scorePill, { backgroundColor: theme.primaryLight }]}>
                 <Text style={[styles.scorePillText, { color: theme.primary }]}>
-                  평균 {scores.pprsImpactAvg}점
+                  {t.avgScore} {scores.pprsImpactAvg}
                 </Text>
               </View>
             </View>
 
             <View style={styles.subscaleRow}>
               <View style={styles.subscaleInfo}>
-                <Text style={[styles.subscaleName, { color: theme.textPrimary }]}>
-                  하위척도 2: 말더듬 심도 및 부모의 걱정
-                </Text>
-                <Text style={[styles.subscaleSub, { color: theme.textSecondary }]}>
-                  (빈도, 심도, 미래 불안, 가족 영향)
-                </Text>
+                <Text style={[styles.subscaleName, { color: theme.textPrimary }]}>{t.pprsSub2}</Text>
+                <Text style={[styles.subscaleSub, { color: theme.textSecondary }]}>{t.pprsSub2Desc}</Text>
               </View>
               <View style={[styles.scorePill, { backgroundColor: theme.primaryLight }]}>
                 <Text style={[styles.scorePillText, { color: theme.primary }]}>
-                  평균 {scores.pprsConcernAvg}점
+                  {t.avgScore} {scores.pprsConcernAvg}
                 </Text>
               </View>
             </View>
 
             <View style={styles.subscaleRow}>
               <View style={styles.subscaleInfo}>
-                <Text style={[styles.subscaleName, { color: theme.textPrimary }]}>
-                  하위척도 3: 부모의 지식 및 대처 자신감
-                </Text>
-                <Text style={[styles.subscaleSub, { color: theme.textSecondary }]}>
-                  (영향 요인 인지, 대응 및 격려 자신감)
-                </Text>
+                <Text style={[styles.subscaleName, { color: theme.textPrimary }]}>{t.pprsSub3}</Text>
+                <Text style={[styles.subscaleSub, { color: theme.textSecondary }]}>{t.pprsSub3Desc}</Text>
               </View>
               <View style={[styles.scorePill, { backgroundColor: theme.primaryLight }]}>
                 <Text style={[styles.scorePillText, { color: theme.primary }]}>
-                  평균 {scores.pprsKnowledgeAvg}점
+                  {t.avgScore} {scores.pprsKnowledgeAvg}
                 </Text>
               </View>
             </View>
@@ -174,7 +160,7 @@ export const PalinReportModal: React.FC<PalinReportModalProps> = ({
               activeOpacity={0.8}
             >
               <Ionicons name={copied ? 'checkmark-circle' : 'copy-outline'} size={18} color="#FFF" />
-              <Text style={styles.actionBtnText}>{copied ? '복사 완료!' : '결과 요약 복사'}</Text>
+              <Text style={styles.actionBtnText}>{copied ? t.copied : t.copySummary}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -186,7 +172,7 @@ export const PalinReportModal: React.FC<PalinReportModalProps> = ({
               activeOpacity={0.8}
             >
               <Ionicons name="trash-outline" size={18} color="#EF4444" />
-              <Text style={[styles.actionBtnText, { color: '#EF4444' }]}>설문 초기화</Text>
+              <Text style={[styles.actionBtnText, { color: '#EF4444' }]}>{t.resetSurvey}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

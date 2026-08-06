@@ -2,11 +2,14 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ColorTheme } from '../theme/colors';
+import { Language, i18n } from '../i18n/translations';
 
 interface HeaderProps {
   theme: ColorTheme;
   isDark: boolean;
   onToggleTheme: () => void;
+  lang: Language;
+  onToggleLanguage: () => void;
   progressPercent: number;
   onReset: () => void;
 }
@@ -15,38 +18,51 @@ export const Header: React.FC<HeaderProps> = ({
   theme,
   isDark,
   onToggleTheme,
+  lang,
+  onToggleLanguage,
   progressPercent,
   onReset,
 }) => {
+  const t = i18n[lang];
+
   return (
     <View style={[styles.container, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
       <View style={styles.topRow}>
         <View style={styles.titleContainer}>
           <View style={[styles.badge, { backgroundColor: theme.badgeBg }]}>
             <Ionicons name="medical" size={14} color={theme.primary} style={{ marginRight: 4 }} />
-            <Text style={[styles.badgeText, { color: theme.primary }]}>언어치료 / 임상 평가</Text>
+            <Text style={[styles.badgeText, { color: theme.primary }]}>{t.clinicalBadge}</Text>
           </View>
-          <Text style={[styles.title, { color: theme.textPrimary }]}>말더듬아동 부모 설문지</Text>
-          <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
-            Stuttering Parent Questionnaire for Clinical Evaluation
-          </Text>
+          <Text style={[styles.title, { color: theme.textPrimary }]}>{t.appTitle}</Text>
+          <Text style={[styles.subtitle, { color: theme.textSecondary }]}>{t.appSubtitle}</Text>
         </View>
 
         <View style={styles.actionsRow}>
+          {/* Language Toggle Button */}
+          <TouchableOpacity
+            style={[styles.langButton, { backgroundColor: theme.chipBg, borderColor: theme.cardBorder }]}
+            onPress={onToggleLanguage}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.langText, { color: theme.textPrimary }]}>
+              {lang === 'ko' ? '🇺🇸 EN' : '🇰🇷 KR'}
+            </Text>
+          </TouchableOpacity>
+
+          {/* Theme Toggle Button */}
           <TouchableOpacity
             style={[styles.iconButton, { backgroundColor: theme.chipBg }]}
             onPress={onToggleTheme}
             activeOpacity={0.7}
-            accessibilityLabel="테마 변경"
           >
             <Ionicons name={isDark ? 'sunny' : 'moon'} size={20} color={theme.textPrimary} />
           </TouchableOpacity>
 
+          {/* Reset Button */}
           <TouchableOpacity
             style={[styles.iconButton, { backgroundColor: theme.chipBg }]}
             onPress={onReset}
             activeOpacity={0.7}
-            accessibilityLabel="설문 초기화"
           >
             <Ionicons name="refresh" size={20} color={theme.textMuted} />
           </TouchableOpacity>
@@ -56,7 +72,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Progress Section */}
       <View style={styles.progressContainer}>
         <View style={styles.progressHeader}>
-          <Text style={[styles.progressLabel, { color: theme.textSecondary }]}>설문 작성 진행률</Text>
+          <Text style={[styles.progressLabel, { color: theme.textSecondary }]}>{t.progressLabel}</Text>
           <Text style={[styles.progressValue, { color: theme.primary }]}>
             {Math.round(progressPercent)}%
           </Text>
@@ -121,6 +137,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  langButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 19,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  langText: {
+    fontSize: 12,
+    fontWeight: '700',
   },
   iconButton: {
     width: 38,

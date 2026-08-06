@@ -4,12 +4,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { ColorTheme } from '../theme/colors';
 import { SURVEY_SECTIONS } from '../constants/surveyData';
 import { SurveySection } from '../types/survey';
+import { Language, i18n } from '../i18n/translations';
 
 interface SectionNavProps {
   theme: ColorTheme;
   activeSection: SurveySection;
   onSelectSection: (section: SurveySection) => void;
   sectionStatus: Record<SurveySection, boolean>;
+  lang?: Language;
 }
 
 export const SectionNav: React.FC<SectionNavProps> = ({
@@ -17,7 +19,16 @@ export const SectionNav: React.FC<SectionNavProps> = ({
   activeSection,
   onSelectSection,
   sectionStatus,
+  lang = 'ko',
 }) => {
+  const t = i18n[lang];
+  const sectionTitleMap: Record<SurveySection, string> = {
+    info: t.sec1Title,
+    onset: t.sec2Title,
+    situations: t.sec3Title,
+    family: t.sec4Title,
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.bg }]}>
       <ScrollView
@@ -28,6 +39,7 @@ export const SectionNav: React.FC<SectionNavProps> = ({
         {SURVEY_SECTIONS.map((sec) => {
           const isActive = activeSection === sec.id;
           const isComplete = sectionStatus[sec.id as SurveySection];
+          const displayTitle = sectionTitleMap[sec.id as SurveySection] || sec.title;
 
           return (
             <TouchableOpacity
@@ -69,7 +81,7 @@ export const SectionNav: React.FC<SectionNavProps> = ({
                   },
                 ]}
               >
-                {sec.title}
+                {displayTitle}
               </Text>
 
               {isComplete && !isActive && (
