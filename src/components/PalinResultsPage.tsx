@@ -134,6 +134,71 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
               <Text style={[styles.factorScoreValue, { color: theme.primary }]}>
                 {f1.score}
               </Text>
+              <View style={[styles.levelBadge, { backgroundColor: f1.badgeColor }]}>
+                <Text style={styles.levelBadgeText}>
+                  {lang === 'en' ? f1.levelLabelEn : f1.levelLabelKr}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Scale Assessment Box */}
+          <View style={[styles.scaleAssessmentCard, { backgroundColor: theme.primaryLight, borderColor: theme.primary }]}>
+            <View style={styles.scaleAssessmentRow}>
+              <Ionicons name="pricetag" size={16} color={theme.primary} />
+              <Text style={[styles.scaleAssessmentTitle, { color: theme.primary }]}>
+                {lang === 'en' ? 'Factor 1 Score Rating Scale:' : 'Factor 1 점수 평가 척도:'}
+              </Text>
+              <View style={[styles.inlineLevelTag, { backgroundColor: f1.badgeColor }]}>
+                <Text style={styles.inlineLevelTagText}>
+                  {f1.levelLabelEn} ({f1.levelLabelKr})
+                </Text>
+              </View>
+            </View>
+            <Text style={[styles.scaleFormulaCode, { color: theme.textSecondary }]}>
+              = IF(Score &le; 2.79, "very high", IF(Score &le; 4.19, "high", IF(Score &le; 5.59, "moderate", IF(Score &le; 6.69, "low", "very low"))))
+            </Text>
+
+            {/* Threshold Legend Bar */}
+            <View style={styles.legendRow}>
+              {[
+                { label: 'Very High', range: '&le; 2.79', key: 'very_high', color: '#EF4444' },
+                { label: 'High', range: '&le; 4.19', key: 'high', color: '#F97316' },
+                { label: 'Moderate', range: '&le; 5.59', key: 'moderate', color: '#F59E0B' },
+                { label: 'Low', range: '&le; 6.69', key: 'low', color: '#10B981' },
+                { label: 'Very Low', range: '> 6.69', key: 'very_low', color: '#059669' },
+              ].map((item) => {
+                const isActive = f1.levelKey === item.key;
+                return (
+                  <View
+                    key={item.key}
+                    style={[
+                      styles.legendItem,
+                      {
+                        backgroundColor: isActive ? item.color : theme.chipBg,
+                        borderColor: isActive ? item.color : theme.cardBorder,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.legendLabel,
+                        { color: isActive ? '#FFFFFF' : theme.textPrimary, fontWeight: isActive ? '800' : '600' },
+                      ]}
+                    >
+                      {item.label}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.legendRange,
+                        { color: isActive ? '#FFFFFF' : theme.textMuted },
+                      ]}
+                    >
+                      {item.range}
+                    </Text>
+                  </View>
+                );
+              })}
             </View>
           </View>
 
@@ -393,6 +458,72 @@ const styles = StyleSheet.create({
   factorScoreValue: {
     fontSize: 26,
     fontWeight: '900',
+    textAlign: 'right',
+  },
+  levelBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+    alignSelf: 'flex-end',
+    marginTop: 4,
+  },
+  levelBadgeText: {
+    color: '#FFF',
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  scaleAssessmentCard: {
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: 14,
+  },
+  scaleAssessmentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 6,
+  },
+  scaleAssessmentTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  inlineLevelTag: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+    marginLeft: 4,
+  },
+  inlineLevelTagText: {
+    color: '#FFF',
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  scaleFormulaCode: {
+    fontSize: 11,
+    fontWeight: '600',
+    marginBottom: 10,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+  },
+  legendRow: {
+    flexDirection: 'row',
+    gap: 4,
+  },
+  legendItem: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 2,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  legendLabel: {
+    fontSize: 10,
+  },
+  legendRange: {
+    fontSize: 9,
+    marginTop: 2,
+    fontWeight: '600',
   },
   formulaBox: {
     padding: 12,

@@ -11,12 +11,18 @@ export interface Factor1Item {
   weightedValue: number;
 }
 
+export type Factor1LevelKey = 'very_high' | 'high' | 'moderate' | 'low' | 'very_low';
+
 export interface Factor1Result {
   score: number;
   weightedSum: number;
   answeredCount: number;
   totalItems: number;
   itemDetails: Factor1Item[];
+  levelKey: Factor1LevelKey;
+  levelLabelEn: string;
+  levelLabelKr: string;
+  badgeColor: string;
 }
 
 export interface PalinScores {
@@ -37,6 +43,25 @@ export function getAllPalinQuestions(): PalinQuestion[] {
     sec.questions.forEach((q) => allQs.push(q));
   });
   return allQs;
+}
+
+export function getFactor1Level(score: number): {
+  levelKey: Factor1LevelKey;
+  levelLabelEn: string;
+  levelLabelKr: string;
+  badgeColor: string;
+} {
+  if (score <= 2.79) {
+    return { levelKey: 'very_high', levelLabelEn: 'Very High', levelLabelKr: '매우 높음', badgeColor: '#EF4444' };
+  } else if (score <= 4.19) {
+    return { levelKey: 'high', levelLabelEn: 'High', levelLabelKr: '높음', badgeColor: '#F97316' };
+  } else if (score <= 5.59) {
+    return { levelKey: 'moderate', levelLabelEn: 'Moderate', levelLabelKr: '보통', badgeColor: '#F59E0B' };
+  } else if (score <= 6.69) {
+    return { levelKey: 'low', levelLabelEn: 'Low', levelLabelKr: '낮음', badgeColor: '#10B981' };
+  } else {
+    return { levelKey: 'very_low', levelLabelEn: 'Very Low', levelLabelKr: '매우 낮음', badgeColor: '#059669' };
+  }
 }
 
 export function calculateFactor1(answers: PalinAnswers): Factor1Result {
@@ -79,6 +104,7 @@ export function calculateFactor1(answers: PalinAnswers): Factor1Result {
 
   const divisor = answeredCount > 0 ? answeredCount : 7;
   const score = Number((weightedSum / divisor).toFixed(3));
+  const levelInfo = getFactor1Level(score);
 
   return {
     score,
@@ -86,6 +112,7 @@ export function calculateFactor1(answers: PalinAnswers): Factor1Result {
     answeredCount,
     totalItems: 7,
     itemDetails,
+    ...levelInfo,
   };
 }
 
@@ -157,8 +184,9 @@ export function generatePalinSummaryText(answers: PalinAnswers): string {
   text += `연구 동의 여부: ${scores.consentAgreed ? '동의함 (Yes)' : '미동의 (No)'}\n\n`;
 
   text += `=== 1. 요인 점수 (Factor Scores) ===\n`;
-  text += `- Factor 1 (Q22~Q28 가중평균): ${scores.factor1.score}점 (응답 문항 수: ${scores.factor1.answeredCount}/${scores.factor1.totalItems})\n`;
-  text += `  수식: SUM(Q22*0.751, Q23*0.775, Q24*0.786, Q25*0.783, Q26*0.747, Q27*0.59, Q28*0.525) / COUNT(Q22:Q28)\n\n`;
+  text += `- Factor 1 (Q22~Q28 가중평균): ${scores.factor1.score}점 [ 평가: ${scores.factor1.levelLabelKr} / ${scores.factor1.levelLabelEn} ] (응답 문항 수: ${scores.factor1.answeredCount}/${scores.factor1.totalItems})\n`;
+  text += `  수식: SUM(Q22*0.751, Q23*0.775, Q24*0.786, Q25*0.783, Q26*0.747, Q27*0.59, Q28*0.525) / COUNT(Q22:Q28)\n`;
+  text += `  척도: IF(Score<=2.79, "very high", IF(Score<=4.19, "high", IF(Score<=5.59, "moderate", IF(Score<=6.69, "low", "very low"))))\n\n`;
 
   text += `=== 2. 주요 하위척도 점수 요약 ===\n`;
   text += `- 간편 행동억제기질검사 (SBIS): ${scores.sbisTotalScore}점 / 20점 만점\n`;
