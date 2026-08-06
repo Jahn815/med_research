@@ -151,7 +151,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
               </Text>
               <View style={[styles.inlineLevelTag, { backgroundColor: f1.badgeColor }]}>
                 <Text style={styles.inlineLevelTagText}>
-                  {f1.levelLabelEn} ({f1.levelLabelKr})
+                  {lang === 'en' ? f1.levelLabelEn : f1.levelLabelKr}
                 </Text>
               </View>
             </View>
