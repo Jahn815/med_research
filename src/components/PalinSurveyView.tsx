@@ -22,6 +22,7 @@ import {
 } from '../i18n/palinTranslationsEn';
 import { PalinQuestionRenderer } from './PalinQuestionRenderer';
 import { PalinReportModal } from './PalinReportModal';
+import { PalinResultsPage } from './PalinResultsPage';
 
 interface PalinSurveyViewProps {
   theme: ColorTheme;
@@ -41,6 +42,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
   const [activeSecIndex, setActiveSecIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<PalinAnswers>({});
   const [showReportModal, setShowReportModal] = useState<boolean>(false);
+  const [showResultsPage, setShowResultsPage] = useState<boolean>(false);
 
   const t = i18n[lang];
   const currentSection: PalinSection = palinFormSchema.sections[activeSecIndex];
@@ -56,6 +58,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
   const handleReset = () => {
     setAnswers({});
     setActiveSecIndex(0);
+    setShowResultsPage(false);
   };
 
   // Progress Calculation
@@ -76,6 +79,22 @@ Completion of this survey takes approximately 10-15 minutes.
 Parents of preschool or elementary school children diagnosed with stuttering (or recovered from past stuttering).
 Your responses will be kept strictly anonymous and confidential.`;
 
+  // IF RESULTS PAGE MODE IS ACTIVE, RENDER RESULTS PAGE
+  if (showResultsPage) {
+    return (
+      <PalinResultsPage
+        answers={answers}
+        theme={theme}
+        isDark={isDark}
+        onToggleTheme={onToggleTheme}
+        lang={lang}
+        onToggleLanguage={onToggleLanguage}
+        onBackToSurvey={() => setShowResultsPage(false)}
+        onResetSurvey={handleReset}
+      />
+    );
+  }
+
   return (
     <View style={styles.container}>
       {/* Research Title Header Banner */}
@@ -87,6 +106,18 @@ Your responses will be kept strictly anonymous and confidential.`;
           </View>
 
           <View style={styles.headerActionBtns}>
+            {/* Direct Jump to Results Page */}
+            <TouchableOpacity
+              style={[styles.resultsPageBtn, { backgroundColor: theme.primaryLight, borderColor: theme.primary }]}
+              onPress={() => setShowResultsPage(true)}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="analytics-sharp" size={14} color={theme.primary} style={{ marginRight: 4 }} />
+              <Text style={[styles.resultsPageBtnText, { color: theme.primary }]}>
+                {lang === 'en' ? 'Results Page' : '결과 분석'}
+              </Text>
+            </TouchableOpacity>
+
             {/* Language Switch */}
             <TouchableOpacity
               style={[styles.langBtn, { backgroundColor: theme.chipBg, borderColor: theme.cardBorder }]}
@@ -244,10 +275,12 @@ Your responses will be kept strictly anonymous and confidential.`;
           ) : (
             <TouchableOpacity
               style={[styles.btn, styles.nextBtn, { backgroundColor: theme.primary, flex: 1 }]}
-              onPress={() => setShowReportModal(true)}
+              onPress={() => setShowResultsPage(true)}
             >
-              <Ionicons name="document-text" size={18} color="#FFFFFF" style={{ marginRight: 6 }} />
-              <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '800' }]}>{t.viewReport}</Text>
+              <Ionicons name="analytics" size={18} color="#FFFFFF" style={{ marginRight: 6 }} />
+              <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '800' }]}>
+                {lang === 'en' ? 'View Results & Factor Analysis' : '결과 보고서 및 요인분석 보기'}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
@@ -297,6 +330,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  resultsPageBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 9,
+    paddingVertical: 5,
+    borderRadius: 14,
+    borderWidth: 1,
+  },
+  resultsPageBtnText: {
+    fontSize: 11,
+    fontWeight: '800',
   },
   langBtn: {
     paddingHorizontal: 10,

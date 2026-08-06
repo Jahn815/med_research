@@ -3,6 +3,22 @@ import { PalinFormSchema, PalinAnswers, PalinSection, PalinQuestion } from '../t
 
 export const palinFormSchema: PalinFormSchema = rawData as unknown as PalinFormSchema;
 
+export interface Factor1Item {
+  qNum: number;
+  text: string;
+  value: number | null;
+  weight: number;
+  weightedValue: number;
+}
+
+export interface Factor1Result {
+  score: number;
+  weightedSum: number;
+  answeredCount: number;
+  totalItems: number;
+  itemDetails: Factor1Item[];
+}
+
 export interface PalinScores {
   consentAgreed: boolean;
   sbisTotalScore: number;
@@ -12,6 +28,7 @@ export interface PalinScores {
   pprsKnowledgeAvg: number;
   totalAnsweredCount: number;
   totalQuestionsCount: number;
+  factor1: Factor1Result;
 }
 
 export function getAllPalinQuestions(): PalinQuestion[] {
@@ -22,6 +39,56 @@ export function getAllPalinQuestions(): PalinQuestion[] {
   return allQs;
 }
 
+export function calculateFactor1(answers: PalinAnswers): Factor1Result {
+  const factor1Questions = [
+    { id: 1481741321, qNum: 22, text: '1) 아이가 말더듬 때문에 말을 적게 합니까?', weight: 0.751 },
+    { id: 1575572212, qNum: 23, text: '2) 아이가 얼마나 자신의 말에 좌절감을 느낍니까?', weight: 0.775 },
+    { id: 107897978, qNum: 24, text: '3) 아이가 얼마나 자신의 말더듬에 짜증을 냅니까?', weight: 0.786 },
+    { id: 914545063, qNum: 25, text: '4) 아이가 얼마나 자신의 말에 대해 불안감을 느낍니까?', weight: 0.783 },
+    { id: 146388951, qNum: 26, text: '5) 아이가 얼마나 자신 있게 말합니까?', weight: 0.747 },
+    { id: 859143932, qNum: 27, text: '6) 아이가 대체로 얼마나 행복합니까?', weight: 0.59 },
+    { id: 1623691428, qNum: 28, text: '7) 아이가 얼마나 자신의 감정을 잘 이야기할 수 있습니까?', weight: 0.525 },
+  ];
+
+  let weightedSum = 0;
+  let answeredCount = 0;
+
+  const itemDetails: Factor1Item[] = factor1Questions.map((q) => {
+    const rawVal = answers[q.id];
+    let val: number | null = null;
+
+    if (typeof rawVal === 'number') {
+      val = rawVal;
+    } else if (typeof rawVal === 'string' && rawVal.trim() !== '' && !isNaN(Number(rawVal))) {
+      val = Number(rawVal);
+    }
+
+    if (val !== null) {
+      weightedSum += val * q.weight;
+      answeredCount++;
+    }
+
+    return {
+      qNum: q.qNum,
+      text: q.text,
+      value: val,
+      weight: q.weight,
+      weightedValue: val !== null ? Number((val * q.weight).toFixed(3)) : 0,
+    };
+  });
+
+  const divisor = answeredCount > 0 ? answeredCount : 7;
+  const score = Number((weightedSum / divisor).toFixed(3));
+
+  return {
+    score,
+    weightedSum: Number(weightedSum.toFixed(3)),
+    answeredCount,
+    totalItems: 7,
+    itemDetails,
+  };
+}
+
 export function calculatePalinScores(answers: PalinAnswers): PalinScores {
   const allQuestions = getAllPalinQuestions();
   const totalQuestionsCount = allQuestions.length;
@@ -30,7 +97,7 @@ export function calculatePalinScores(answers: PalinAnswers): PalinScores {
   const consentAns = answers[1536400327]; // Q1 id
   const consentAgreed = consentAns === 0 || consentAns === '예' || consentAns === 0;
 
-  // 2. SBIS (Q17 ~ Q21, ids: 2015490662, 1544182638, 1140751121, 2129570078, 676432939)
+  // 2. SBIS (Q17 ~ Q21)
   const sbisIds = [2015490662, 1544182638, 1140751121, 2129570078, 676432939];
   let sbisTotalScore = 0;
   sbisIds.forEach((id) => {
@@ -40,8 +107,7 @@ export function calculatePalinScores(answers: PalinAnswers): PalinScores {
     }
   });
 
-  // 3. PPRS Subscales (Q22 ~ Q40, drop-downs with 0-10 values)
-  // Subscale 1: Impact on child (Q22~Q31, ids: 1481741321, 1575572212, 107897978, 914545063, 146388951, 859143932, 1623691428, 2094095092, 648032736, 740503268)
+  // 3. PPRS Subscales (Q22 ~ Q40)
   const impactIds = [1481741321, 1575572212, 107897978, 914545063, 146388951, 859143932, 1623691428, 2094095092, 648032736, 740503268];
   const concernIds = [1050082798, 341804199, 905335102, 1048848859]; // Q32 ~ Q35
   const knowledgeIds = [1520832689, 1667221451, 1434469522, 493302818, 705539961]; // Q36 ~ Q40
@@ -67,6 +133,8 @@ export function calculatePalinScores(answers: PalinAnswers): PalinScores {
     (k) => answers[Number(k)] !== undefined && answers[Number(k)] !== ''
   ).length;
 
+  const factor1 = calculateFactor1(answers);
+
   return {
     consentAgreed,
     sbisTotalScore,
@@ -76,6 +144,7 @@ export function calculatePalinScores(answers: PalinAnswers): PalinScores {
     pprsKnowledgeAvg,
     totalAnsweredCount,
     totalQuestionsCount,
+    factor1,
   };
 }
 
@@ -83,17 +152,21 @@ export function generatePalinSummaryText(answers: PalinAnswers): string {
   const scores = calculatePalinScores(answers);
   const allQs = getAllPalinQuestions();
 
-  let text = `[Palin 부모 평가지 & 기질검사 (Palin Parent Rating Scale) 응답 결과 보고서]\n\n`;
+  let text = `[Palin 부모 평가지 & 기질검사 (Palin Parent Rating Scale) 응답 및 요인 분석 결과 보고서]\n\n`;
   text += `작성 현황: ${scores.totalAnsweredCount} / ${scores.totalQuestionsCount} 문항 완료\n`;
   text += `연구 동의 여부: ${scores.consentAgreed ? '동의함 (Yes)' : '미동의 (No)'}\n\n`;
 
-  text += `=== 1. 주요 척도 점수 요약 ===\n`;
+  text += `=== 1. 요인 점수 (Factor Scores) ===\n`;
+  text += `- Factor 1 (Q22~Q28 가중평균): ${scores.factor1.score}점 (응답 문항 수: ${scores.factor1.answeredCount}/${scores.factor1.totalItems})\n`;
+  text += `  수식: SUM(Q22*0.751, Q23*0.775, Q24*0.786, Q25*0.783, Q26*0.747, Q27*0.59, Q28*0.525) / COUNT(Q22:Q28)\n\n`;
+
+  text += `=== 2. 주요 하위척도 점수 요약 ===\n`;
   text += `- 간편 행동억제기질검사 (SBIS): ${scores.sbisTotalScore}점 / 20점 만점\n`;
   text += `- Palin PPRS [영향 척도]: 평균 ${scores.pprsImpactAvg} / 10점\n`;
   text += `- Palin PPRS [심도 및 부모 걱정]: 평균 ${scores.pprsConcernAvg} / 10점\n`;
   text += `- Palin PPRS [부모 지식 및 대처 자신감]: 평균 ${scores.pprsKnowledgeAvg} / 10점\n\n`;
 
-  text += `=== 2. 세부 문항별 응답 내용 ===\n`;
+  text += `=== 3. 세부 문항별 응답 내용 ===\n`;
   allQs.forEach((q) => {
     const val = answers[q.id];
     let displayVal = '미응답';
