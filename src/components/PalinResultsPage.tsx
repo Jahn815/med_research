@@ -159,11 +159,11 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
             {/* Threshold Legend Bar */}
             <View style={styles.legendRow}>
               {[
-                { label: 'Very High', range: '&le; 2.79', key: 'very_high', color: '#EF4444' },
-                { label: 'High', range: '&le; 4.19', key: 'high', color: '#F97316' },
-                { label: 'Moderate', range: '&le; 5.59', key: 'moderate', color: '#F59E0B' },
-                { label: 'Low', range: '&le; 6.69', key: 'low', color: '#10B981' },
-                { label: 'Very Low', range: '> 6.69', key: 'very_low', color: '#059669' },
+                { label: lang === 'en' ? 'Very High' : '매우 높음', range: '0 - 2.79', key: 'very_high', color: '#EF4444' },
+                { label: lang === 'en' ? 'High' : '높음', range: '2.80 - 4.19', key: 'high', color: '#F97316' },
+                { label: lang === 'en' ? 'Moderate' : '보통', range: '4.20 - 5.59', key: 'moderate', color: '#F59E0B' },
+                { label: lang === 'en' ? 'Low' : '낮음', range: '5.60 - 6.69', key: 'low', color: '#10B981' },
+                { label: lang === 'en' ? 'Very Low' : '매우 낮음', range: '> 6.69', key: 'very_low', color: '#059669' },
               ].map((item) => {
                 const isActive = f1.levelKey === item.key;
                 return (
