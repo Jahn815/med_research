@@ -154,8 +154,9 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
       {/* 3. GRID (SBIS 5-POINT SCALE CHIPS) */}
       {question.type === 'grid' && (
         <View style={styles.gridContainer}>
-          {choices.map((c) => {
+          {choices.map((c, cIdx) => {
             const isSelected = value === c.value;
+            const pts = cIdx + 1;
             return (
               <TouchableOpacity
                 key={c.value}
@@ -186,6 +187,25 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
                   >
                     {c.label}
                   </Text>
+                  <View
+                    style={[
+                      styles.scoreTag,
+                      {
+                        backgroundColor: isSelected ? theme.primary : 'rgba(139, 92, 246, 0.12)',
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.scoreTagText,
+                        {
+                          color: isSelected ? '#FFFFFF' : '#8B5CF6',
+                        },
+                      ]}
+                    >
+                      {lang === 'en' ? `${pts} pt${pts > 1 ? 's' : ''}` : `${pts}점`}
+                    </Text>
+                  </View>
                 </View>
               </TouchableOpacity>
             );
@@ -365,5 +385,14 @@ const styles = StyleSheet.create({
   selectedScaleText: {
     fontSize: 12,
     fontWeight: '700',
+  },
+  scoreTag: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+  },
+  scoreTagText: {
+    fontSize: 11,
+    fontWeight: '800',
   },
 });

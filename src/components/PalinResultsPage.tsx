@@ -16,6 +16,7 @@ import {
   generatePalinSummaryText,
   palinFormSchema,
 } from '../services/palinSurveyService';
+import { saveSurveyResponseToFirestore } from '../services/firebase';
 import { Language, i18n } from '../i18n/translations';
 import { palinTranslationsEn } from '../i18n/palinTranslationsEn';
 
@@ -41,12 +42,34 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
   onResetSurvey,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [savedDocId, setSavedDocId] = useState<string | null>(null);
   const scores = calculatePalinScores(answers);
   const f1 = scores.factor1;
   const f2 = scores.factor2;
   const f3 = scores.factor3;
   const currentLang: Language = lang && i18n[lang] ? lang : 'ko';
   const t = i18n[currentLang];
+
+  const handleSaveToCloud = async () => {
+    try {
+      setSaveStatus('saving');
+      const docId = await saveSurveyResponseToFirestore({
+        answers,
+        scores,
+        locale: lang,
+        metadata: {
+          platform: Platform.OS,
+          userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : undefined
+        }
+      });
+      setSavedDocId(docId);
+      setSaveStatus('saved');
+    } catch (err) {
+      console.error('Firebase save error:', err);
+      setSaveStatus('error');
+    }
+  };
 
   const handleCopyText = () => {
     const text = generatePalinSummaryText(answers);
@@ -119,6 +142,91 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
               ? `Completed ${scores.totalAnsweredCount} of ${scores.totalQuestionsCount} questions`
               : `총 ${scores.totalQuestionsCount}문항 중 ${scores.totalAnsweredCount}문항 응답 완료`}
           </Text>
+        </View>
+
+        {/* 1. SBIS SECTION CARD (FIRST PLACE) */}
+        <View style={[styles.factorCard, { backgroundColor: theme.cardBg, borderColor: '#8B5CF6' }]}>
+          <View style={styles.factorHeaderRow}>
+            <View style={styles.factorTitleGroup}>
+              <View style={[styles.factorBadge, { backgroundColor: '#8B5CF6' }]}>
+                <Text style={styles.factorBadgeText}>SBIS</Text>
+              </View>
+              <Text style={[styles.factorTitle, { color: theme.textPrimary }]}>
+                {lang === 'en'
+                  ? 'Short Behavioral Inhibition Scale (SBIS)'
+                  : '간편 행동억제기질검사 (SBIS)'}
+              </Text>
+            </View>
+            <View style={[styles.scoreContainer, { backgroundColor: 'rgba(139, 92, 246, 0.1)' }]}>
+              <Text style={[styles.factorScoreValue, { color: '#8B5CF6' }]}>
+                {scores.sbisTotalScore} / 25
+              </Text>
+              <Text style={{ fontSize: 11, fontWeight: '700', color: theme.textSecondary, textAlign: 'right' }}>
+                {lang === 'en' ? 'Points' : '점 (25점 만점)'}
+              </Text>
+            </View>
+          </View>
+
+          {/* SBIS Assessment Summary Box */}
+          <View style={[styles.scaleAssessmentCard, { backgroundColor: 'rgba(139, 92, 246, 0.06)', borderColor: '#8B5CF6' }]}>
+            <View style={styles.scaleAssessmentRow}>
+              <Ionicons name="ribbon" size={18} color="#8B5CF6" />
+              <Text style={[styles.scaleAssessmentTitle, { color: '#8B5CF6' }]}>
+                {lang === 'en' ? 'SBIS Temperament Total Score:' : '행동억제 기질 측정 결과:'}
+              </Text>
+              <Text style={{ fontSize: 14, fontWeight: '800', color: theme.textPrimary }}>
+                {scores.sbisTotalScore} / 25 {lang === 'en' ? 'pts' : '점'}
+              </Text>
+            </View>
+            <Text style={{ fontSize: 12, color: theme.textSecondary, marginTop: 4, lineHeight: 18 }}>
+              {lang === 'en'
+                ? 'Each response option is scored from 1 point (first option) to 5 points (fifth option) for a total maximum of 25 points.'
+                : '각 문항당 첫 번째 선택지는 1점, 마지막 선택지는 5점으로 계산되며 (문항별 1~5점), 총 25점 만점입니다.'}
+            </Text>
+          </View>
+
+          {/* SBIS Itemized Breakdown Table */}
+          <Text style={[styles.tableSectionTitle, { color: theme.textPrimary, marginTop: 8 }]}>
+            {lang === 'en' ? 'SBIS 5-Item Response & Scoring Breakdown' : 'SBIS 5문항 응답 및 세부 점수 (문항별 1~5점)'}
+          </Text>
+
+          <View style={[styles.tableContainer, { borderColor: theme.cardBorder }]}>
+            <View style={[styles.tableHeaderRow, { backgroundColor: theme.chipBg }]}>
+              <Text style={[styles.th, { width: 45, color: theme.textSecondary }]}>{lang === 'en' ? 'Q#' : '문항'}</Text>
+              <Text style={[styles.th, { flex: 1, color: theme.textSecondary }]}>{lang === 'en' ? 'Question & Response' : '문항 내용 및 선택한 답변'}</Text>
+              <Text style={[styles.th, { width: 75, textAlign: 'right', color: theme.textSecondary }]}>{lang === 'en' ? 'Score' : '획득 점수'}</Text>
+            </View>
+
+            {scores.sbis.itemDetails.map((item, idx) => (
+              <View
+                key={item.qNum}
+                style={[
+                  styles.tableRow,
+                  {
+                    backgroundColor: idx % 2 === 0 ? theme.cardBg : theme.chipBg,
+                    borderBottomColor: theme.cardBorder,
+                  },
+                ]}
+              >
+                <Text style={[styles.td, { width: 45, fontWeight: '700', color: theme.textSecondary }]}>
+                  Q{item.qNum}
+                </Text>
+                <View style={{ flex: 1, paddingRight: 6 }}>
+                  <Text style={[styles.td, { fontWeight: '600', color: theme.textPrimary, fontSize: 12 }]} numberOfLines={2}>
+                    {lang === 'en' ? item.textEn : item.text}
+                  </Text>
+                  <Text style={{ fontSize: 11, color: item.value !== null ? '#8B5CF6' : theme.textMuted, marginTop: 2, fontWeight: '700' }}>
+                    {lang === 'en' ? 'Selected: ' : '선택한 답변: '}
+                    {lang === 'en' ? item.selectedLabelEn : item.selectedLabel}
+                    {item.value !== null ? ` (${item.score}${lang === 'en' ? ' pts' : '점'})` : ''}
+                  </Text>
+                </View>
+                <Text style={[styles.td, { width: 75, textAlign: 'right', fontWeight: '900', color: '#8B5CF6', fontSize: 14 }]}>
+                  {item.value !== null ? `${item.score} / ${lang === 'en' ? '5 pts' : '5점'}` : '-'}
+                </Text>
+              </View>
+            ))}
+          </View>
         </View>
 
         {/* FACTOR 1 CARD (FEATURED) */}
@@ -535,6 +643,46 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
 
         {/* ACTION BUTTONS */}
         <View style={styles.actionsGroup}>
+          <TouchableOpacity
+            style={[
+              styles.actionBtn,
+              {
+                backgroundColor:
+                  saveStatus === 'saved'
+                    ? '#10B981'
+                    : saveStatus === 'error'
+                    ? '#EF4444'
+                    : '#2563EB',
+              },
+            ]}
+            onPress={handleSaveToCloud}
+            disabled={saveStatus === 'saving' || saveStatus === 'saved'}
+            activeOpacity={0.8}
+          >
+            <Ionicons
+              name={
+                saveStatus === 'saving'
+                  ? 'sync'
+                  : saveStatus === 'saved'
+                  ? 'cloud-done'
+                  : saveStatus === 'error'
+                  ? 'alert-circle'
+                  : 'cloud-upload-outline'
+              }
+              size={18}
+              color="#FFF"
+            />
+            <Text style={styles.actionBtnText}>
+              {saveStatus === 'saving'
+                ? lang === 'en' ? 'Saving to Database...' : 'DB에 저장 중...'
+                : saveStatus === 'saved'
+                ? lang === 'en' ? 'Saved to Database!' : 'DB 저장 완료!'
+                : saveStatus === 'error'
+                ? lang === 'en' ? 'Error Saving (Check Config)' : '저장 실패 (설정 확인)'
+                : lang === 'en' ? 'Save to Firebase Cloud DB' : '파이어베이스 클라우드 DB에 저장'}
+            </Text>
+          </TouchableOpacity>
+
           <TouchableOpacity
             style={[styles.actionBtn, { backgroundColor: theme.primary }]}
             onPress={handleCopyText}

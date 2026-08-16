@@ -1,5 +1,6 @@
 import rawData from '../../palin_form_decoded.json';
 import { PalinFormSchema, PalinAnswers, PalinSection, PalinQuestion } from '../types/palinSurvey';
+import { palinTranslationsEn } from '../i18n/palinTranslationsEn';
 
 export const palinFormSchema: PalinFormSchema = rawData as unknown as PalinFormSchema;
 
@@ -69,10 +70,30 @@ export interface Factor3Result {
   badgeColor: string;
 }
 
+export interface SBISItem {
+  id: number;
+  qNum: number;
+  text: string;
+  textEn: string;
+  value: number | null;
+  score: number;
+  selectedLabel: string;
+  selectedLabelEn: string;
+}
+
+export interface SBISResult {
+  totalScore: number;
+  maxScore: number;
+  answeredCount: number;
+  totalItems: number;
+  itemDetails: SBISItem[];
+}
+
 export interface PalinScores {
   consentAgreed: boolean;
   sbisTotalScore: number;
   sbisMaxScore: number;
+  sbis: SBISResult;
   pprsImpactAvg: number;
   pprsConcernAvg: number;
   pprsKnowledgeAvg: number;
@@ -302,6 +323,78 @@ export function calculateFactor3(answers: PalinAnswers): Factor3Result {
   };
 }
 
+export function calculateSBIS(answers: PalinAnswers): SBISResult {
+  const sbisQuestions = [
+    { id: 2015490662, qNum: 17, text: '1) 낯선 사람이나 물건에 다가가지 않는다. 또는 가까이 다가간다.' },
+    { id: 1544182638, qNum: 18, text: '2) 부모에게서 떨어지지 않는다. 또는 부모에게서 쉽게 떨어진다.' },
+    { id: 1140751121, qNum: 19, text: '3) 처음 방문하는 장소에서 조용히 부모 곁에 있는다. 또는 곧바로 주위를 탐색하며 논다.' },
+    { id: 2129570078, qNum: 20, text: '4) 새로운 일(게임, 과제)을 할 때 먼저 지켜본다. 또는 곧바로 참여한다.' },
+    { id: 676432939, qNum: 21, text: '5) 처음 만나는 사람(어른, 친구)에게 말을 거의 건네지 않는다. 또는 쉽게 말을 건넨다.' },
+  ];
+
+  let totalScore = 0;
+  let answeredCount = 0;
+  const allQs = getAllPalinQuestions();
+
+  const itemDetails: SBISItem[] = sbisQuestions.map((q) => {
+    const rawVal = answers[q.id];
+    let val: number | null = null;
+    let score = 0;
+
+    if (typeof rawVal === 'number') {
+      val = rawVal;
+    } else if (typeof rawVal === 'string' && rawVal.trim() !== '' && !isNaN(Number(rawVal))) {
+      val = Number(rawVal);
+    }
+
+    const enObj = palinTranslationsEn[q.id];
+    const textEn = enObj?.text || q.text;
+
+    let selectedLabel = '미응답';
+    let selectedLabelEn = 'Not answered';
+
+    if (val !== null) {
+      score = val + 1; // 1st option = 1 pt, 2nd = 2 pts, 3rd = 3 pts, 4th = 4 pts, 5th = 5 pts
+      totalScore += score;
+      answeredCount++;
+
+      const qObj = allQs.find((item) => item.id === q.id);
+      const choices = qObj?.options?.choices || qObj?.options?.groups?.[0]?.choices;
+      const foundChoice = choices?.find((c) => c.value === val);
+      if (foundChoice) {
+        selectedLabel = foundChoice.label;
+      } else {
+        selectedLabel = `${score}점`;
+      }
+
+      if (enObj?.choices && enObj.choices[val]) {
+        selectedLabelEn = enObj.choices[val];
+      } else {
+        selectedLabelEn = `${score} pts`;
+      }
+    }
+
+    return {
+      id: q.id,
+      qNum: q.qNum,
+      text: q.text,
+      textEn,
+      value: val,
+      score,
+      selectedLabel,
+      selectedLabelEn,
+    };
+  });
+
+  return {
+    totalScore,
+    maxScore: 25,
+    answeredCount,
+    totalItems: 5,
+    itemDetails,
+  };
+}
+
 export function calculatePalinScores(answers: PalinAnswers): PalinScores {
   const allQuestions = getAllPalinQuestions();
   const totalQuestionsCount = allQuestions.length;
@@ -311,14 +404,8 @@ export function calculatePalinScores(answers: PalinAnswers): PalinScores {
   const consentAgreed = consentAns === 0 || consentAns === '예' || consentAns === 0;
 
   // 2. SBIS (Q17 ~ Q21)
-  const sbisIds = [2015490662, 1544182638, 1140751121, 2129570078, 676432939];
-  let sbisTotalScore = 0;
-  sbisIds.forEach((id) => {
-    const val = answers[id];
-    if (typeof val === 'number') {
-      sbisTotalScore += val;
-    }
-  });
+  const sbis = calculateSBIS(answers);
+  const sbisTotalScore = sbis.totalScore;
 
   // 3. PPRS Subscales (Q22 ~ Q40)
   const impactIds = [1481741321, 1575572212, 107897978, 914545063, 146388951, 859143932, 1623691428, 2094095092, 648032736, 740503268];
@@ -353,7 +440,8 @@ export function calculatePalinScores(answers: PalinAnswers): PalinScores {
   return {
     consentAgreed,
     sbisTotalScore,
-    sbisMaxScore: 20,
+    sbisMaxScore: 25,
+    sbis,
     pprsImpactAvg,
     pprsConcernAvg,
     pprsKnowledgeAvg,

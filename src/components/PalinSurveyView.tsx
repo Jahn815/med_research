@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -43,6 +43,16 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
   const [answers, setAnswers] = useState<PalinAnswers>({});
   const [showReportModal, setShowReportModal] = useState<boolean>(false);
   const [showResultsPage, setShowResultsPage] = useState<boolean>(false);
+
+  const isConsentYes = answers[1536400327] === 0;
+  const isConsentNo = answers[1536400327] === 1;
+  const isLocked = !isConsentYes;
+
+  useEffect(() => {
+    if (isLocked && activeSecIndex !== 0) {
+      setActiveSecIndex(0);
+    }
+  }, [isLocked, activeSecIndex]);
 
   const currentLang: Language = lang && i18n[lang] ? lang : 'ko';
   const t = i18n[currentLang];
@@ -109,12 +119,27 @@ Your responses will be kept strictly anonymous and confidential.`;
           <View style={styles.headerActionBtns}>
             {/* Direct Jump to Results Page */}
             <TouchableOpacity
-              style={[styles.resultsPageBtn, { backgroundColor: theme.primaryLight, borderColor: theme.primary }]}
-              onPress={() => setShowResultsPage(true)}
+              style={[
+                styles.resultsPageBtn,
+                {
+                  backgroundColor: isLocked ? theme.chipBg : theme.primaryLight,
+                  borderColor: isLocked ? theme.cardBorder : theme.primary,
+                  opacity: isLocked ? 0.5 : 1,
+                },
+              ]}
+              onPress={() => {
+                if (!isLocked) setShowResultsPage(true);
+              }}
+              disabled={isLocked}
               activeOpacity={0.7}
             >
-              <Ionicons name="analytics-sharp" size={14} color={theme.primary} style={{ marginRight: 4 }} />
-              <Text style={[styles.resultsPageBtnText, { color: theme.primary }]}>
+              <Ionicons
+                name={isLocked ? 'lock-closed' : 'analytics-sharp'}
+                size={14}
+                color={isLocked ? theme.textMuted : theme.primary}
+                style={{ marginRight: 4 }}
+              />
+              <Text style={[styles.resultsPageBtnText, { color: isLocked ? theme.textMuted : theme.primary }]}>
                 {lang === 'en' ? 'Results Page' : '결과 분석'}
               </Text>
             </TouchableOpacity>
@@ -167,6 +192,7 @@ Your responses will be kept strictly anonymous and confidential.`;
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabsContent}>
           {palinFormSchema.sections.map((sec, idx) => {
             const isActive = idx === activeSecIndex;
+            const isTabLocked = idx > 0 && isLocked;
             const secTitle = lang === 'en' && palinSectionTitlesEn[idx] ? palinSectionTitlesEn[idx] : sec.title;
             return (
               <TouchableOpacity
@@ -176,22 +202,31 @@ Your responses will be kept strictly anonymous and confidential.`;
                   {
                     backgroundColor: isActive ? theme.primary : theme.cardBg,
                     borderColor: isActive ? theme.primary : theme.cardBorder,
+                    opacity: isTabLocked ? 0.4 : 1,
                   },
                 ]}
-                onPress={() => setActiveSecIndex(idx)}
+                onPress={() => {
+                  if (!isTabLocked) setActiveSecIndex(idx);
+                }}
+                disabled={isTabLocked}
                 activeOpacity={0.8}
               >
-                <Text
-                  style={[
-                    styles.tabText,
-                    {
-                      color: isActive ? '#FFFFFF' : theme.textPrimary,
-                      fontWeight: isActive ? '700' : '600',
-                    },
-                  ]}
-                >
-                  {secTitle}
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  {isTabLocked && (
+                    <Ionicons name="lock-closed" size={12} color={theme.textMuted} style={{ marginRight: 4 }} />
+                  )}
+                  <Text
+                    style={[
+                      styles.tabText,
+                      {
+                        color: isActive ? '#FFFFFF' : isTabLocked ? theme.textMuted : theme.textPrimary,
+                        fontWeight: isActive ? '700' : '600',
+                      },
+                    ]}
+                  >
+                    {secTitle}
+                  </Text>
+                </View>
               </TouchableOpacity>
             );
           })}
@@ -216,14 +251,19 @@ Your responses will be kept strictly anonymous and confidential.`;
         )}
 
         {/* Notice if user selected No to consent */}
-        {activeSecIndex === 0 && answers[1536400327] === 1 && (
-          <View style={[styles.warningBox, { backgroundColor: '#FEF2F2', borderColor: '#FCA5A5' }]}>
-            <Ionicons name="alert-circle" size={20} color="#DC2626" />
-            <Text style={styles.warningText}>
-              {lang === 'en'
-                ? 'Consent is required to proceed with this research study.'
-                : '연구에 동의하지 않으신 경우, 다음 단계로 진행하실 수 없습니다.'}
-            </Text>
+        {activeSecIndex === 0 && isConsentNo && (
+          <View style={[styles.warningBox, { backgroundColor: '#FEF2F2', borderColor: '#FCA5A5', paddingVertical: 14 }]}>
+            <Ionicons name="lock-closed" size={22} color="#DC2626" />
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.warningText, { fontSize: 14, fontWeight: '800' }]}>
+                {lang === 'en' ? 'Survey Locked' : '설문 진행이 잠겼습니다'}
+              </Text>
+              <Text style={{ fontSize: 12, color: '#991B1B', marginTop: 2, lineHeight: 16 }}>
+                {lang === 'en'
+                  ? 'Consent is required to proceed with this research study. Remaining questions and sections are locked until you select "Yes" (예).'
+                  : '연구 참여에 동의("예")하셔야 다음 설문 항목을 진행하실 수 있습니다. 동의 여부를 "예"로 변경하시면 잠금이 해제됩니다.'}
+              </Text>
+            </View>
           </View>
         )}
 
@@ -267,20 +307,64 @@ Your responses will be kept strictly anonymous and confidential.`;
 
           {activeSecIndex < palinFormSchema.sections.length - 1 ? (
             <TouchableOpacity
-              style={[styles.btn, styles.nextBtn, { backgroundColor: theme.primary, flex: 1 }]}
-              onPress={() => setActiveSecIndex((prev) => prev + 1)}
+              style={[
+                styles.btn,
+                styles.nextBtn,
+                {
+                  backgroundColor: isLocked ? '#9CA3AF' : theme.primary,
+                  flex: 1,
+                  opacity: isLocked ? 0.7 : 1,
+                },
+              ]}
+              onPress={() => {
+                if (!isLocked) setActiveSecIndex((prev) => prev + 1);
+              }}
+              disabled={isLocked}
             >
-              <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '700' }]}>{t.nextSection}</Text>
-              <Ionicons name="chevron-forward" size={18} color="#FFFFFF" />
+              <Ionicons
+                name={isLocked ? 'lock-closed' : 'chevron-forward'}
+                size={18}
+                color="#FFFFFF"
+                style={{ marginRight: 4 }}
+              />
+              <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '700' }]}>
+                {isLocked
+                  ? lang === 'en'
+                    ? 'Locked - Consent Required'
+                    : '진행 불가 (동의 필요)'
+                  : t.nextSection}
+              </Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
-              style={[styles.btn, styles.nextBtn, { backgroundColor: theme.primary, flex: 1 }]}
-              onPress={() => setShowResultsPage(true)}
+              style={[
+                styles.btn,
+                styles.nextBtn,
+                {
+                  backgroundColor: isLocked ? '#9CA3AF' : theme.primary,
+                  flex: 1,
+                  opacity: isLocked ? 0.7 : 1,
+                },
+              ]}
+              onPress={() => {
+                if (!isLocked) setShowResultsPage(true);
+              }}
+              disabled={isLocked}
             >
-              <Ionicons name="analytics" size={18} color="#FFFFFF" style={{ marginRight: 6 }} />
+              <Ionicons
+                name={isLocked ? 'lock-closed' : 'analytics'}
+                size={18}
+                color="#FFFFFF"
+                style={{ marginRight: 6 }}
+              />
               <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '800' }]}>
-                {lang === 'en' ? 'View Results & Factor Analysis' : '결과 보고서 및 요인분석 보기'}
+                {isLocked
+                  ? lang === 'en'
+                    ? 'Locked - Consent Required'
+                    : '진행 불가 (동의 필요)'
+                  : lang === 'en'
+                  ? 'View Results & Factor Analysis'
+                  : '결과 보고서 및 요인분석 보기'}
               </Text>
             </TouchableOpacity>
           )}
@@ -423,12 +507,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   consentTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '800',
   },
   consentBody: {
-    fontSize: 13,
-    lineHeight: 20,
+    fontSize: 15,
+    lineHeight: 23,
+    fontWeight: '500',
   },
   warningBox: {
     flexDirection: 'row',
