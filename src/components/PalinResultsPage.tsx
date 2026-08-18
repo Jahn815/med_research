@@ -29,6 +29,8 @@ interface PalinResultsPageProps {
   onToggleLanguage: () => void;
   onBackToSurvey: () => void;
   onResetSurvey: () => void;
+  initialTab?: 'sbis' | 'palin' | 'both';
+  onGoToQuizHub?: () => void;
 }
 
 export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
@@ -40,7 +42,12 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
   onToggleLanguage,
   onBackToSurvey,
   onResetSurvey,
+  initialTab = 'sbis',
+  onGoToQuizHub,
 }) => {
+  const [activeResultsTab, setActiveResultsTab] = useState<'sbis' | 'palin' | 'both'>(
+    initialTab === 'both' ? 'sbis' : initialTab
+  );
   const [copied, setCopied] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [savedDocId, setSavedDocId] = useState<string | null>(null);
@@ -93,12 +100,12 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
       <View style={[styles.header, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
         <TouchableOpacity
           style={[styles.backBtn, { backgroundColor: theme.chipBg }]}
-          onPress={onBackToSurvey}
+          onPress={onGoToQuizHub || onBackToSurvey}
           activeOpacity={0.8}
         >
-          <Ionicons name="arrow-back" size={18} color={theme.textPrimary} />
+          <Ionicons name="grid-outline" size={18} color={theme.textPrimary} />
           <Text style={[styles.backBtnText, { color: theme.textPrimary }]}>
-            {lang === 'en' ? 'Back to Survey' : '설문 수정으로 돌아가기'}
+            {lang === 'en' ? 'Quiz Selection Hub' : '검사 선택 화면으로'}
           </Text>
         </TouchableOpacity>
 
@@ -131,103 +138,148 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           <View style={[styles.badge, { backgroundColor: theme.badgeBg }]}>
             <Ionicons name="analytics-sharp" size={14} color={theme.primary} style={{ marginRight: 4 }} />
             <Text style={[styles.badgeText, { color: theme.primary }]}>
-              {lang === 'en' ? 'Factor Analysis & Clinical Report' : '요인 분석 및 종합 결과'}
+              {lang === 'en' ? 'Factor Analysis & Clinical Report' : '요인 분석 및 설문 결과'}
             </Text>
           </View>
           <Text style={[styles.mainTitle, { color: theme.textPrimary }]}>
-            {lang === 'en' ? 'Palin Scale Survey Results' : 'Palin 부모평가지 설문 결과 보고서'}
+            {activeResultsTab === 'sbis'
+              ? (lang === 'en' ? 'SBIS Temperament Assessment Results' : 'SBIS 간편 행동억제기질검사 결과')
+              : activeResultsTab === 'palin'
+              ? (lang === 'en' ? 'Palin Parent Rating Scale Results' : 'Palin 부모평가지 검사 결과')
+              : (lang === 'en' ? 'Comprehensive Palin & SBIS Results' : 'Palin & SBIS 종합 검사 결과')}
           </Text>
           <Text style={[styles.subTitle, { color: theme.textSecondary }]}>
             {lang === 'en'
               ? `Completed ${scores.totalAnsweredCount} of ${scores.totalQuestionsCount} questions`
               : `총 ${scores.totalQuestionsCount}문항 중 ${scores.totalAnsweredCount}문항 응답 완료`}
           </Text>
-        </View>
 
-        {/* 1. SBIS SECTION CARD (FIRST PLACE) */}
-        <View style={[styles.factorCard, { backgroundColor: theme.cardBg, borderColor: '#8B5CF6' }]}>
-          <View style={styles.factorHeaderRow}>
-            <View style={styles.factorTitleGroup}>
-              <View style={[styles.factorBadge, { backgroundColor: '#8B5CF6' }]}>
-                <Text style={styles.factorBadgeText}>SBIS</Text>
-              </View>
-              <Text style={[styles.factorTitle, { color: theme.textPrimary }]}>
-                {lang === 'en'
-                  ? 'Short Behavioral Inhibition Scale (SBIS)'
-                  : '간편 행동억제기질검사 (SBIS)'}
-              </Text>
-            </View>
-            <View style={[styles.scoreContainer, { backgroundColor: 'rgba(139, 92, 246, 0.1)' }]}>
-              <Text style={[styles.factorScoreValue, { color: '#8B5CF6' }]}>
-                {scores.sbisTotalScore} / 25
-              </Text>
-              <Text style={{ fontSize: 11, fontWeight: '700', color: theme.textSecondary, textAlign: 'right' }}>
-                {lang === 'en' ? 'Points' : '점 (25점 만점)'}
-              </Text>
-            </View>
-          </View>
-
-          {/* SBIS Assessment Summary Box */}
-          <View style={[styles.scaleAssessmentCard, { backgroundColor: 'rgba(139, 92, 246, 0.06)', borderColor: '#8B5CF6' }]}>
-            <View style={styles.scaleAssessmentRow}>
-              <Ionicons name="ribbon" size={18} color="#8B5CF6" />
-              <Text style={[styles.scaleAssessmentTitle, { color: '#8B5CF6' }]}>
-                {lang === 'en' ? 'SBIS Temperament Total Score:' : '행동억제 기질 측정 결과:'}
-              </Text>
-              <Text style={{ fontSize: 14, fontWeight: '800', color: theme.textPrimary }}>
-                {scores.sbisTotalScore} / 25 {lang === 'en' ? 'pts' : '점'}
-              </Text>
-            </View>
-            <Text style={{ fontSize: 12, color: theme.textSecondary, marginTop: 4, lineHeight: 18 }}>
-              {lang === 'en'
-                ? 'Each response option is scored from 1 point (first option) to 5 points (fifth option) for a total maximum of 25 points.'
-                : '각 문항당 첫 번째 선택지는 1점, 마지막 선택지는 5점으로 계산되며 (문항별 1~5점), 총 25점 만점입니다.'}
-            </Text>
-          </View>
-
-          {/* SBIS Itemized Breakdown Table */}
-          <Text style={[styles.tableSectionTitle, { color: theme.textPrimary, marginTop: 8 }]}>
-            {lang === 'en' ? 'SBIS 5-Item Response & Scoring Breakdown' : 'SBIS 5문항 응답 및 세부 점수 (문항별 1~5점)'}
-          </Text>
-
-          <View style={[styles.tableContainer, { borderColor: theme.cardBorder }]}>
-            <View style={[styles.tableHeaderRow, { backgroundColor: theme.chipBg }]}>
-              <Text style={[styles.th, { width: 45, color: theme.textSecondary }]}>{lang === 'en' ? 'Q#' : '문항'}</Text>
-              <Text style={[styles.th, { flex: 1, color: theme.textSecondary }]}>{lang === 'en' ? 'Question & Response' : '문항 내용 및 선택한 답변'}</Text>
-              <Text style={[styles.th, { width: 75, textAlign: 'right', color: theme.textSecondary }]}>{lang === 'en' ? 'Score' : '획득 점수'}</Text>
-            </View>
-
-            {scores.sbis.itemDetails.map((item, idx) => (
-              <View
-                key={item.qNum}
+          {/* Results Segmented Tab Switcher */}
+          <View style={[styles.resultsTabBar, { backgroundColor: theme.chipBg }]}>
+            <TouchableOpacity
+              style={[
+                styles.resultsTabBtn,
+                activeResultsTab === 'sbis' && { backgroundColor: '#8B5CF6' },
+              ]}
+              onPress={() => setActiveResultsTab('sbis')}
+              activeOpacity={0.8}
+            >
+              <Ionicons
+                name="ribbon"
+                size={14}
+                color={activeResultsTab === 'sbis' ? '#FFFFFF' : theme.textSecondary}
+                style={{ marginRight: 4 }}
+              />
+              <Text
                 style={[
-                  styles.tableRow,
-                  {
-                    backgroundColor: idx % 2 === 0 ? theme.cardBg : theme.chipBg,
-                    borderBottomColor: theme.cardBorder,
-                  },
+                  styles.resultsTabText,
+                  { color: activeResultsTab === 'sbis' ? '#FFFFFF' : theme.textSecondary, fontWeight: activeResultsTab === 'sbis' ? '800' : '600' },
                 ]}
               >
-                <Text style={[styles.td, { width: 45, fontWeight: '700', color: theme.textSecondary }]}>
-                  Q{item.qNum}
-                </Text>
-                <View style={{ flex: 1, paddingRight: 6 }}>
-                  <Text style={[styles.td, { fontWeight: '600', color: theme.textPrimary, fontSize: 12 }]} numberOfLines={2}>
-                    {lang === 'en' ? item.textEn : item.text}
-                  </Text>
-                  <Text style={{ fontSize: 11, color: item.value !== null ? '#8B5CF6' : theme.textMuted, marginTop: 2, fontWeight: '700' }}>
-                    {lang === 'en' ? 'Selected: ' : '선택한 답변: '}
-                    {lang === 'en' ? item.selectedLabelEn : item.selectedLabel}
-                    {item.value !== null ? ` (${item.score}${lang === 'en' ? ' pts' : '점'})` : ''}
-                  </Text>
-                </View>
-                <Text style={[styles.td, { width: 75, textAlign: 'right', fontWeight: '900', color: '#8B5CF6', fontSize: 14 }]}>
-                  {item.value !== null ? `${item.score} / ${lang === 'en' ? '5 pts' : '5점'}` : '-'}
-                </Text>
-              </View>
-            ))}
+                {lang === 'en' ? 'SBIS Results' : 'SBIS 결과'}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.resultsTabBtn,
+                activeResultsTab === 'palin' && { backgroundColor: theme.primary },
+              ]}
+              onPress={() => setActiveResultsTab('palin')}
+              activeOpacity={0.8}
+            >
+              <Ionicons
+                name="analytics"
+                size={14}
+                color={activeResultsTab === 'palin' ? '#FFFFFF' : theme.textSecondary}
+                style={{ marginRight: 4 }}
+              />
+              <Text
+                style={[
+                  styles.resultsTabText,
+                  { color: activeResultsTab === 'palin' ? '#FFFFFF' : theme.textSecondary, fontWeight: activeResultsTab === 'palin' ? '800' : '600' },
+                ]}
+              >
+                {lang === 'en' ? 'Palin Results' : 'Palin 결과'}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
+
+        {/* 1. SBIS SECTION CARD (RENDERED FOR 'sbis' OR 'both') */}
+        {(activeResultsTab === 'sbis' || activeResultsTab === 'both') && (
+          <View style={[styles.factorCard, { backgroundColor: theme.cardBg, borderColor: '#8B5CF6' }]}>
+            <View style={styles.factorHeaderRow}>
+              <View style={styles.factorTitleGroup}>
+                <View style={[styles.factorBadge, { backgroundColor: '#8B5CF6' }]}>
+                  <Text style={styles.factorBadgeText}>SBIS</Text>
+                </View>
+                <Text style={[styles.factorTitle, { color: theme.textPrimary }]}>
+                  {lang === 'en'
+                    ? 'Short Behavioral Inhibition Scale (SBIS)'
+                    : '간편 행동억제기질검사 (SBIS)'}
+                </Text>
+              </View>
+              <View style={[styles.scoreContainer, { backgroundColor: 'rgba(139, 92, 246, 0.1)' }]}>
+                <Text style={[styles.factorScoreValue, { color: '#8B5CF6' }]}>
+                  {scores.sbisTotalScore} / 25
+                </Text>
+                <Text style={{ fontSize: 11, fontWeight: '700', color: theme.textSecondary, textAlign: 'right' }}>
+                  {lang === 'en' ? 'Points' : '점 (25점 만점)'}
+                </Text>
+              </View>
+            </View>
+
+            {/* SBIS Assessment Summary Box */}
+            <View style={[styles.scaleAssessmentCard, { backgroundColor: 'rgba(139, 92, 246, 0.06)', borderColor: '#8B5CF6' }]}>
+              <View style={styles.scaleAssessmentRow}>
+                <Ionicons name="ribbon" size={18} color="#8B5CF6" />
+                <Text style={[styles.scaleAssessmentTitle, { color: '#8B5CF6' }]}>
+                  행동억제 기질 총점:
+                </Text>
+                <Text style={{ fontSize: 14, fontWeight: '800', color: theme.textPrimary }}>
+                  {scores.sbisTotalScore} / 25 점
+                </Text>
+              </View>
+            </View>
+
+            {/* SBIS Active Score Range Display (Only rendered when at least 1 question is answered and score > 0) */}
+            {scores.sbis.answeredCount > 0 && scores.sbisTotalScore > 0 && (
+              <View style={[styles.scaleAssessmentCard, { backgroundColor: 'rgba(139, 92, 246, 0.06)', borderColor: '#8B5CF6' }]}>
+                <View style={styles.scaleAssessmentRow}>
+                  <Ionicons name="podium" size={18} color="#8B5CF6" />
+                  <Text style={[styles.scaleAssessmentTitle, { color: '#8B5CF6' }]}>
+                    점수 구간 평가:
+                  </Text>
+                  <View style={[styles.inlineLevelTag, { backgroundColor: scores.sbis.rangeInfo.badgeColor }]}>
+                    <Text style={styles.inlineLevelTagText}>
+                      {scores.sbis.rangeInfo.rangeLabel}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={{ marginTop: 8, padding: 12, borderRadius: 10, backgroundColor: theme.cardBg, borderWidth: 1, borderColor: theme.cardBorder }}>
+                  <Text style={{ fontSize: 14, fontWeight: '800', color: theme.textPrimary, marginBottom: 6 }}>
+                    해당 점수 구간: {scores.sbis.rangeInfo.rangeLabel}
+                  </Text>
+                  {scores.sbis.rangeInfo.descriptionKr ? (
+                    <Text style={{ fontSize: 13, color: theme.textPrimary, lineHeight: 21, fontWeight: '500' }}>
+                      {scores.sbis.rangeInfo.descriptionKr}
+                    </Text>
+                  ) : (
+                    <Text style={{ fontSize: 13, color: theme.textSecondary, lineHeight: 20 }}>
+                      현재 행동억제 기질 점수({scores.sbisTotalScore}점)는 <Text style={{ fontWeight: '700', color: theme.textPrimary }}>{scores.sbis.rangeInfo.rangeLabel}</Text> 구간에 해당합니다.
+                    </Text>
+                  )}
+                </View>
+              </View>
+            )}
+          </View>
+        )}
+
+        {/* 2. PALIN CARDS (RENDERED FOR 'palin' OR 'both') */}
+        {(activeResultsTab === 'palin' || activeResultsTab === 'both') && (
+          <>
 
         {/* FACTOR 1 CARD (FEATURED) */}
         <View style={[styles.factorCard, { backgroundColor: theme.cardBg, borderColor: theme.primary }]}>
@@ -309,47 +361,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
             </View>
           </View>
 
-          {/* Itemized Responses Table */}
-          <Text style={[styles.tableSectionTitle, { color: theme.textPrimary }]}>
-            {lang === 'en' ? 'Q22 - Q28 Individual Response Breakdown:' : 'Q22 ~ Q28 문항별 응답 및 가중치 내역:'}
-          </Text>
 
-          <View style={[styles.tableContainer, { borderColor: theme.cardBorder }]}>
-            <View style={[styles.tableHeaderRow, { backgroundColor: theme.chipBg }]}>
-              <Text style={[styles.th, { width: 45, color: theme.textSecondary }]}>문항</Text>
-              <Text style={[styles.th, { flex: 1, color: theme.textSecondary }]}>질문 내용</Text>
-              <Text style={[styles.th, { width: 50, textAlign: 'center', color: theme.textSecondary }]}>응답</Text>
-              <Text style={[styles.th, { width: 55, textAlign: 'center', color: theme.textSecondary }]}>가중치</Text>
-              <Text style={[styles.th, { width: 55, textAlign: 'right', color: theme.textSecondary }]}>가중값</Text>
-            </View>
-
-            {f1.itemDetails.map((item) => {
-              const qText =
-                lang === 'en' && palinTranslationsEn[item.qNum === 22 ? 1481741321 : item.qNum === 23 ? 1575572212 : item.qNum === 24 ? 107897978 : item.qNum === 25 ? 914545063 : item.qNum === 26 ? 146388951 : item.qNum === 27 ? 859143932 : 1623691428]
-                  ? palinTranslationsEn[item.qNum === 22 ? 1481741321 : item.qNum === 23 ? 1575572212 : item.qNum === 24 ? 107897978 : item.qNum === 25 ? 914545063 : item.qNum === 26 ? 146388951 : item.qNum === 27 ? 859143932 : 1623691428].text
-                  : item.text;
-
-              return (
-                <View key={item.qNum} style={[styles.tableRow, { borderBottomColor: theme.cardBorder }]}>
-                  <Text style={[styles.td, { width: 45, fontWeight: '700', color: theme.primary }]}>
-                    Q{item.qNum}
-                  </Text>
-                  <Text style={[styles.td, { flex: 1, color: theme.textPrimary }]} numberOfLines={2}>
-                    {qText}
-                  </Text>
-                  <Text style={[styles.td, { width: 50, textAlign: 'center', fontWeight: '700', color: theme.textPrimary }]}>
-                    {item.value !== null ? item.value : '-'}
-                  </Text>
-                  <Text style={[styles.td, { width: 55, textAlign: 'center', color: theme.textSecondary }]}>
-                    {item.weight}
-                  </Text>
-                  <Text style={[styles.td, { width: 55, textAlign: 'right', fontWeight: '700', color: theme.accent }]}>
-                    {item.value !== null ? item.weightedValue : '-'}
-                  </Text>
-                </View>
-              );
-            })}
-          </View>
         </View>
 
         {/* FACTOR 2 CARD (FEATURED) */}
@@ -432,57 +444,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
             </View>
           </View>
 
-          {/* Itemized Responses Table */}
-          <Text style={[styles.tableSectionTitle, { color: theme.textPrimary }]}>
-            {lang === 'en' ? 'Q29 - Q35 Individual Response Breakdown:' : 'Q29 ~ Q35 문항별 응답 및 가중치 내역:'}
-          </Text>
 
-          <View style={[styles.tableContainer, { borderColor: theme.cardBorder }]}>
-            <View style={[styles.tableHeaderRow, { backgroundColor: theme.chipBg }]}>
-              <Text style={[styles.th, { width: 45, color: theme.textSecondary }]}>문항</Text>
-              <Text style={[styles.th, { flex: 1, color: theme.textSecondary }]}>질문 내용</Text>
-              <Text style={[styles.th, { width: 50, textAlign: 'center', color: theme.textSecondary }]}>응답</Text>
-              <Text style={[styles.th, { width: 55, textAlign: 'center', color: theme.textSecondary }]}>가중치</Text>
-              <Text style={[styles.th, { width: 55, textAlign: 'right', color: theme.textSecondary }]}>가중값</Text>
-            </View>
-
-            {f2.itemDetails.map((item) => {
-              const qIdMap: Record<number, number> = {
-                29: 2094095092,
-                30: 648032736,
-                31: 740503268,
-                32: 1050082798,
-                33: 341804199,
-                34: 905335102,
-                35: 1048848859,
-              };
-              const targetId = qIdMap[item.qNum];
-              const qText =
-                lang === 'en' && targetId && palinTranslationsEn[targetId]
-                  ? palinTranslationsEn[targetId].text
-                  : item.text;
-
-              return (
-                <View key={item.qNum} style={[styles.tableRow, { borderBottomColor: theme.cardBorder }]}>
-                  <Text style={[styles.td, { width: 45, fontWeight: '700', color: theme.accent }]}>
-                    Q{item.qNum}
-                  </Text>
-                  <Text style={[styles.td, { flex: 1, color: theme.textPrimary }]} numberOfLines={2}>
-                    {qText}
-                  </Text>
-                  <Text style={[styles.td, { width: 50, textAlign: 'center', fontWeight: '700', color: theme.textPrimary }]}>
-                    {item.value !== null ? item.value : '-'}
-                  </Text>
-                  <Text style={[styles.td, { width: 55, textAlign: 'center', color: theme.textSecondary }]}>
-                    {item.weight}
-                  </Text>
-                  <Text style={[styles.td, { width: 55, textAlign: 'right', fontWeight: '700', color: theme.primary }]}>
-                    {item.value !== null ? item.weightedValue : '-'}
-                  </Text>
-                </View>
-              );
-            })}
-          </View>
         </View>
 
         {/* FACTOR 3 CARD (FEATURED) */}
@@ -565,55 +527,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
             </View>
           </View>
 
-          {/* Itemized Responses Table */}
-          <Text style={[styles.tableSectionTitle, { color: theme.textPrimary }]}>
-            {lang === 'en' ? 'Q36 - Q40 Individual Response Breakdown:' : 'Q36 ~ Q40 문항별 응답 및 가중치 내역:'}
-          </Text>
 
-          <View style={[styles.tableContainer, { borderColor: theme.cardBorder }]}>
-            <View style={[styles.tableHeaderRow, { backgroundColor: theme.chipBg }]}>
-              <Text style={[styles.th, { width: 45, color: theme.textSecondary }]}>문항</Text>
-              <Text style={[styles.th, { flex: 1, color: theme.textSecondary }]}>질문 내용</Text>
-              <Text style={[styles.th, { width: 50, textAlign: 'center', color: theme.textSecondary }]}>응답</Text>
-              <Text style={[styles.th, { width: 55, textAlign: 'center', color: theme.textSecondary }]}>가중치</Text>
-              <Text style={[styles.th, { width: 55, textAlign: 'right', color: theme.textSecondary }]}>가중값</Text>
-            </View>
-
-            {f3.itemDetails.map((item) => {
-              const qIdMap: Record<number, number> = {
-                36: 1520832689,
-                37: 1667221451,
-                38: 1434469522,
-                39: 493302818,
-                40: 705539961,
-              };
-              const targetId = qIdMap[item.qNum];
-              const qText =
-                lang === 'en' && targetId && palinTranslationsEn[targetId]
-                  ? palinTranslationsEn[targetId].text
-                  : item.text;
-
-              return (
-                <View key={item.qNum} style={[styles.tableRow, { borderBottomColor: theme.cardBorder }]}>
-                  <Text style={[styles.td, { width: 45, fontWeight: '700', color: '#8B5CF6' }]}>
-                    Q{item.qNum}
-                  </Text>
-                  <Text style={[styles.td, { flex: 1, color: theme.textPrimary }]} numberOfLines={2}>
-                    {qText}
-                  </Text>
-                  <Text style={[styles.td, { width: 50, textAlign: 'center', fontWeight: '700', color: theme.textPrimary }]}>
-                    {item.value !== null ? item.value : '-'}
-                  </Text>
-                  <Text style={[styles.td, { width: 55, textAlign: 'center', color: theme.textSecondary }]}>
-                    {item.weight}
-                  </Text>
-                  <Text style={[styles.td, { width: 55, textAlign: 'right', fontWeight: '700', color: theme.primary }]}>
-                    {item.value !== null ? item.weightedValue : '-'}
-                  </Text>
-                </View>
-              );
-            })}
-          </View>
         </View>
 
         {/* OVERALL SUBSCALES SUMMARY */}
@@ -637,9 +551,11 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           </View>
           <View style={styles.subscaleRow}>
             <Text style={[styles.subscaleLabel, { color: theme.textPrimary }]}>{t.sbisTitle}</Text>
-            <Text style={[styles.subscaleVal, { color: theme.accent }]}>{scores.sbisTotalScore} / 20</Text>
+            <Text style={[styles.subscaleVal, { color: theme.accent }]}>{scores.sbisTotalScore} / 25 점</Text>
           </View>
         </View>
+      </>
+    )}
 
         {/* ACTION BUTTONS */}
         <View style={styles.actionsGroup}>
@@ -980,5 +896,23 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 15,
     fontWeight: '700',
+  },
+  resultsTabBar: {
+    flexDirection: 'row',
+    marginTop: 12,
+    padding: 4,
+    borderRadius: 12,
+    gap: 4,
+  },
+  resultsTabBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  resultsTabText: {
+    fontSize: 13,
   },
 });

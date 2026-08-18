@@ -43,6 +43,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
   const [answers, setAnswers] = useState<PalinAnswers>({});
   const [showReportModal, setShowReportModal] = useState<boolean>(false);
   const [showResultsPage, setShowResultsPage] = useState<boolean>(false);
+  const [resultsInitialTab, setResultsInitialTab] = useState<'sbis' | 'palin' | 'both'>('both');
 
   const isConsentYes = answers[1536400327] === 0;
   const isConsentNo = answers[1536400327] === 1;
@@ -56,8 +57,20 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
 
   const currentLang: Language = lang && i18n[lang] ? lang : 'ko';
   const t = i18n[currentLang];
-  const currentSection: PalinSection = palinFormSchema.sections[activeSecIndex];
   const allQuestions = useMemo(() => getAllPalinQuestions(), []);
+
+  const sbisIds = [2015490662, 1544182638, 1140751121, 2129570078, 676432939];
+  const sbisAnsweredCount = useMemo(() => {
+    return sbisIds.filter((id) => answers[id] !== undefined && answers[id] !== '').length;
+  }, [answers]);
+
+  const palinIds = [
+    1481741321, 1575572212, 107897978, 914545063, 146388951, 859143932, 1623691428, 2094095092, 648032736, 740503268,
+    1050082798, 341804199, 905335102, 1048848859, 1520832689, 1667221451, 1434469522, 493302818, 705539961,
+  ];
+  const palinAnsweredCount = useMemo(() => {
+    return palinIds.filter((id) => answers[id] !== undefined && answers[id] !== '').length;
+  }, [answers]);
 
   const handleAnswerChange = (questionId: number, val: string | number) => {
     setAnswers((prev) => ({
@@ -72,7 +85,6 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
     setShowResultsPage(false);
   };
 
-  // Progress Calculation
   const progressPercent = useMemo(() => {
     const answeredCount = Object.keys(answers).filter(
       (k) => answers[Number(k)] !== undefined && answers[Number(k)] !== ''
@@ -90,6 +102,18 @@ Completion of this survey takes approximately 10-15 minutes.
 Parents of preschool or elementary school children diagnosed with stuttering (or recovered from past stuttering).
 Your responses will be kept strictly anonymous and confidential.`;
 
+  const customTabs = [
+    { id: 0, title: lang === 'en' ? '1. Consent & Info' : '1. 연구 동의 및 배경정보' },
+    { id: 1, title: lang === 'en' ? '2. Quiz Hub' : '2. 검사 선택' },
+    { id: 2, title: lang === 'en' ? '3. SBIS Quiz (5 Qs)' : '3. SBIS 기질검사 (5문항)' },
+    { id: 3, title: lang === 'en' ? '4. Palin PPRS (19 Qs)' : '4. Palin 부모평가지 (19문항)' },
+  ];
+
+  const openResultsWithTab = (tab: 'sbis' | 'palin' | 'both') => {
+    setResultsInitialTab(tab);
+    setShowResultsPage(true);
+  };
+
   // IF RESULTS PAGE MODE IS ACTIVE, RENDER RESULTS PAGE
   if (showResultsPage) {
     return (
@@ -102,6 +126,11 @@ Your responses will be kept strictly anonymous and confidential.`;
         onToggleLanguage={onToggleLanguage}
         onBackToSurvey={() => setShowResultsPage(false)}
         onResetSurvey={handleReset}
+        initialTab={resultsInitialTab}
+        onGoToQuizHub={() => {
+          setShowResultsPage(false);
+          setActiveSecIndex(1);
+        }}
       />
     );
   }
@@ -128,7 +157,7 @@ Your responses will be kept strictly anonymous and confidential.`;
                 },
               ]}
               onPress={() => {
-                if (!isLocked) setShowResultsPage(true);
+                if (!isLocked) openResultsWithTab('both');
               }}
               disabled={isLocked}
               activeOpacity={0.7}
@@ -187,16 +216,15 @@ Your responses will be kept strictly anonymous and confidential.`;
         </View>
       </View>
 
-      {/* Section Tabs */}
+      {/* Section Navigation Tabs */}
       <View style={styles.tabsContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabsContent}>
-          {palinFormSchema.sections.map((sec, idx) => {
-            const isActive = idx === activeSecIndex;
-            const isTabLocked = idx > 0 && isLocked;
-            const secTitle = lang === 'en' && palinSectionTitlesEn[idx] ? palinSectionTitlesEn[idx] : sec.title;
+          {customTabs.map((tab) => {
+            const isActive = tab.id === activeSecIndex;
+            const isTabLocked = tab.id > 0 && isLocked;
             return (
               <TouchableOpacity
-                key={idx}
+                key={tab.id}
                 style={[
                   styles.tab,
                   {
@@ -206,7 +234,7 @@ Your responses will be kept strictly anonymous and confidential.`;
                   },
                 ]}
                 onPress={() => {
-                  if (!isTabLocked) setActiveSecIndex(idx);
+                  if (!isTabLocked) setActiveSecIndex(tab.id);
                 }}
                 disabled={isTabLocked}
                 activeOpacity={0.8}
@@ -224,7 +252,7 @@ Your responses will be kept strictly anonymous and confidential.`;
                       },
                     ]}
                   >
-                    {secTitle}
+                    {tab.title}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -233,142 +261,289 @@ Your responses will be kept strictly anonymous and confidential.`;
         </ScrollView>
       </View>
 
-      {/* Questions Content */}
+      {/* Questions & Content Container */}
       <ScrollView contentContainerStyle={styles.questionsContainer} showsVerticalScrollIndicator={false}>
-        {/* Consent Info Box for Section 1 */}
+        {/* TAB 0: CONSENT & DEMOGRAPHICS (Q1 ~ Q16) */}
         {activeSecIndex === 0 && (
-          <View style={[styles.consentCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
-            <View style={styles.consentHeader}>
-              <Ionicons name="shield-checkmark" size={22} color={theme.primary} />
-              <Text style={[styles.consentTitle, { color: theme.textPrimary }]}>
-                {lang === 'en' ? 'Research Participation Consent' : '연구 참여 안내 및 동의서'}
+          <>
+            <View style={[styles.consentCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
+              <View style={styles.consentHeader}>
+                <Ionicons name="shield-checkmark" size={22} color={theme.primary} />
+                <Text style={[styles.consentTitle, { color: theme.textPrimary }]}>
+                  {lang === 'en' ? 'Research Participation Consent' : '연구 참여 안내 및 동의서'}
+                </Text>
+              </View>
+              <Text style={[styles.consentBody, { color: theme.textSecondary }]}>
+                {lang === 'en' ? consentDescriptionEn : palinFormSchema.description}
               </Text>
             </View>
-            <Text style={[styles.consentBody, { color: theme.textSecondary }]}>
-              {lang === 'en' ? consentDescriptionEn : palinFormSchema.description}
-            </Text>
-          </View>
-        )}
 
-        {/* Notice if user selected No to consent */}
-        {activeSecIndex === 0 && isConsentNo && (
-          <View style={[styles.warningBox, { backgroundColor: '#FEF2F2', borderColor: '#FCA5A5', paddingVertical: 14 }]}>
-            <Ionicons name="lock-closed" size={22} color="#DC2626" />
-            <View style={{ flex: 1 }}>
-              <Text style={[styles.warningText, { fontSize: 14, fontWeight: '800' }]}>
-                {lang === 'en' ? 'Survey Locked' : '설문 진행이 잠겼습니다'}
-              </Text>
-              <Text style={{ fontSize: 12, color: '#991B1B', marginTop: 2, lineHeight: 16 }}>
-                {lang === 'en'
-                  ? 'Consent is required to proceed with this research study. Remaining questions and sections are locked until you select "Yes" (예).'
-                  : '연구 참여에 동의("예")하셔야 다음 설문 항목을 진행하실 수 있습니다. 동의 여부를 "예"로 변경하시면 잠금이 해제됩니다.'}
-              </Text>
-            </View>
-          </View>
-        )}
-
-        {/* Subsections if any */}
-        {currentSection.subsections && currentSection.subsections.length > 0 && (
-          <View style={styles.subsectionsBox}>
-            {currentSection.subsections.map((sub, sidx) => {
-              const subTitle = lang === 'en' && palinSubsectionsEn[sidx] ? palinSubsectionsEn[sidx] : sub.title;
-              return (
-                <View key={sidx} style={[styles.subCard, { backgroundColor: theme.primaryLight }]}>
-                  <Text style={[styles.subCardTitle, { color: theme.primary }]}>{subTitle}</Text>
+            {/* Warning if user selected No */}
+            {isConsentNo && (
+              <View style={[styles.warningBox, { backgroundColor: '#FEF2F2', borderColor: '#FCA5A5', paddingVertical: 14 }]}>
+                <Ionicons name="lock-closed" size={22} color="#DC2626" />
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.warningText, { fontSize: 14, fontWeight: '800' }]}>
+                    {lang === 'en' ? 'Survey Locked' : '설문 진행이 잠겼습니다'}
+                  </Text>
+                  <Text style={{ fontSize: 12, color: '#991B1B', marginTop: 2, lineHeight: 16 }}>
+                    {lang === 'en'
+                      ? 'Consent is required to proceed with this research study. Remaining questions and sections are locked until you select "Yes" (예).'
+                      : '연구 참여에 동의("예")하셔야 다음 설문 항목을 진행하실 수 있습니다. 동의 여부를 "예"로 변경하시면 잠금이 해제됩니다.'}
+                  </Text>
                 </View>
-              );
-            })}
+              </View>
+            )}
+
+            {/* Questions for Section 0 & Section 1 */}
+            {palinFormSchema.sections[0].questions.map((q) => (
+              <PalinQuestionRenderer
+                key={q.id}
+                question={q}
+                value={answers[q.id]}
+                onChange={(val) => handleAnswerChange(q.id, val)}
+                theme={theme}
+                lang={lang}
+              />
+            ))}
+            {palinFormSchema.sections[1].questions.map((q) => (
+              <PalinQuestionRenderer
+                key={q.id}
+                question={q}
+                value={answers[q.id]}
+                onChange={(val) => handleAnswerChange(q.id, val)}
+                theme={theme}
+                lang={lang}
+              />
+            ))}
+
+            {/* Bottom Nav for Tab 0 */}
+            <View style={styles.bottomNavRow}>
+              <TouchableOpacity
+                style={[
+                  styles.btn,
+                  styles.nextBtn,
+                  {
+                    backgroundColor: isLocked ? '#9CA3AF' : theme.primary,
+                    flex: 1,
+                    opacity: isLocked ? 0.7 : 1,
+                  },
+                ]}
+                onPress={() => {
+                  if (!isLocked) setActiveSecIndex(1);
+                }}
+                disabled={isLocked}
+              >
+                <Ionicons
+                  name={isLocked ? 'lock-closed' : 'grid-outline'}
+                  size={18}
+                  color="#FFFFFF"
+                  style={{ marginRight: 6 }}
+                />
+                <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '800' }]}>
+                  {isLocked
+                    ? (lang === 'en' ? 'Locked - Consent Required' : '진행 불가 (동의 필요)')
+                    : (lang === 'en' ? 'Next: Choose Quiz (Quiz Hub)' : '다음: 검사 선택 화면으로')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+
+        {/* TAB 1: QUIZ SELECTION HUB */}
+        {activeSecIndex === 1 && (
+          <View style={{ gap: 16 }}>
+            {/* Hub Banner */}
+            <View style={[styles.consentCard, { backgroundColor: theme.cardBg, borderColor: theme.primary }]}>
+              <View style={styles.consentHeader}>
+                <Ionicons name="grid-sharp" size={24} color={theme.primary} />
+                <Text style={[styles.consentTitle, { color: theme.textPrimary, fontSize: 17 }]}>
+                  {lang === 'en' ? 'Select Survey Quiz to Complete' : '진행할 검사를 선택하세요'}
+                </Text>
+              </View>
+              <Text style={{ fontSize: 13, color: theme.textSecondary, lineHeight: 20, marginTop: 4 }}>
+                {lang === 'en'
+                  ? 'You can choose to take SBIS (5 questions) or Palin PPRS (19 questions) independently.'
+                  : 'SBIS 기질검사와 Palin 부모평가지 중 원하시는 검사를 선택하여 진행할 수 있습니다.'}
+              </Text>
+            </View>
+
+            {/* Quiz Choice 1: SBIS Only */}
+            <View style={[styles.quizChoiceCard, { backgroundColor: theme.cardBg, borderColor: '#8B5CF6' }]}>
+              <View style={styles.quizChoiceHeader}>
+                <View style={[styles.quizChoiceBadge, { backgroundColor: '#8B5CF6' }]}>
+                  <Ionicons name="ribbon" size={14} color="#FFF" />
+                  <Text style={styles.quizChoiceBadgeText}>5문항</Text>
+                </View>
+                <Text style={[styles.quizChoiceTitle, { color: theme.textPrimary }]}>
+                  {lang === 'en' ? 'Take SBIS Quiz Only' : 'SBIS 기질검사만 실시'}
+                </Text>
+              </View>
+              <Text style={{ fontSize: 13, color: theme.textSecondary, marginBottom: 12, lineHeight: 18 }}>
+                낯선 사람이나 장소에 대한 아동의 행동억제 기질을 측정합니다. (5문항 완료 후 SBIS 결과만 확인)
+              </Text>
+              <View style={styles.quizStatusRow}>
+                <Text style={{ fontSize: 12, fontWeight: '700', color: sbisAnsweredCount === 5 ? '#10B981' : theme.textSecondary }}>
+                  진행 상태: {sbisAnsweredCount} / 5 문항 완료 {sbisAnsweredCount === 5 ? '✓' : ''}
+                </Text>
+              </View>
+              <View style={styles.quizChoiceBtnRow}>
+                <TouchableOpacity
+                  style={[styles.quizActionBtn, { backgroundColor: '#8B5CF6' }]}
+                  onPress={() => setActiveSecIndex(2)}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="play-circle-outline" size={18} color="#FFF" />
+                  <Text style={styles.quizActionBtnText}>SBIS 검사 시작</Text>
+                </TouchableOpacity>
+
+                {sbisAnsweredCount > 0 && (
+                  <TouchableOpacity
+                    style={[styles.quizResultBtn, { borderColor: '#8B5CF6', backgroundColor: 'rgba(139, 92, 246, 0.1)' }]}
+                    onPress={() => openResultsWithTab('sbis')}
+                    activeOpacity={0.8}
+                  >
+                    <Ionicons name="analytics-outline" size={16} color="#8B5CF6" />
+                    <Text style={[styles.quizResultBtnText, { color: '#8B5CF6' }]}>SBIS 결과 보기</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+
+            {/* Quiz Choice 2: Palin Only */}
+            <View style={[styles.quizChoiceCard, { backgroundColor: theme.cardBg, borderColor: theme.primary }]}>
+              <View style={styles.quizChoiceHeader}>
+                <View style={[styles.quizChoiceBadge, { backgroundColor: theme.primary }]}>
+                  <Ionicons name="analytics" size={14} color="#FFF" />
+                  <Text style={styles.quizChoiceBadgeText}>19문항</Text>
+                </View>
+                <Text style={[styles.quizChoiceTitle, { color: theme.textPrimary }]}>
+                  {lang === 'en' ? 'Take Palin PPRS Quiz Only' : 'Palin 부모평가지만 실시'}
+                </Text>
+              </View>
+              <Text style={{ fontSize: 13, color: theme.textSecondary, marginBottom: 12, lineHeight: 18 }}>
+                말더듬이 아동과 부모에게 미치는 영향, 걱정 정도, 말더듬 관리 지식 및 자신감을 평가합니다. (19문항 완료 후 Palin 결과만 확인)
+              </Text>
+              <View style={styles.quizStatusRow}>
+                <Text style={{ fontSize: 12, fontWeight: '700', color: palinAnsweredCount === 19 ? '#10B981' : theme.textSecondary }}>
+                  진행 상태: {palinAnsweredCount} / 19 문항 완료 {palinAnsweredCount === 19 ? '✓' : ''}
+                </Text>
+              </View>
+              <View style={styles.quizChoiceBtnRow}>
+                <TouchableOpacity
+                  style={[styles.quizActionBtn, { backgroundColor: theme.primary }]}
+                  onPress={() => setActiveSecIndex(3)}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="play-circle-outline" size={18} color="#FFF" />
+                  <Text style={styles.quizActionBtnText}>Palin 검사 시작</Text>
+                </TouchableOpacity>
+
+                {palinAnsweredCount > 0 && (
+                  <TouchableOpacity
+                    style={[styles.quizResultBtn, { borderColor: theme.primary, backgroundColor: theme.primaryLight }]}
+                    onPress={() => openResultsWithTab('palin')}
+                    activeOpacity={0.8}
+                  >
+                    <Ionicons name="analytics-outline" size={16} color={theme.primary} />
+                    <Text style={[styles.quizResultBtnText, { color: theme.primary }]}>Palin 결과 보기</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+
+            {/* Bottom Back Button */}
+            <View style={styles.bottomNavRow}>
+              <TouchableOpacity
+                style={[styles.btn, styles.prevBtn, { borderColor: theme.cardBorder }]}
+                onPress={() => setActiveSecIndex(0)}
+              >
+                <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
+                <Text style={[styles.btnText, { color: theme.textPrimary }]}>이전: 동의 및 배경정보</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
 
-        {/* Question List */}
-        {currentSection.questions.map((q) => (
-          <PalinQuestionRenderer
-            key={q.id}
-            question={q}
-            value={answers[q.id]}
-            onChange={(val) => handleAnswerChange(q.id, val)}
-            theme={theme}
-            lang={lang}
-          />
-        ))}
-
-        {/* Bottom Nav inside Scroll */}
-        <View style={styles.bottomNavRow}>
-          {activeSecIndex > 0 && (
-            <TouchableOpacity
-              style={[styles.btn, styles.prevBtn, { borderColor: theme.cardBorder }]}
-              onPress={() => setActiveSecIndex((prev) => prev - 1)}
-            >
-              <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
-              <Text style={[styles.btnText, { color: theme.textPrimary }]}>{t.prevSection}</Text>
-            </TouchableOpacity>
-          )}
-
-          {activeSecIndex < palinFormSchema.sections.length - 1 ? (
-            <TouchableOpacity
-              style={[
-                styles.btn,
-                styles.nextBtn,
-                {
-                  backgroundColor: isLocked ? '#9CA3AF' : theme.primary,
-                  flex: 1,
-                  opacity: isLocked ? 0.7 : 1,
-                },
-              ]}
-              onPress={() => {
-                if (!isLocked) setActiveSecIndex((prev) => prev + 1);
-              }}
-              disabled={isLocked}
-            >
-              <Ionicons
-                name={isLocked ? 'lock-closed' : 'chevron-forward'}
-                size={18}
-                color="#FFFFFF"
-                style={{ marginRight: 4 }}
-              />
-              <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '700' }]}>
-                {isLocked
-                  ? lang === 'en'
-                    ? 'Locked - Consent Required'
-                    : '진행 불가 (동의 필요)'
-                  : t.nextSection}
+        {/* TAB 2: SBIS QUIZ (Q17 ~ Q21) */}
+        {activeSecIndex === 2 && (
+          <>
+            <View style={[styles.subCard, { backgroundColor: 'rgba(139, 92, 246, 0.1)', borderColor: '#8B5CF6', borderWidth: 1, marginBottom: 16 }]}>
+              <Text style={[styles.subCardTitle, { color: '#8B5CF6', fontSize: 15 }]}>
+                🟣 SBIS 간편 행동억제기질검사 (Q17 ~ Q21)
               </Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={[
-                styles.btn,
-                styles.nextBtn,
-                {
-                  backgroundColor: isLocked ? '#9CA3AF' : theme.primary,
-                  flex: 1,
-                  opacity: isLocked ? 0.7 : 1,
-                },
-              ]}
-              onPress={() => {
-                if (!isLocked) setShowResultsPage(true);
-              }}
-              disabled={isLocked}
-            >
-              <Ionicons
-                name={isLocked ? 'lock-closed' : 'analytics'}
-                size={18}
-                color="#FFFFFF"
-                style={{ marginRight: 6 }}
+            </View>
+
+            {palinFormSchema.sections[2].questions.map((q) => (
+              <PalinQuestionRenderer
+                key={q.id}
+                question={q}
+                value={answers[q.id]}
+                onChange={(val) => handleAnswerChange(q.id, val)}
+                theme={theme}
+                lang={lang}
               />
-              <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '800' }]}>
-                {isLocked
-                  ? lang === 'en'
-                    ? 'Locked - Consent Required'
-                    : '진행 불가 (동의 필요)'
-                  : lang === 'en'
-                  ? 'View Results & Factor Analysis'
-                  : '결과 보고서 및 요인분석 보기'}
+            ))}
+
+            <View style={styles.bottomNavRow}>
+              <TouchableOpacity
+                style={[styles.btn, styles.prevBtn, { borderColor: theme.cardBorder }]}
+                onPress={() => setActiveSecIndex(1)}
+              >
+                <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
+                <Text style={[styles.btnText, { color: theme.textPrimary }]}>검사 선택으로</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.btn, { backgroundColor: '#8B5CF6', flex: 1 }]}
+                onPress={() => openResultsWithTab('sbis')}
+              >
+                <Ionicons name="analytics" size={18} color="#FFF" style={{ marginRight: 6 }} />
+                <Text style={[styles.btnText, { color: '#FFF', fontWeight: '800' }]}>SBIS 결과만 확인하기</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+
+        {/* TAB 3: PALIN PPRS QUIZ (Q22 ~ Q40) */}
+        {activeSecIndex === 3 && (
+          <>
+            <View style={[styles.subCard, { backgroundColor: theme.primaryLight, borderColor: theme.primary, borderWidth: 1, marginBottom: 16 }]}>
+              <Text style={[styles.subCardTitle, { color: theme.primary, fontSize: 15 }]}>
+                🔵 Palin 부모평가지 (PPRS) (Q22 ~ Q40)
               </Text>
-            </TouchableOpacity>
-          )}
-        </View>
+            </View>
+
+            {palinFormSchema.sections[3].questions.map((q) => (
+              <PalinQuestionRenderer
+                key={q.id}
+                question={q}
+                value={answers[q.id]}
+                onChange={(val) => handleAnswerChange(q.id, val)}
+                theme={theme}
+                lang={lang}
+              />
+            ))}
+
+            <View style={styles.bottomNavRow}>
+              <TouchableOpacity
+                style={[styles.btn, styles.prevBtn, { borderColor: theme.cardBorder }]}
+                onPress={() => setActiveSecIndex(1)}
+              >
+                <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
+                <Text style={[styles.btnText, { color: theme.textPrimary }]}>검사 선택으로</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.btn, { backgroundColor: theme.primary, flex: 1 }]}
+                onPress={() => openResultsWithTab('palin')}
+              >
+                <Ionicons name="analytics" size={18} color="#FFF" style={{ marginRight: 6 }} />
+                <Text style={[styles.btnText, { color: '#FFF', fontWeight: '800' }]}>Palin 결과만 확인하기</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </ScrollView>
 
       {/* Report Modal */}
@@ -568,5 +743,72 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  quizChoiceCard: {
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    marginBottom: 8,
+  },
+  quizChoiceHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 8,
+  },
+  quizChoiceBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+    gap: 4,
+  },
+  quizChoiceBadgeText: {
+    color: '#FFF',
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  quizChoiceTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    flex: 1,
+  },
+  quizStatusRow: {
+    marginBottom: 12,
+  },
+  quizChoiceBtnRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  quizActionBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    gap: 6,
+  },
+  quizActionBtnText: {
+    color: '#FFF',
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  quizResultBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    gap: 6,
+  },
+  quizResultBtnText: {
+    fontSize: 13,
+    fontWeight: '800',
   },
 });

@@ -70,6 +70,17 @@ export interface Factor3Result {
   badgeColor: string;
 }
 
+export type SBISRangeKey = 'range_0_11' | 'range_12_18' | 'range_19_25';
+
+export interface SBISRangeInfo {
+  rangeKey: SBISRangeKey;
+  rangeLabel: string;
+  min: number;
+  max: number;
+  badgeColor: string;
+  descriptionKr: string;
+}
+
 export interface SBISItem {
   id: number;
   qNum: number;
@@ -87,6 +98,7 @@ export interface SBISResult {
   answeredCount: number;
   totalItems: number;
   itemDetails: SBISItem[];
+  rangeInfo: SBISRangeInfo;
 }
 
 export interface PalinScores {
@@ -386,13 +398,50 @@ export function calculateSBIS(answers: PalinAnswers): SBISResult {
     };
   });
 
+  const rangeInfo = getSBISRangeInfo(totalScore);
+
   return {
     totalScore,
     maxScore: 25,
     answeredCount,
     totalItems: 5,
     itemDetails,
+    rangeInfo,
   };
+}
+
+export function getSBISRangeInfo(score: number): SBISRangeInfo {
+  if (score <= 11) {
+    return {
+      rangeKey: 'range_0_11',
+      rangeLabel: '0 ~ 11점',
+      min: 0,
+      max: 11,
+      badgeColor: '#3B82F6',
+      descriptionKr:
+        '아이가 낯선 사람이나 새로운 상황에 대해 상당히 조심스럽고 위축된 반응을 보이는 편이에요. 부모님과 떨어지는 것을 어려워하거나, 낯선 사람에게 잘 다가가지 않고, 새로운 환경에 적응하는 데 시간이 오래 걸릴 수 있어요.',
+    };
+  } else if (score <= 18) {
+    return {
+      rangeKey: 'range_12_18',
+      rangeLabel: '12 ~ 18점',
+      min: 12,
+      max: 18,
+      badgeColor: '#F59E0B',
+      descriptionKr:
+        '또래 아이들과 비슷한 수준으로, 낯선 상황에서 어느 정도 조심스러운 모습을 보이지만 특별히 심한 편은 아니에요.',
+    };
+  } else {
+    return {
+      rangeKey: 'range_19_25',
+      rangeLabel: '19 ~ 25점',
+      min: 19,
+      max: 25,
+      badgeColor: '#EF4444',
+      descriptionKr:
+        '아이가 낯선 사람이나 새로운 상황에도 비교적 쉽게 다가가고 빠르게 적응하는 편이에요. 활발하고 사교적인 성향을 보일 수 있어요.',
+    };
+  }
 }
 
 export function calculatePalinScores(answers: PalinAnswers): PalinScores {
