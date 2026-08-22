@@ -177,12 +177,18 @@ Your responses will be kept strictly anonymous and confidential.`;
 
             {/* Language Switch */}
             <TouchableOpacity
-              style={[styles.langBtn, { backgroundColor: theme.chipBg, borderColor: theme.cardBorder }]}
+              style={[
+                styles.langBtn,
+                {
+                  backgroundColor: lang === 'en' ? theme.primaryLight : theme.chipBg,
+                  borderColor: lang === 'en' ? theme.primary : theme.cardBorder,
+                },
+              ]}
               onPress={onToggleLanguage}
               activeOpacity={0.7}
             >
-              <Text style={[styles.langBtnText, { color: theme.textPrimary }]}>
-                {lang === 'ko' ? '🇺🇸 EN' : '🇰🇷 KR'}
+              <Text style={[styles.langBtnText, { color: lang === 'en' ? theme.primary : theme.textPrimary, fontWeight: '700' }]}>
+                {lang === 'ko' ? '🇺🇸 EN' : '🇰🇷 한국어'}
               </Text>
             </TouchableOpacity>
 
