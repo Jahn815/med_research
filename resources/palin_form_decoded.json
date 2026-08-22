@@ -73,8 +73,16 @@
           "subsection": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
         },
         {
-          "id": 712970807,
+          "id": 999001122,
           "number": 2,
+          "text": "아동 이름 이니셜 (영문 2자리)",
+          "type": "short_answer",
+          "required": false,
+          "description": "성(Last Name)과 이름(First Name)의 영문 첫 글자 2자리를 입력해주세요. (숫자, 기호 입력 불가)"
+        },
+        {
+          "id": 712970807,
+          "number": 3,
           "text": "아동이 이전에 언어재활사로부터 말더듬으로 진단받은 적이 있나요?",
           "description": null,
           "type": "radio",
@@ -120,7 +128,7 @@
         },
         {
           "id": 148068858,
-          "number": 3,
+          "number": 4,
           "text": "보고자는 아동의  누구신지요?",
           "description": null,
           "type": "radio",
@@ -166,7 +174,7 @@
         },
         {
           "id": 1227784826,
-          "number": 4,
+          "number": 5,
           "text": "보고자의 연령은 어떻게 되시는지요?",
           "description": null,
           "type": "paragraph",
@@ -174,7 +182,7 @@
         },
         {
           "id": 1525865811,
-          "number": 5,
+          "number": 6,
           "text": "보고자의 최종 학력은 어떻게 되시는지요?",
           "description": null,
           "type": "radio",
@@ -244,7 +252,7 @@
         },
         {
           "id": 1100613129,
-          "number": 6,
+          "number": 7,
           "text": "아동의 나이는 만으로 몇 살입니까?         년     월       일(      세      개월)",
           "description": null,
           "type": "paragraph",
@@ -252,7 +260,7 @@
         },
         {
           "id": 134861503,
-          "number": 7,
+          "number": 8,
           "text": "아동의 성별은?",
           "description": null,
           "type": "radio",
@@ -298,7 +306,7 @@
         },
         {
           "id": 528139896,
-          "number": 8,
+          "number": 9,
           "text": "가족 중에 예전에 말을 더듬었거나 현재도 말을 더듬는 사람이 있나요?",
           "description": null,
           "type": "radio",
@@ -344,7 +352,7 @@
         },
         {
           "id": 669909246,
-          "number": 9,
+          "number": 10,
           "text": "과거에 말을 더듬었거나 현재도 말을 더듬는 가족이 있다면 누구인가요?",
           "description": null,
           "type": "short_answer",
@@ -352,7 +360,7 @@
         },
         {
           "id": 1016082815,
-          "number": 10,
+          "number": 11,
           "text": "아동이 말더듬으로 치료를 받은 적이 있습니까?",
           "description": null,
           "type": "radio",
@@ -398,7 +406,7 @@
         },
         {
           "id": 1529614863,
-          "number": 11,
+          "number": 12,
           "text": "아동이 말더듬으로 치료를 받을 적이 있다면, 부모교육을 받은 적이 있나요?",
           "description": null,
           "type": "radio",
@@ -444,7 +452,7 @@
         },
         {
           "id": 744630384,
-          "number": 12,
+          "number": 13,
           "text": "아동이 말을 언제 처음 더듬기 시작했나요?       년    월 ",
           "description": null,
           "type": "short_answer",
@@ -452,7 +460,7 @@
         },
         {
           "id": 1665081174,
-          "number": 13,
+          "number": 14,
           "text": "아동의 말더듬이 처음보다 늘어났나요, 줄어들었나요, 아니면 변화없이 유지되고 있나요? ",
           "description": null,
           "type": "grid",
@@ -510,7 +518,7 @@
         },
         {
           "id": 1512095907,
-          "number": 14,
+          "number": 15,
           "text": "아동이 자신이 말을 더듬는다는 것을 알고 있나요? ",
           "description": null,
           "type": "radio",
@@ -556,7 +564,7 @@
         },
         {
           "id": 1466102584,
-          "number": 15,
+          "number": 16,
           "text": "아동이 말더듬 이외에 다른 언어적, 청각적, 심리적, 인지적 문제가 있나요?",
           "description": null,
           "type": "radio",
@@ -602,7 +610,7 @@
         },
         {
           "id": 1494434037,
-          "number": 16,
+          "number": 17,
           "text": "아동이 말더듬 이외에 다른 문제가 있다면, 어떤 문제인가요?",
           "description": null,
           "type": "short_answer",

@@ -180,17 +180,21 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
         const isBirthdateQuestion = question.id === 1100613129;
         const isMonthYearQuestion = question.id === 744630384;
         const isPhoneQuestion = question.id === 1043373993;
+        const isInitialsQuestion = question.id === 999001122 || question.text.includes('이니셜');
 
         const isSingleLine =
           question.type === 'short_answer' ||
           isBirthdateQuestion ||
           isMonthYearQuestion ||
           isPhoneQuestion ||
+          isInitialsQuestion ||
           question.id === 1227784826;
 
         const placeholder =
           lang === 'en'
-            ? isPhoneQuestion
+            ? isInitialsQuestion
+              ? "e.g., JA (John Adams)"
+              : isPhoneQuestion
               ? "e.g., 010-1234-5678"
               : question.number === 4
               ? "e.g., 38"
@@ -199,6 +203,8 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
               : isMonthYearQuestion
               ? "Select onset year & month..."
               : "Enter your answer..."
+            : isInitialsQuestion
+            ? "예: JA (영문 2자리 예시: John Adams -> JA)"
             : isPhoneQuestion
             ? "예: 010-1234-5678 (전화번호 입력)"
             : question.number === 4
@@ -208,6 +214,16 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
             : isMonthYearQuestion
             ? "달력 팝업으로 연월을 선택하세요..."
             : "답변을 입력하세요...";
+
+        const handleTextChange = (text: string) => {
+          if (isInitialsQuestion) {
+            // Strip out non-English letters (only A-Z, a-z allowed), convert to uppercase, max 2 chars
+            const cleaned = text.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 2);
+            onChange(cleaned);
+          } else {
+            onChange(text);
+          }
+        };
 
         return (
           <View style={{ gap: 8 }}>
@@ -271,11 +287,13 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
                 },
               ]}
               value={value !== undefined ? String(value) : ''}
-              onChangeText={(text) => onChange(text)}
+              onChangeText={handleTextChange}
               placeholder={placeholder}
               placeholderTextColor={theme.textMuted}
               multiline={!isSingleLine}
-              keyboardType={isPhoneQuestion ? "phone-pad" : question.number === 4 ? "numeric" : "default"}
+              maxLength={isInitialsQuestion ? 2 : undefined}
+              autoCapitalize={isInitialsQuestion ? 'characters' : 'sentences'}
+              keyboardType={isPhoneQuestion ? 'phone-pad' : question.number === 4 ? 'numeric' : 'default'}
             />
 
             {isBirthdateQuestion && (

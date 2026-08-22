@@ -180,6 +180,10 @@ export const palinTranslationsEn: Record<number, { text: string; description?: s
   1043373993: {
     text: 'Please enter your phone number.',
   },
+  999001122: {
+    text: "Child's Initials (2 English letters, First & Last name)",
+    description: "Please enter 2 English alphabet letters for initials (e.g., JA for John Adams). No numbers or symbols allowed.",
+  },
 };
 
 export const palinSectionTitlesEn = [
