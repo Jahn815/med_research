@@ -14,6 +14,7 @@ interface PalinQuestionRendererProps {
   lang?: Language;
   displayNumber?: number;
   prefix?: string;
+  hideBadge?: boolean;
 }
 
 export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
@@ -24,6 +25,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
   lang = 'ko',
   displayNumber,
   prefix = 'Q',
+  hideBadge = false,
 }) => {
   const enTrans = lang === 'en' ? palinTranslationsEn[question.id] : undefined;
 
@@ -65,18 +67,29 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
           borderColor: theme.cardBorder,
           shadowColor: theme.shadowColor,
         },
+        hideBadge && { paddingVertical: 20, paddingHorizontal: 20, alignItems: 'center' },
       ]}
     >
       {/* Question Header */}
-      <View style={styles.headerRow}>
-        <View style={[styles.qNumBadge, { backgroundColor: theme.primaryLight }]}>
-          <Text style={[styles.qNumText, { color: theme.primary }]}>{badgeText}</Text>
-        </View>
-        <Text style={[styles.questionText, { color: theme.textPrimary }]}>{questionText}</Text>
+      <View style={[styles.headerRow, hideBadge && { justifyContent: 'center', width: '100%', marginBottom: 12 }]}>
+        {!hideBadge && (
+          <View style={[styles.qNumBadge, { backgroundColor: theme.primaryLight }]}>
+            <Text style={[styles.qNumText, { color: theme.primary }]}>{badgeText}</Text>
+          </View>
+        )}
+        <Text
+          style={[
+            styles.questionText,
+            { color: theme.textPrimary },
+            hideBadge && { textAlign: 'center', fontSize: 16, fontWeight: '700', flex: 0 },
+          ]}
+        >
+          {questionText}
+        </Text>
       </View>
 
       {descriptionText && (
-        <Text style={[styles.descriptionText, { color: theme.textSecondary }]}>
+        <Text style={[styles.descriptionText, { color: theme.textSecondary }, hideBadge && { textAlign: 'center' }]}>
           {descriptionText}
         </Text>
       )}
@@ -84,7 +97,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
       {/* RENDER BY TYPE */}
       {/* 1. RADIO / SINGLE CHOICE */}
       {question.type === 'radio' && (
-        <View style={styles.choicesRow}>
+        <View style={[styles.choicesRow, hideBadge && { justifyContent: 'center', gap: 16 }]}>
           {choices.map((c) => {
             const isSelected = value === c.value;
             return (

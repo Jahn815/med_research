@@ -285,6 +285,7 @@ Your responses will be kept strictly anonymous and confidential.`;
                 key={q.id}
                 question={q}
                 displayNumber={1}
+                hideBadge={true}
                 value={answers[q.id]}
                 onChange={(val) => handleAnswerChange(q.id, val)}
                 theme={theme}
