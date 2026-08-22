@@ -44,6 +44,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
   const [showReportModal, setShowReportModal] = useState<boolean>(false);
   const [showResultsPage, setShowResultsPage] = useState<boolean>(false);
   const [resultsInitialTab, setResultsInitialTab] = useState<'sbis' | 'palin' | 'both'>('both');
+  const [isConsentExpanded, setIsConsentExpanded] = useState<boolean>(false);
 
   const isConsentYes = answers[1536400327] === 0;
   const isConsentNo = answers[1536400327] === 1;
@@ -274,9 +275,32 @@ Your responses will be kept strictly anonymous and confidential.`;
                   {lang === 'en' ? 'Research Participation Consent' : '연구 참여 안내 및 동의서'}
                 </Text>
               </View>
-              <Text style={[styles.consentBody, { color: theme.textSecondary }]}>
+              <Text
+                style={[styles.consentBody, { color: theme.textSecondary }]}
+                numberOfLines={isConsentExpanded ? undefined : 3}
+                ellipsizeMode="tail"
+              >
                 {lang === 'en' ? consentDescriptionEn : palinFormSchema.description}
               </Text>
+
+              {/* Expand / Collapse Toggle Button */}
+              <TouchableOpacity
+                style={[styles.seeMoreBtn, { backgroundColor: theme.primaryLight }]}
+                onPress={() => setIsConsentExpanded((prev) => !prev)}
+                activeOpacity={0.7}
+              >
+                <Ionicons
+                  name={isConsentExpanded ? 'chevron-up-outline' : 'chevron-down-outline'}
+                  size={14}
+                  color={theme.primary}
+                  style={{ marginRight: 4 }}
+                />
+                <Text style={[styles.seeMoreText, { color: theme.primary }]}>
+                  {isConsentExpanded
+                    ? (lang === 'en' ? 'See less ▲' : '접기 ▲')
+                    : (lang === 'en' ? 'See more... ▼' : '자세히 보기... ▼')}
+                </Text>
+              </TouchableOpacity>
             </View>
 
             {/* Question 1: Research Consent */}
@@ -747,9 +771,22 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   consentBody: {
-    fontSize: 15,
-    lineHeight: 23,
+    fontSize: 16.5,
+    lineHeight: 25,
     fontWeight: '500',
+  },
+  seeMoreBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    marginTop: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+  },
+  seeMoreText: {
+    fontSize: 13,
+    fontWeight: '700',
   },
   warningBox: {
     flexDirection: 'row',
