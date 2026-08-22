@@ -182,7 +182,7 @@ export const palinTranslationsEn: Record<number, { text: string; description?: s
   },
   999001122: {
     text: "Child's Initials (2 English letters, First & Last name)",
-    description: "Please enter 2 English alphabet letters for initials (e.g., JA for John Adams). No numbers or symbols allowed.",
+    description: "Please enter 2 English alphabet letters for initials (e.g., HD for Hong Gildong). No numbers or symbols allowed.",
   },
 };
 

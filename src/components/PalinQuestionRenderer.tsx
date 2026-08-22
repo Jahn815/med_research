@@ -193,7 +193,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
         const placeholder =
           lang === 'en'
             ? isInitialsQuestion
-              ? "e.g., JA (John Adams)"
+              ? "e.g., HD (Hong Gildong -> HD)"
               : isPhoneQuestion
               ? "e.g., 010-1234-5678"
               : question.number === 4
@@ -204,7 +204,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
               ? "Select onset year & month..."
               : "Enter your answer..."
             : isInitialsQuestion
-            ? "예: JA (영문 2자리 예시: John Adams -> JA)"
+            ? "예: HD (홍길동 -> HD, 김철수 -> KC)"
             : isPhoneQuestion
             ? "예: 010-1234-5678 (전화번호 입력)"
             : question.number === 4
