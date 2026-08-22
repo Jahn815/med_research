@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ColorTheme } from '../theme/colors';
 import { PalinQuestion } from '../types/palinSurvey';
@@ -12,6 +12,8 @@ interface PalinQuestionRendererProps {
   onChange: (val: string | number) => void;
   theme: ColorTheme;
   lang?: Language;
+  displayNumber?: number;
+  prefix?: string;
 }
 
 export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
@@ -20,11 +22,16 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
   onChange,
   theme,
   lang = 'ko',
+  displayNumber,
+  prefix = 'Q',
 }) => {
   const enTrans = lang === 'en' ? palinTranslationsEn[question.id] : undefined;
 
   const questionText = enTrans?.text || question.text.trim();
   const descriptionText = enTrans?.description || question.description;
+
+  const qNum = displayNumber !== undefined ? displayNumber : question.number;
+  const badgeText = `${prefix}${qNum}`;
 
   const rawChoices = question.options?.choices || [];
   const choices = rawChoices.map((c, idx) => ({
@@ -40,6 +47,15 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
       }
     : null;
 
+  const { width: windowWidth } = useWindowDimensions();
+
+  // Calculate dynamic 0-10 scale pill button size to fit all 11 items without horizontal scrolling
+  const availableWidth = Math.max(280, windowWidth - 56);
+  const idealGap = Math.min(8, Math.max(2, Math.floor((availableWidth - 11 * 26) / 10)));
+  const calculatedPillSize = Math.floor((availableWidth - 10 * idealGap) / 11);
+  const pillSize = Math.min(40, Math.max(25, calculatedPillSize));
+  const pillFontSize = pillSize < 28 ? 11 : pillSize < 34 ? 12 : 14;
+
   return (
     <View
       style={[
@@ -54,7 +70,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
       {/* Question Header */}
       <View style={styles.headerRow}>
         <View style={[styles.qNumBadge, { backgroundColor: theme.primaryLight }]}>
-          <Text style={[styles.qNumText, { color: theme.primary }]}>Q{question.number}</Text>
+          <Text style={[styles.qNumText, { color: theme.primary }]}>{badgeText}</Text>
         </View>
         <Text style={[styles.questionText, { color: theme.textPrimary }]}>{questionText}</Text>
       </View>
@@ -227,7 +243,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
             </View>
           )}
 
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scalePillRow}>
+          <View style={[styles.scalePillRow, { gap: idealGap }]}>
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
               const isSelected = value === num;
               return (
@@ -236,6 +252,9 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
                   style={[
                     styles.scalePill,
                     {
+                      width: pillSize,
+                      height: pillSize,
+                      borderRadius: Math.floor(pillSize / 2),
                       backgroundColor: isSelected ? theme.primary : theme.chipBg,
                       borderColor: isSelected ? theme.primary : theme.cardBorder,
                     },
@@ -246,7 +265,11 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
                   <Text
                     style={[
                       styles.scalePillText,
-                      { color: isSelected ? '#FFFFFF' : theme.textPrimary, fontWeight: isSelected ? '800' : '600' },
+                      {
+                        fontSize: pillFontSize,
+                        color: isSelected ? '#FFFFFF' : theme.textPrimary,
+                        fontWeight: isSelected ? '800' : '600',
+                      },
                     ]}
                   >
                     {num}
@@ -254,7 +277,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
                 </TouchableOpacity>
               );
             })}
-          </ScrollView>
+          </View>
 
           {value !== undefined && (
             <View style={[styles.selectedScaleBadge, { backgroundColor: theme.primaryLight }]}>
@@ -361,19 +384,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scalePillRow: {
-    gap: 6,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: 4,
   },
   scalePill: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   scalePillText: {
-    fontSize: 14,
+    textAlign: 'center',
   },
   selectedScaleBadge: {
     alignSelf: 'center',

@@ -280,89 +280,59 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
         {/* 2. PALIN CARDS (RENDERED FOR 'palin' OR 'both') */}
         {(activeResultsTab === 'palin' || activeResultsTab === 'both') && (
           <>
-
-        {/* FACTOR 1 CARD (FEATURED) */}
-        <View style={[styles.factorCard, { backgroundColor: theme.cardBg, borderColor: theme.primary }]}>
-          <View style={styles.factorHeaderRow}>
-            <View style={styles.factorTitleGroup}>
-              <View style={[styles.factorBadge, { backgroundColor: theme.primary }]}>
-                <Text style={styles.factorBadgeText}>Factor 1</Text>
-              </View>
-              <Text style={[styles.factorTitle, { color: theme.textPrimary }]}>
-                {lang === 'en' ? 'Factor 1 Weighted Average' : 'Factor 1 가중평균 점수'}
-              </Text>
-            </View>
-            <View style={styles.scoreContainer}>
-              <Text style={[styles.factorScoreValue, { color: theme.primary }]}>
-                {f1.score}
-              </Text>
-              <View style={[styles.levelBadge, { backgroundColor: f1.badgeColor }]}>
-                <Text style={styles.levelBadgeText}>
-                  {lang === 'en' ? f1.levelLabelEn : f1.levelLabelKr}
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Scale Assessment Box */}
-          <View style={[styles.scaleAssessmentCard, { backgroundColor: theme.primaryLight, borderColor: theme.primary }]}>
-            <View style={styles.scaleAssessmentRow}>
-              <Ionicons name="pricetag" size={16} color={theme.primary} />
-              <Text style={[styles.scaleAssessmentTitle, { color: theme.primary }]}>
-                {lang === 'en' ? 'Factor 1 Category Rating:' : 'Factor 1 평가 카테고리:'}
-              </Text>
-              <View style={[styles.inlineLevelTag, { backgroundColor: f1.badgeColor }]}>
-                <Text style={styles.inlineLevelTagText}>
-                  {lang === 'en' ? f1.levelLabelEn : f1.levelLabelKr}
-                </Text>
-              </View>
-            </View>
-
-            {/* Threshold Legend Bar */}
-            <View style={styles.legendRow}>
-              {[
-                { label: lang === 'en' ? 'Very High' : '매우 높음', range: '0 - 2.79', key: 'very_high', color: '#EF4444' },
-                { label: lang === 'en' ? 'High' : '높음', range: '2.80 - 4.19', key: 'high', color: '#F97316' },
-                { label: lang === 'en' ? 'Moderate' : '보통', range: '4.20 - 5.59', key: 'moderate', color: '#F59E0B' },
-                { label: lang === 'en' ? 'Low' : '낮음', range: '5.60 - 6.69', key: 'low', color: '#10B981' },
-                { label: lang === 'en' ? 'Very Low' : '매우 낮음', range: '> 6.69', key: 'very_low', color: '#059669' },
-              ].map((item) => {
-                const isActive = f1.levelKey === item.key;
-                return (
-                  <View
-                    key={item.key}
-                    style={[
-                      styles.legendItem,
-                      {
-                        backgroundColor: isActive ? item.color : theme.chipBg,
-                        borderColor: isActive ? item.color : theme.cardBorder,
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.legendLabel,
-                        { color: isActive ? '#FFFFFF' : theme.textPrimary, fontWeight: isActive ? '800' : '600' },
-                      ]}
-                    >
-                      {item.label}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.legendRange,
-                        { color: isActive ? '#FFFFFF' : theme.textMuted },
-                      ]}
-                    >
-                      {item.range}
+            {/* FACTOR 1 CARD (FEATURED) */}
+            <View style={[styles.factorCard, { backgroundColor: theme.cardBg, borderColor: theme.primary }]}>
+              <View style={styles.factorHeaderRow}>
+                <View style={styles.factorTitleGroup}>
+                  <View style={[styles.factorBadge, { backgroundColor: theme.primary }]}>
+                    <Text style={styles.factorBadgeText}>Factor 1</Text>
+                  </View>
+                  <Text style={[styles.factorTitle, { color: theme.textPrimary }]}>
+                    {lang === 'en' ? 'Factor 1 Weighted Average' : 'Factor 1 가중평균 점수'}
+                  </Text>
+                </View>
+                <View style={styles.scoreContainer}>
+                  <Text style={[styles.factorScoreValue, { color: theme.primary }]}>
+                    {f1.score}
+                  </Text>
+                  <View style={[styles.levelBadge, { backgroundColor: f1.badgeColor }]}>
+                    <Text style={styles.levelBadgeText}>
+                      {lang === 'en' ? f1.levelLabelEn : f1.levelLabelKr}
                     </Text>
                   </View>
-                );
-              })}
+                </View>
+              </View>
+
+              {/* Factor 1 Active Score Range Display (Shows ONLY the single active range for Factor 1) */}
+              <View style={[styles.scaleAssessmentCard, { backgroundColor: theme.primaryLight, borderColor: theme.primary }]}>
+                <View style={styles.scaleAssessmentRow}>
+                  <Ionicons name="pricetag" size={16} color={theme.primary} />
+                  <Text style={[styles.scaleAssessmentTitle, { color: theme.primary }]}>
+                    Factor 1 점수 구간 평가:
+                  </Text>
+                  <View style={[styles.inlineLevelTag, { backgroundColor: f1.rangeInfo.badgeColor }]}>
+                    <Text style={styles.inlineLevelTagText}>
+                      {f1.rangeInfo.rangeLabel}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={{ marginTop: 8, padding: 12, borderRadius: 10, backgroundColor: theme.cardBg, borderWidth: 1, borderColor: theme.cardBorder }}>
+                  <Text style={{ fontSize: 14, fontWeight: '800', color: theme.textPrimary, marginBottom: 6 }}>
+                    해당 점수 구간: {f1.rangeInfo.rangeLabel}
+                  </Text>
+                  {f1.rangeInfo.descriptionKr ? (
+                    <Text style={{ fontSize: 13, color: theme.textPrimary, lineHeight: 21, fontWeight: '500' }}>
+                      {f1.rangeInfo.descriptionKr}
+                    </Text>
+                  ) : (
+                    <Text style={{ fontSize: 13, color: theme.textSecondary, lineHeight: 20 }}>
+                      현재 Factor 1 가중평균 점수({f1.score}점)는 <Text style={{ fontWeight: '700', color: theme.textPrimary }}>{f1.rangeInfo.rangeLabel}</Text> 구간에 해당합니다.
+                    </Text>
+                  )}
+                </View>
+              </View>
             </View>
-          </View>
-
-
-        </View>
 
         {/* FACTOR 2 CARD (FEATURED) */}
         <View style={[styles.factorCard, { backgroundColor: theme.cardBg, borderColor: theme.accent }]}>
@@ -387,60 +357,33 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
             </View>
           </View>
 
-          {/* Scale Assessment Box */}
+          {/* Factor 2 Active Score Range Display (Shows ONLY the single active range for Factor 2) */}
           <View style={[styles.scaleAssessmentCard, { backgroundColor: theme.primaryLight, borderColor: theme.accent }]}>
             <View style={styles.scaleAssessmentRow}>
               <Ionicons name="pricetag" size={16} color={theme.accent} />
               <Text style={[styles.scaleAssessmentTitle, { color: theme.accent }]}>
-                {lang === 'en' ? 'Factor 2 Category Rating:' : 'Factor 2 평가 카테고리:'}
+                Factor 2 점수 구간 평가:
               </Text>
-              <View style={[styles.inlineLevelTag, { backgroundColor: f2.badgeColor }]}>
+              <View style={[styles.inlineLevelTag, { backgroundColor: f2.rangeInfo.badgeColor }]}>
                 <Text style={styles.inlineLevelTagText}>
-                  {lang === 'en' ? f2.levelLabelEn : f2.levelLabelKr}
+                  {f2.rangeInfo.rangeLabel}
                 </Text>
               </View>
             </View>
 
-            {/* Threshold Legend Bar */}
-            <View style={styles.legendRow}>
-              {[
-                { label: lang === 'en' ? 'Very High' : '매우 높음', range: '0 - 1.79', key: 'very_high', color: '#EF4444' },
-                { label: lang === 'en' ? 'High' : '높음', range: '1.80 - 2.79', key: 'high', color: '#F97316' },
-                { label: lang === 'en' ? 'Moderate' : '보통', range: '2.80 - 4.19', key: 'moderate', color: '#F59E0B' },
-                { label: lang === 'en' ? 'Low' : '낮음', range: '4.20 - 5.39', key: 'low', color: '#10B981' },
-                { label: lang === 'en' ? 'Very Low' : '매우 낮음', range: '> 5.39', key: 'very_low', color: '#059669' },
-              ].map((item) => {
-                const isActive = f2.levelKey === item.key;
-                return (
-                  <View
-                    key={item.key}
-                    style={[
-                      styles.legendItem,
-                      {
-                        backgroundColor: isActive ? item.color : theme.chipBg,
-                        borderColor: isActive ? item.color : theme.cardBorder,
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.legendLabel,
-                        { color: isActive ? '#FFFFFF' : theme.textPrimary, fontWeight: isActive ? '800' : '600' },
-                      ]}
-                    >
-                      {item.label}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.legendRange,
-                        { color: isActive ? '#FFFFFF' : theme.textMuted },
-                      ]}
-                    >
-                      {item.range}
-                    </Text>
-                  </View>
-                );
-              })}
+            <View style={{ marginTop: 8, padding: 12, borderRadius: 10, backgroundColor: theme.cardBg, borderWidth: 1, borderColor: theme.cardBorder }}>
+              <Text style={{ fontSize: 14, fontWeight: '800', color: theme.textPrimary, marginBottom: 6 }}>
+                해당 점수 구간: {f2.rangeInfo.rangeLabel}
+              </Text>
+              {f2.rangeInfo.descriptionKr ? (
+                <Text style={{ fontSize: 13, color: theme.textPrimary, lineHeight: 21, fontWeight: '500' }}>
+                  {f2.rangeInfo.descriptionKr}
+                </Text>
+              ) : (
+                <Text style={{ fontSize: 13, color: theme.textSecondary, lineHeight: 20 }}>
+                  현재 Factor 2 가중평균 점수({f2.score}점)는 <Text style={{ fontWeight: '700', color: theme.textPrimary }}>{f2.rangeInfo.rangeLabel}</Text> 구간에 해당합니다.
+                </Text>
+              )}
             </View>
           </View>
 
@@ -470,60 +413,33 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
             </View>
           </View>
 
-          {/* Scale Assessment Box */}
+          {/* Factor 3 Active Score Range Display (Shows ONLY the single active range for Factor 3) */}
           <View style={[styles.scaleAssessmentCard, { backgroundColor: theme.primaryLight, borderColor: '#8B5CF6' }]}>
             <View style={styles.scaleAssessmentRow}>
               <Ionicons name="pricetag" size={16} color="#8B5CF6" />
               <Text style={[styles.scaleAssessmentTitle, { color: '#8B5CF6' }]}>
-                {lang === 'en' ? 'Factor 3 Category Rating:' : 'Factor 3 평가 카테고리:'}
+                Factor 3 점수 구간 평가:
               </Text>
-              <View style={[styles.inlineLevelTag, { backgroundColor: f3.badgeColor }]}>
+              <View style={[styles.inlineLevelTag, { backgroundColor: f3.rangeInfo.badgeColor }]}>
                 <Text style={styles.inlineLevelTagText}>
-                  {lang === 'en' ? f3.levelLabelEn : f3.levelLabelKr}
+                  {f3.rangeInfo.rangeLabel}
                 </Text>
               </View>
             </View>
 
-            {/* Threshold Legend Bar */}
-            <View style={styles.legendRow}>
-              {[
-                { label: lang === 'en' ? 'Very High' : '매우 높음', range: '>= 6.60', key: 'very_high', color: '#059669' },
-                { label: lang === 'en' ? 'High' : '높음', range: '5.60 - 6.59', key: 'high', color: '#10B981' },
-                { label: lang === 'en' ? 'Moderate' : '보통', range: '4.10 - 5.59', key: 'moderate', color: '#F59E0B' },
-                { label: lang === 'en' ? 'Low' : '낮음', range: '2.20 - 4.09', key: 'low', color: '#F97316' },
-                { label: lang === 'en' ? 'Very Low' : '매우 낮음', range: '< 2.20', key: 'very_low', color: '#EF4444' },
-              ].map((item) => {
-                const isActive = f3.levelKey === item.key;
-                return (
-                  <View
-                    key={item.key}
-                    style={[
-                      styles.legendItem,
-                      {
-                        backgroundColor: isActive ? item.color : theme.chipBg,
-                        borderColor: isActive ? item.color : theme.cardBorder,
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.legendLabel,
-                        { color: isActive ? '#FFFFFF' : theme.textPrimary, fontWeight: isActive ? '800' : '600' },
-                      ]}
-                    >
-                      {item.label}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.legendRange,
-                        { color: isActive ? '#FFFFFF' : theme.textMuted },
-                      ]}
-                    >
-                      {item.range}
-                    </Text>
-                  </View>
-                );
-              })}
+            <View style={{ marginTop: 8, padding: 12, borderRadius: 10, backgroundColor: theme.cardBg, borderWidth: 1, borderColor: theme.cardBorder }}>
+              <Text style={{ fontSize: 14, fontWeight: '800', color: theme.textPrimary, marginBottom: 6 }}>
+                해당 점수 구간: {f3.rangeInfo.rangeLabel}
+              </Text>
+              {f3.rangeInfo.descriptionKr ? (
+                <Text style={{ fontSize: 13, color: theme.textPrimary, lineHeight: 21, fontWeight: '500' }}>
+                  {f3.rangeInfo.descriptionKr}
+                </Text>
+              ) : (
+                <Text style={{ fontSize: 13, color: theme.textSecondary, lineHeight: 20 }}>
+                  현재 Factor 3 가중평균 점수({f3.score}점)는 <Text style={{ fontWeight: '700', color: theme.textPrimary }}>{f3.rangeInfo.rangeLabel}</Text> 구간에 해당합니다.
+                </Text>
+              )}
             </View>
           </View>
 

@@ -300,16 +300,18 @@ Your responses will be kept strictly anonymous and confidential.`;
               <PalinQuestionRenderer
                 key={q.id}
                 question={q}
+                displayNumber={1}
                 value={answers[q.id]}
                 onChange={(val) => handleAnswerChange(q.id, val)}
                 theme={theme}
                 lang={lang}
               />
             ))}
-            {palinFormSchema.sections[1].questions.map((q) => (
+            {palinFormSchema.sections[1].questions.map((q, idx) => (
               <PalinQuestionRenderer
                 key={q.id}
                 question={q}
+                displayNumber={idx + 1}
                 value={answers[q.id]}
                 onChange={(val) => handleAnswerChange(q.id, val)}
                 theme={theme}
@@ -376,11 +378,11 @@ Your responses will be kept strictly anonymous and confidential.`;
                   <Text style={styles.quizChoiceBadgeText}>5문항</Text>
                 </View>
                 <Text style={[styles.quizChoiceTitle, { color: theme.textPrimary }]}>
-                  {lang === 'en' ? 'Take SBIS Quiz Only' : 'SBIS 기질검사만 실시'}
+                  {lang === 'en' ? 'SBIS Quiz' : 'SBIS 기질검사'}
                 </Text>
               </View>
               <Text style={{ fontSize: 13, color: theme.textSecondary, marginBottom: 12, lineHeight: 18 }}>
-                낯선 사람이나 장소에 대한 아동의 행동억제 기질을 측정합니다. (5문항 완료 후 SBIS 결과만 확인)
+                낯선 사람이나 장소에 대한 아동의 행동억제 기질을 측정합니다. (5문항 완료 후 SBIS 결과 확인)
               </Text>
               <View style={styles.quizStatusRow}>
                 <Text style={{ fontSize: 12, fontWeight: '700', color: sbisAnsweredCount === 5 ? '#10B981' : theme.textSecondary }}>
@@ -418,11 +420,11 @@ Your responses will be kept strictly anonymous and confidential.`;
                   <Text style={styles.quizChoiceBadgeText}>19문항</Text>
                 </View>
                 <Text style={[styles.quizChoiceTitle, { color: theme.textPrimary }]}>
-                  {lang === 'en' ? 'Take Palin PPRS Quiz Only' : 'Palin 부모평가지만 실시'}
+                  {lang === 'en' ? 'Palin PPRS Quiz' : 'Palin 부모평가지'}
                 </Text>
               </View>
               <Text style={{ fontSize: 13, color: theme.textSecondary, marginBottom: 12, lineHeight: 18 }}>
-                말더듬이 아동과 부모에게 미치는 영향, 걱정 정도, 말더듬 관리 지식 및 자신감을 평가합니다. (19문항 완료 후 Palin 결과만 확인)
+                말더듬이 아동과 부모에게 미치는 영향, 걱정 정도, 말더듬 관리 지식 및 자신감을 평가합니다. (19문항 완료 후 Palin 결과 확인)
               </Text>
               <View style={styles.quizStatusRow}>
                 <Text style={{ fontSize: 12, fontWeight: '700', color: palinAnsweredCount === 19 ? '#10B981' : theme.textSecondary }}>
@@ -465,19 +467,21 @@ Your responses will be kept strictly anonymous and confidential.`;
           </View>
         )}
 
-        {/* TAB 2: SBIS QUIZ (Q17 ~ Q21) */}
+        {/* TAB 2: SBIS QUIZ (S1 ~ S5) */}
         {activeSecIndex === 2 && (
           <>
             <View style={[styles.subCard, { backgroundColor: 'rgba(139, 92, 246, 0.1)', borderColor: '#8B5CF6', borderWidth: 1, marginBottom: 16 }]}>
               <Text style={[styles.subCardTitle, { color: '#8B5CF6', fontSize: 15 }]}>
-                🟣 SBIS 간편 행동억제기질검사 (Q17 ~ Q21)
+                🟣 SBIS 간편 행동억제기질검사 (S1 ~ S5번 문항)
               </Text>
             </View>
 
-            {palinFormSchema.sections[2].questions.map((q) => (
+            {palinFormSchema.sections[2].questions.map((q, idx) => (
               <PalinQuestionRenderer
                 key={q.id}
                 question={q}
+                displayNumber={idx + 1}
+                prefix="S"
                 value={answers[q.id]}
                 onChange={(val) => handleAnswerChange(q.id, val)}
                 theme={theme}
@@ -499,25 +503,27 @@ Your responses will be kept strictly anonymous and confidential.`;
                 onPress={() => openResultsWithTab('sbis')}
               >
                 <Ionicons name="analytics" size={18} color="#FFF" style={{ marginRight: 6 }} />
-                <Text style={[styles.btnText, { color: '#FFF', fontWeight: '800' }]}>SBIS 결과만 확인하기</Text>
+                <Text style={[styles.btnText, { color: '#FFF', fontWeight: '800' }]}>SBIS 결과 확인하기</Text>
               </TouchableOpacity>
             </View>
           </>
         )}
 
-        {/* TAB 3: PALIN PPRS QUIZ (Q22 ~ Q40) */}
+        {/* TAB 3: PALIN PPRS QUIZ (P1 ~ P19) */}
         {activeSecIndex === 3 && (
           <>
             <View style={[styles.subCard, { backgroundColor: theme.primaryLight, borderColor: theme.primary, borderWidth: 1, marginBottom: 16 }]}>
               <Text style={[styles.subCardTitle, { color: theme.primary, fontSize: 15 }]}>
-                🔵 Palin 부모평가지 (PPRS) (Q22 ~ Q40)
+                🔵 Palin 부모평가지 (PPRS) (P1 ~ P19번 문항)
               </Text>
             </View>
 
-            {palinFormSchema.sections[3].questions.map((q) => (
+            {palinFormSchema.sections[3].questions.map((q, idx) => (
               <PalinQuestionRenderer
                 key={q.id}
                 question={q}
+                displayNumber={idx + 1}
+                prefix="P"
                 value={answers[q.id]}
                 onChange={(val) => handleAnswerChange(q.id, val)}
                 theme={theme}
@@ -539,7 +545,7 @@ Your responses will be kept strictly anonymous and confidential.`;
                 onPress={() => openResultsWithTab('palin')}
               >
                 <Ionicons name="analytics" size={18} color="#FFF" style={{ marginRight: 6 }} />
-                <Text style={[styles.btnText, { color: '#FFF', fontWeight: '800' }]}>Palin 결과만 확인하기</Text>
+                <Text style={[styles.btnText, { color: '#FFF', fontWeight: '800' }]}>Palin 결과 확인하기</Text>
               </TouchableOpacity>
             </View>
           </>

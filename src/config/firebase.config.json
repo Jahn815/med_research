@@ -1,0 +1,29 @@
+{
+  "projectInfo": {
+    "name": "med-research-e4ae6",
+    "description": "Firebase backend for Stuttering Research Survey App"
+  },
+  "firebaseConfig": {
+    "apiKey": "AIzaSyAeEkILjMg4XWLYk3AbAeICJW6t72HDXWs",
+    "authDomain": "med-research-e4ae6.firebaseapp.com",
+    "projectId": "med-research-e4ae6",
+    "storageBucket": "med-research-e4ae6.firebasestorage.app",
+    "messagingSenderId": "196756062260",
+    "appId": "1:196756062260:web:850302c2bd7b998c3d0a61"
+  },
+  "firestore": {
+    "collections": {
+      "survey_responses": {
+        "description": "Stores completed parent stuttering survey responses and calculated clinical factor scores",
+        "fields": {
+          "answers": "Object containing question ID key-value map of user responses",
+          "scores": "Object containing calculated SBIS total score and Factor 1, 2, 3 weighted scores and range info",
+          "locale": "Language locale string ('ko' or 'en')",
+          "submittedAtIso": "ISO 8601 string timestamp",
+          "createdAt": "Firestore serverTimestamp()",
+          "metadata": "Platform, userAgent, or device metadata"
+        }
+      }
+    }
+  }
+}
