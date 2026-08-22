@@ -302,11 +302,8 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
       {/* 3. GRID (SBIS 5-POINT SCALE CHIPS OR CATEGORY CHIPS) */}
       {question.type === 'grid' && (
         <View style={styles.gridContainer}>
-          {choices.map((c, cIdx) => {
+          {choices.map((c) => {
             const isSelected = value === c.value;
-            const pts = cIdx + 1;
-            const showPointTag = prefix === 'S' && question.id !== 1665081174;
-
             return (
               <TouchableOpacity
                 key={c.value}
@@ -337,28 +334,6 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
                   >
                     {c.label}
                   </Text>
-
-                  {showPointTag && (
-                    <View
-                      style={[
-                        styles.scoreTag,
-                        {
-                          backgroundColor: isSelected ? theme.primary : 'rgba(139, 92, 246, 0.12)',
-                        },
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.scoreTagText,
-                          {
-                            color: isSelected ? '#FFFFFF' : '#8B5CF6',
-                          },
-                        ]}
-                      >
-                        {lang === 'en' ? `${pts} pt${pts > 1 ? 's' : ''}` : `${pts}점`}
-                      </Text>
-                    </View>
-                  )}
                 </View>
               </TouchableOpacity>
             );
