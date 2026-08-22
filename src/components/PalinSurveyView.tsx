@@ -283,7 +283,7 @@ Your responses will be kept strictly anonymous and confidential.`;
               </View>
               <Text
                 style={[styles.consentBody, { color: theme.textSecondary }]}
-                numberOfLines={isConsentExpanded ? undefined : 3}
+                numberOfLines={isConsentExpanded ? undefined : 7}
                 ellipsizeMode="tail"
               >
                 {lang === 'en' ? consentDescriptionEn : palinFormSchema.description}
