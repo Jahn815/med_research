@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ColorTheme } from '../theme/colors';
 import { PalinQuestion } from '../types/palinSurvey';
 import { Language } from '../i18n/translations';
 import { palinTranslationsEn } from '../i18n/palinTranslationsEn';
+import { DatePickerModal } from './DatePickerModal';
 
 interface PalinQuestionRendererProps {
   question: PalinQuestion;
@@ -57,6 +58,41 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
   const calculatedPillSize = Math.floor((availableWidth - 10 * idealGap) / 11);
   const pillSize = Math.min(40, Math.max(25, calculatedPillSize));
   const pillFontSize = pillSize < 28 ? 11 : pillSize < 34 ? 12 : 14;
+
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+
+  const handleDateSelected = (dateStr: string) => {
+    const matches = dateStr.match(/(\d{4})[^\d]+(\d{1,2})[^\d]+(\d{1,2})/);
+    if (matches) {
+      const year = parseInt(matches[1], 10);
+      const month = parseInt(matches[2], 10);
+      const day = parseInt(matches[3], 10);
+
+      const today = new Date();
+      let ageYears = today.getFullYear() - year;
+      let ageMonths = today.getMonth() - (month - 1);
+      if (today.getDate() < day) {
+        ageMonths--;
+      }
+      if (ageMonths < 0) {
+        ageYears--;
+        ageMonths += 12;
+      }
+      ageYears = Math.max(0, ageYears);
+      ageMonths = Math.max(0, ageMonths);
+
+      const formattedMonth = String(month).padStart(2, '0');
+      const formattedDay = String(day).padStart(2, '0');
+
+      const fullValue = lang === 'en'
+        ? `${year}-${formattedMonth}-${formattedDay} (${ageYears} yrs ${ageMonths} mos)`
+        : `${year}년 ${formattedMonth}월 ${formattedDay}일 (만 ${ageYears}세 ${ageMonths}개월)`;
+
+      onChange(fullValue);
+    } else {
+      onChange(dateStr);
+    }
+  };
 
   return (
     <View
@@ -138,6 +174,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
 
       {/* 2. TEXT INPUT (SHORT ANSWER OR PARAGRAPH) */}
       {(question.type === 'short_answer' || question.type === 'paragraph') && (() => {
+        const isBirthdateQuestion = question.id === 1100613129 || question.number === 6 || displayNumber === 5;
         const isSingleLine =
           question.type === 'short_answer' ||
           question.number === 4 ||
@@ -149,34 +186,71 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
           lang === 'en'
             ? question.number === 4
               ? "e.g., 38"
-              : question.number === 6
-              ? "e.g., 2019-05-10 (6 years 2 months)"
+              : isBirthdateQuestion
+              ? "Select birthdate using calendar..."
               : "Enter your answer..."
             : question.number === 4
             ? "예: 38 (숫자 또는 연령 입력)"
-            : question.number === 6
-            ? "예: 2019년 05월 10일 (6세 2개월)"
+            : isBirthdateQuestion
+            ? "달력으로 생년월일을 선택하세요..."
             : "답변을 입력하세요...";
 
         return (
-          <TextInput
-            style={[
-              styles.textInput,
-              {
-                backgroundColor: theme.inputBg,
-                borderColor: theme.inputBorder,
-                color: theme.textPrimary,
-                height: isSingleLine ? 46 : 90,
-                textAlignVertical: isSingleLine ? 'center' : 'top',
-              },
-            ]}
-            value={value !== undefined ? String(value) : ''}
-            onChangeText={(text) => onChange(text)}
-            placeholder={placeholder}
-            placeholderTextColor={theme.textMuted}
-            multiline={!isSingleLine}
-            keyboardType={question.number === 4 ? "numeric" : "default"}
-          />
+          <View style={{ gap: 8 }}>
+            {isBirthdateQuestion && (
+              <TouchableOpacity
+                style={[
+                  styles.datePickerTriggerBtn,
+                  {
+                    backgroundColor: theme.primaryLight,
+                    borderColor: theme.primary,
+                  },
+                ]}
+                onPress={() => setShowDatePicker(true)}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="calendar-sharp" size={20} color={theme.primary} />
+                <Text style={[styles.datePickerTriggerText, { color: theme.primary }]}>
+                  {value
+                    ? `${value}`
+                    : lang === 'en'
+                    ? '📅 Open Calendar Popup to Select Birthday'
+                    : '📅 달력 팝업으로 아동 생년월일 선택하기'}
+                </Text>
+                <Ionicons name="chevron-forward" size={16} color={theme.primary} />
+              </TouchableOpacity>
+            )}
+
+            <TextInput
+              style={[
+                styles.textInput,
+                {
+                  backgroundColor: theme.inputBg,
+                  borderColor: theme.inputBorder,
+                  color: theme.textPrimary,
+                  height: isSingleLine ? 46 : 90,
+                  textAlignVertical: isSingleLine ? 'center' : 'top',
+                },
+              ]}
+              value={value !== undefined ? String(value) : ''}
+              onChangeText={(text) => onChange(text)}
+              placeholder={placeholder}
+              placeholderTextColor={theme.textMuted}
+              multiline={!isSingleLine}
+              keyboardType={question.number === 4 ? "numeric" : "default"}
+            />
+
+            {isBirthdateQuestion && (
+              <DatePickerModal
+                visible={showDatePicker}
+                onClose={() => setShowDatePicker(false)}
+                onSelectDate={handleDateSelected}
+                initialDate={value ? String(value) : undefined}
+                theme={theme}
+                lang={lang}
+              />
+            )}
+          </View>
         );
       })()}
 
@@ -365,6 +439,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
+  },
+  datePickerTriggerBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    gap: 8,
+  },
+  datePickerTriggerText: {
+    fontSize: 14,
+    fontWeight: '700',
+    flex: 1,
   },
   gridContainer: {
     gap: 8,
