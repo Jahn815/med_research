@@ -62,6 +62,23 @@ To host the web version of this application on a CDN or static hosting service (
    ```
 2. Upload the generated `dist` folder to your preferred CDN provider.
 
+### Over-The-Air (OTA) Updates (Expo CDN)
+
+To instantly push JavaScript and asset updates directly to your mobile users without going through App Store or Play Store reviews, use **EAS Update**:
+
+1. Install the EAS CLI globally:
+   ```bash
+   npm install -g eas-cli
+   ```
+2. Initialize and configure the project for updates:
+   ```bash
+   eas update:configure
+   ```
+3. Publish a new update to a specific branch (e.g., preview or production):
+   ```bash
+   eas update --branch preview --message "Updated survey logic"
+   ```
+
 ## Resources
 
 - **Source Survey:** [Google Form](https://docs.google.com/forms/d/e/1FAIpQLScTNfr3pHSUTC1hPFU6k9zQmZNLo-DVITqZxmraAQmcrN8ihg/viewform)
