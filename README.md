@@ -52,6 +52,16 @@ Simply install the "Expo Go" app on your phone, run `npm start`, and scan the te
 
 👉 **[View the Detailed Expo Go Testing Guide](docs/EXPO_GO_TESTING.md)**
 
+### Web Deployment (CDN)
+
+To host the web version of this application on a CDN or static hosting service (e.g., Vercel, Netlify, Cloudflare Pages, or GitHub Pages):
+
+1. Generate the static web export:
+   ```bash
+   npx expo export -p web
+   ```
+2. Upload the generated `dist` folder to your preferred CDN provider.
+
 ## Resources
 
 - **Source Survey:** [Google Form](https://docs.google.com/forms/d/e/1FAIpQLScTNfr3pHSUTC1hPFU6k9zQmZNLo-DVITqZxmraAQmcrN8ihg/viewform)
