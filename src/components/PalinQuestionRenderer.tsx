@@ -177,27 +177,30 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
 
       {/* 2. TEXT INPUT (SHORT ANSWER OR PARAGRAPH) */}
       {(question.type === 'short_answer' || question.type === 'paragraph') && (() => {
-        const isBirthdateQuestion = question.id === 1100613129 || question.number === 6 || displayNumber === 5;
-        const isMonthYearQuestion = question.id === 744630384 || question.number === 12 || displayNumber === 11;
+        const isBirthdateQuestion = question.id === 1100613129;
+        const isMonthYearQuestion = question.id === 744630384;
+        const isPhoneQuestion = question.id === 1043373993;
 
         const isSingleLine =
           question.type === 'short_answer' ||
-          question.number === 4 ||
-          question.number === 6 ||
-          question.number === 12 ||
-          question.id === 1227784826 ||
-          question.id === 1100613129 ||
-          question.id === 744630384;
+          isBirthdateQuestion ||
+          isMonthYearQuestion ||
+          isPhoneQuestion ||
+          question.id === 1227784826;
 
         const placeholder =
           lang === 'en'
-            ? question.number === 4
+            ? isPhoneQuestion
+              ? "e.g., 010-1234-5678"
+              : question.number === 4
               ? "e.g., 38"
               : isBirthdateQuestion
               ? "Select birthdate using calendar..."
               : isMonthYearQuestion
               ? "Select onset year & month..."
               : "Enter your answer..."
+            : isPhoneQuestion
+            ? "예: 010-1234-5678 (전화번호 입력)"
             : question.number === 4
             ? "예: 38 (숫자 또는 연령 입력)"
             : isBirthdateQuestion
@@ -272,7 +275,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
               placeholder={placeholder}
               placeholderTextColor={theme.textMuted}
               multiline={!isSingleLine}
-              keyboardType={question.number === 4 ? "numeric" : "default"}
+              keyboardType={isPhoneQuestion ? "phone-pad" : question.number === 4 ? "numeric" : "default"}
             />
 
             {isBirthdateQuestion && (

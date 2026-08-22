@@ -64,6 +64,15 @@
       "subsections": [],
       "questions": [
         {
+          "id": 1043373993,
+          "number": 1,
+          "text": "전화번호를 입력해주세요.",
+          "description": null,
+          "type": "short_answer",
+          "options": null,
+          "subsection": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
+        },
+        {
           "id": 712970807,
           "number": 2,
           "text": "아동이 이전에 언어재활사로부터 말더듬으로 진단받은 적이 있나요?",
@@ -1040,7 +1049,7 @@
       "questions": [
         {
           "id": 1481741321,
-          "number": 22,
+          "number": 1,
           "text": "1) 아이가 말더듬 때문에 말을 적게 합니까?",
           "description": null,
           "type": "dropdown",
@@ -1205,7 +1214,7 @@
         },
         {
           "id": 1575572212,
-          "number": 23,
+          "number": 2,
           "text": "2) 아이가 얼마나 자신의 말에 좌절감을 느낍니까?",
           "description": null,
           "type": "dropdown",
@@ -1370,7 +1379,7 @@
         },
         {
           "id": 107897978,
-          "number": 24,
+          "number": 3,
           "text": "3) 아이가 얼마나 자신의 말더듬에 짜증을 냅니까?",
           "description": null,
           "type": "dropdown",
@@ -1535,7 +1544,7 @@
         },
         {
           "id": 914545063,
-          "number": 25,
+          "number": 4,
           "text": "4) 아이가 얼마나 자신의 말에 대해 불안감을 느낍니까?",
           "description": null,
           "type": "dropdown",
@@ -1700,7 +1709,7 @@
         },
         {
           "id": 146388951,
-          "number": 26,
+          "number": 5,
           "text": "5) 아이가 얼마나 자신 있게 말합니까?",
           "description": null,
           "type": "dropdown",
@@ -1865,7 +1874,7 @@
         },
         {
           "id": 859143932,
-          "number": 27,
+          "number": 6,
           "text": "6) 아이가 대체로 얼마나 행복합니까?",
           "description": null,
           "type": "dropdown",
@@ -2030,7 +2039,7 @@
         },
         {
           "id": 1623691428,
-          "number": 28,
+          "number": 7,
           "text": "7) 아이가 얼마나 자신의 감정을 잘 이야기할 수 있습니까?",
           "description": null,
           "type": "dropdown",
@@ -2195,7 +2204,7 @@
         },
         {
           "id": 2094095092,
-          "number": 29,
+          "number": 8,
           "text": "8) 아이가 말할 때 얼마나 말하는 것을 힘들어합니까?",
           "description": null,
           "type": "dropdown",
@@ -2360,7 +2369,7 @@
         },
         {
           "id": 648032736,
-          "number": 30,
+          "number": 9,
           "text": "9) 아이가 유창할 때가 있습니까?",
           "description": null,
           "type": "dropdown",
@@ -2525,7 +2534,7 @@
         },
         {
           "id": 740503268,
-          "number": 31,
+          "number": 10,
           "text": "10) 아이가 얼마나 자주 말을 더듬습니까?",
           "description": null,
           "type": "dropdown",
@@ -2690,7 +2699,7 @@
         },
         {
           "id": 1050082798,
-          "number": 32,
+          "number": 11,
           "text": "11) 아이가 얼마나 심하게 말을 더듬습니까?",
           "description": null,
           "type": "dropdown",
@@ -2855,7 +2864,7 @@
         },
         {
           "id": 341804199,
-          "number": 33,
+          "number": 12,
           "text": "12) 당신은 아이의 말더듬에 대해 얼마나 걱정하고 있습니까?",
           "description": null,
           "type": "dropdown",
@@ -3020,7 +3029,7 @@
         },
         {
           "id": 905335102,
-          "number": 34,
+          "number": 13,
           "text": "13) 당신은 아이의 말더듬 때문에 얼마나 아이의 미래에 대해 불안해합니까?",
           "description": null,
           "type": "dropdown",
@@ -3185,7 +3194,7 @@
         },
         {
           "id": 1048848859,
-          "number": 35,
+          "number": 14,
           "text": "14) 말더듬이 당신의 가족에 어느 정도 영향을 끼치고 있습니까?",
           "description": null,
           "type": "dropdown",
@@ -3350,7 +3359,7 @@
         },
         {
           "id": 1520832689,
-          "number": 36,
+          "number": 15,
           "text": "15) 당신은 무엇이 아이의 말더듬에 영향을 끼치는지 알고 있습니까?",
           "description": null,
           "type": "dropdown",
@@ -3515,7 +3524,7 @@
         },
         {
           "id": 1667221451,
-          "number": 37,
+          "number": 16,
           "text": "16) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? a) 아이가 말을 더듬을 때 적절히 반응하기 ",
           "description": null,
           "type": "dropdown",
@@ -3680,7 +3689,7 @@
         },
         {
           "id": 1434469522,
-          "number": 38,
+          "number": 17,
           "text": "16) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? b) 아이의 말더듬에 대한 인식과 걱정에 대처하기",
           "description": null,
           "type": "dropdown",
@@ -3845,7 +3854,7 @@
         },
         {
           "id": 493302818,
-          "number": 39,
+          "number": 18,
           "text": "16) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? c) 아이의 자신감을 키워 주기",
           "description": null,
           "type": "dropdown",
@@ -4010,7 +4019,7 @@
         },
         {
           "id": 705539961,
-          "number": 40,
+          "number": 19,
           "text": "16) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? d) 아이의 유창성을 격려하기 ",
           "description": null,
           "type": "dropdown",
@@ -4171,15 +4180,6 @@
               "high_label": "완전히 자신있음"
             }
           },
-          "subsection": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
-        },
-        {
-          "id": 1043373993,
-          "number": 41,
-          "text": "전화번호를 입력해주세요.",
-          "description": null,
-          "type": "short_answer",
-          "options": null,
           "subsection": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
         }
       ]
