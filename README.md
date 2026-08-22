@@ -62,6 +62,20 @@ To host the web version of this application on a CDN or static hosting service (
    ```
 2. Upload the generated `dist` folder to your preferred CDN provider.
 
+### Building for Android (Direct APK Install)
+
+To build an `.apk` file that you can send directly to testers via email, Slack, or other messengers (bypassing the Play Store):
+
+1. Install the EAS CLI globally if you haven't already:
+   ```bash
+   npm install -g eas-cli
+   ```
+2. Run the APK build command using the configured preview profile:
+   ```bash
+   eas build -p android --profile preview
+   ```
+3. Once the build finishes, EAS will provide a public link and QR code. Anyone with this link can download and install the APK directly on their Android device.
+
 ### Over-The-Air (OTA) Updates (Expo CDN)
 
 To instantly push JavaScript and asset updates directly to your mobile users without going through App Store or Play Store reviews, use **EAS Update**:
