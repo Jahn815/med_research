@@ -45,6 +45,13 @@ Once the server is running, you can press:
 - `a` to open in Android emulator
 - `w` to open in Web browser
 
+### Testing on Physical Devices (Expo Go)
+
+You can easily test the app on your personal iPhone or Android device using **Expo Go**. 
+Simply install the "Expo Go" app on your phone, run `npm start`, and scan the terminal's QR code while connected to the same Wi-Fi network.
+
+👉 **[View the Detailed Expo Go Testing Guide](docs/EXPO_GO_TESTING.md)**
+
 ## Resources
 
 - **Source Survey:** [Google Form](https://docs.google.com/forms/d/e/1FAIpQLScTNfr3pHSUTC1hPFU6k9zQmZNLo-DVITqZxmraAQmcrN8ihg/viewform)
