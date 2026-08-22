@@ -75,10 +75,10 @@
         {
           "id": 999001122,
           "number": 2,
-          "text": "아동 이름 이니셜 (영문 2자리)",
+          "text": "보호자(부모) 이름 이니셜 (영문 2자리)",
           "type": "short_answer",
           "required": false,
-          "description": "성(Last Name)과 이름(First Name)의 영문 첫 글자 2자리를 입력해주세요. (예: 홍길동 -> HD, 김철수 -> KC)"
+          "description": "보호자(부모)의 성(Last Name)과 이름(First Name)의 영문 첫 글자 2자리를 입력해주세요. (예: 홍길동 -> HD, 김철수 -> KC)"
         },
         {
           "id": 712970807,
