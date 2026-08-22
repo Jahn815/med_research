@@ -6,6 +6,7 @@ import { PalinQuestion } from '../types/palinSurvey';
 import { Language } from '../i18n/translations';
 import { palinTranslationsEn } from '../i18n/palinTranslationsEn';
 import { DatePickerModal } from './DatePickerModal';
+import { MonthYearPickerModal } from './MonthYearPickerModal';
 
 interface PalinQuestionRendererProps {
   question: PalinQuestion;
@@ -60,6 +61,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
   const pillFontSize = pillSize < 28 ? 11 : pillSize < 34 ? 12 : 14;
 
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const [showMonthYearPicker, setShowMonthYearPicker] = useState<boolean>(false);
 
   const handleDateSelected = (dateStr: string) => {
     const matches = dateStr.match(/(\d{4})[^\d]+(\d{1,2})[^\d]+(\d{1,2})/);
@@ -175,12 +177,16 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
       {/* 2. TEXT INPUT (SHORT ANSWER OR PARAGRAPH) */}
       {(question.type === 'short_answer' || question.type === 'paragraph') && (() => {
         const isBirthdateQuestion = question.id === 1100613129 || question.number === 6 || displayNumber === 5;
+        const isMonthYearQuestion = question.id === 744630384 || question.number === 12 || displayNumber === 11;
+
         const isSingleLine =
           question.type === 'short_answer' ||
           question.number === 4 ||
           question.number === 6 ||
+          question.number === 12 ||
           question.id === 1227784826 ||
-          question.id === 1100613129;
+          question.id === 1100613129 ||
+          question.id === 744630384;
 
         const placeholder =
           lang === 'en'
@@ -188,11 +194,15 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
               ? "e.g., 38"
               : isBirthdateQuestion
               ? "Select birthdate using calendar..."
+              : isMonthYearQuestion
+              ? "Select onset year & month..."
               : "Enter your answer..."
             : question.number === 4
             ? "예: 38 (숫자 또는 연령 입력)"
             : isBirthdateQuestion
             ? "달력으로 생년월일을 선택하세요..."
+            : isMonthYearQuestion
+            ? "달력 팝업으로 연월을 선택하세요..."
             : "답변을 입력하세요...";
 
         return (
@@ -216,6 +226,30 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
                     : lang === 'en'
                     ? '📅 Open Calendar Popup to Select Birthday'
                     : '📅 달력 팝업으로 아동 생년월일 선택하기'}
+                </Text>
+                <Ionicons name="chevron-forward" size={16} color={theme.primary} />
+              </TouchableOpacity>
+            )}
+
+            {isMonthYearQuestion && (
+              <TouchableOpacity
+                style={[
+                  styles.datePickerTriggerBtn,
+                  {
+                    backgroundColor: theme.primaryLight,
+                    borderColor: theme.primary,
+                  },
+                ]}
+                onPress={() => setShowMonthYearPicker(true)}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="calendar-outline" size={20} color={theme.primary} />
+                <Text style={[styles.datePickerTriggerText, { color: theme.primary }]}>
+                  {value
+                    ? `${value}`
+                    : lang === 'en'
+                    ? '📅 Open Month & Year Popup to Select Onset'
+                    : '📅 연월 팝업으로 말더듬 시작 시기 선택하기'}
                 </Text>
                 <Ionicons name="chevron-forward" size={16} color={theme.primary} />
               </TouchableOpacity>
@@ -246,6 +280,17 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
                 onClose={() => setShowDatePicker(false)}
                 onSelectDate={handleDateSelected}
                 initialDate={value ? String(value) : undefined}
+                theme={theme}
+                lang={lang}
+              />
+            )}
+
+            {isMonthYearQuestion && (
+              <MonthYearPickerModal
+                visible={showMonthYearPicker}
+                onClose={() => setShowMonthYearPicker(false)}
+                onSelectMonthYear={(valStr) => onChange(valStr)}
+                initialValue={value ? String(value) : undefined}
                 theme={theme}
                 lang={lang}
               />
