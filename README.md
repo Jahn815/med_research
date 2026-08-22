@@ -49,6 +49,4 @@ Once the server is running, you can press:
 
 - **Source Survey:** [Google Form](https://docs.google.com/forms/d/e/1FAIpQLScTNfr3pHSUTC1hPFU6k9zQmZNLo-DVITqZxmraAQmcrN8ihg/viewform)
 - **Converted Form Data:** [resources/palin_form_decoded.json](resources/palin_form_decoded.json) (JSON representation converted from the Google Form)
-- **Palin Parent Rating Scale (PPRS) Auto-calculation Tool:** 
-  - 📥 [Download Excel File](resources/PPRS_Auto_Calculation_Data.xlsx)
-  - 👁️ [View Online in Browser](https://view.officeapps.live.com/op/view.aspx?src=https://raw.githubusercontent.com/Jahn815/med_research/main/resources/PPRS_Auto_Calculation_Data.xlsx) (Excel template for automatically calculating raw scores, percentiles, and result interpretations based on the survey responses)
+- **Palin Parent Rating Scale (PPRS) Auto-calculation Tool:** [resources/PPRS_Auto_Calculation_Data.xlsx](resources/PPRS_Auto_Calculation_Data.xlsx) (Excel template for automatically calculating raw scores, percentiles, and result interpretations based on the survey responses)
