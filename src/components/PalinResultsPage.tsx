@@ -31,6 +31,8 @@ interface PalinResultsPageProps {
   onResetSurvey: () => void;
   initialTab?: 'sbis' | 'palin' | 'both';
   onGoToQuizHub?: () => void;
+  onTakeSbisQuiz?: () => void;
+  onTakePalinQuiz?: () => void;
 }
 
 export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
@@ -44,6 +46,8 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
   onResetSurvey,
   initialTab = 'sbis',
   onGoToQuizHub,
+  onTakeSbisQuiz,
+  onTakePalinQuiz,
 }) => {
   const [activeResultsTab, setActiveResultsTab] = useState<'sbis' | 'palin' | 'both'>(
     initialTab === 'both' ? 'sbis' : initialTab
@@ -479,6 +483,47 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
       </>
     )}
 
+        {/* CROSS-QUIZ NAVIGATION PROMPT BUTTON */}
+        <View style={[styles.switchQuizCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
+          {activeResultsTab === 'palin' ? (
+            <>
+              <Text style={[styles.switchQuizTitle, { color: theme.textPrimary }]}>
+                {lang === 'en'
+                  ? 'Would you like to complete the SBIS Temperament Quiz as well?'
+                  : 'SBIS 기질검사도 함께 작성해보시겠습니까?'}
+              </Text>
+              <TouchableOpacity
+                style={[styles.switchQuizBtn, { backgroundColor: '#8B5CF6' }]}
+                onPress={onTakeSbisQuiz || onGoToQuizHub || onBackToSurvey}
+                activeOpacity={0.85}
+              >
+                <Ionicons name="clipboard-outline" size={20} color="#FFFFFF" />
+                <Text style={styles.switchQuizBtnText}>
+                  {lang === 'en' ? '➔ Take SBIS Temperament Quiz' : '➔ SBIS 기질검사 바로 작성하기'}
+                </Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              <Text style={[styles.switchQuizTitle, { color: theme.textPrimary }]}>
+                {lang === 'en'
+                  ? 'Would you like to complete the Palin Parent Rating Scale as well?'
+                  : 'Palin 부모평가지도 함께 작성해보시겠습니까?'}
+              </Text>
+              <TouchableOpacity
+                style={[styles.switchQuizBtn, { backgroundColor: theme.primary }]}
+                onPress={onTakePalinQuiz || onGoToQuizHub || onBackToSurvey}
+                activeOpacity={0.85}
+              >
+                <Ionicons name="document-text-outline" size={20} color="#FFFFFF" />
+                <Text style={styles.switchQuizBtnText}>
+                  {lang === 'en' ? '➔ Take Palin Parent Rating Scale' : '➔ Palin 부모평가지 바로 작성하기'}
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+
         {/* ACTION BUTTONS */}
         <View style={styles.actionsGroup}>
           <TouchableOpacity
@@ -836,5 +881,38 @@ const styles = StyleSheet.create({
   },
   resultsTabText: {
     fontSize: 13,
+  },
+  switchQuizCard: {
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    gap: 12,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  switchQuizTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  switchQuizBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    gap: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  switchQuizBtnText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '800',
   },
 });

@@ -133,6 +133,14 @@ Your responses will be kept strictly anonymous and confidential.`;
           setShowResultsPage(false);
           setActiveSecIndex(2);
         }}
+        onTakeSbisQuiz={() => {
+          setShowResultsPage(false);
+          setActiveSecIndex(3);
+        }}
+        onTakePalinQuiz={() => {
+          setShowResultsPage(false);
+          setActiveSecIndex(4);
+        }}
       />
     );
   }
