@@ -48,5 +48,5 @@ Once the server is running, you can press:
 ## Resources
 
 - **Source Survey:** [Google Form](https://docs.google.com/forms/d/e/1FAIpQLScTNfr3pHSUTC1hPFU6k9zQmZNLo-DVITqZxmraAQmcrN8ihg/viewform)
-- **Converted Form Data:** `resources/palin_form_decoded.json` (JSON representation converted from the Google Form)
-- **Palin Parent Rating Scale (PPRS) Auto-calculation Tool:** `resources/PPRS-자동계산-엑셀표-2 (1).xlsx` (Excel template for automatically calculating raw scores, percentiles, and result interpretations based on the survey responses)
+- **Converted Form Data:** [resources/palin_form_decoded.json](./resources/palin_form_decoded.json) (JSON representation converted from the Google Form)
+- **Palin Parent Rating Scale (PPRS) Auto-calculation Tool:** [resources/PPRS-자동계산-엑셀표-2 (1).xlsx](./resources/PPRS-자동계산-엑셀표-2%20(1).xlsx) (Excel template for automatically calculating raw scores, percentiles, and result interpretations based on the survey responses)
