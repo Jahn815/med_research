@@ -103,10 +103,11 @@ Parents of preschool or elementary school children diagnosed with stuttering (or
 Your responses will be kept strictly anonymous and confidential.`;
 
   const customTabs = [
-    { id: 0, title: lang === 'en' ? '1. Consent & Info' : '1. 연구 동의 및 배경정보' },
-    { id: 1, title: lang === 'en' ? '2. Quiz Hub' : '2. 검사 선택' },
-    { id: 2, title: lang === 'en' ? '3. SBIS Quiz (5 Qs)' : '3. SBIS 기질검사 (5문항)' },
-    { id: 3, title: lang === 'en' ? '4. Palin PPRS (19 Qs)' : '4. Palin 부모평가지 (19문항)' },
+    { id: 0, title: lang === 'en' ? '1. Consent' : '1. 연구 동의' },
+    { id: 1, title: lang === 'en' ? '2. Background Info' : '2. 아동 배경정보' },
+    { id: 2, title: lang === 'en' ? '3. Quiz Hub' : '3. 검사 선택' },
+    { id: 3, title: lang === 'en' ? '4. SBIS Quiz (5 Qs)' : '4. SBIS 기질검사 (5문항)' },
+    { id: 4, title: lang === 'en' ? '5. Palin PPRS (19 Qs)' : '5. Palin 부모평가지 (19문항)' },
   ];
 
   const openResultsWithTab = (tab: 'sbis' | 'palin' | 'both') => {
@@ -129,7 +130,7 @@ Your responses will be kept strictly anonymous and confidential.`;
         initialTab={resultsInitialTab}
         onGoToQuizHub={() => {
           setShowResultsPage(false);
-          setActiveSecIndex(1);
+          setActiveSecIndex(2);
         }}
       />
     );
@@ -263,7 +264,7 @@ Your responses will be kept strictly anonymous and confidential.`;
 
       {/* Questions & Content Container */}
       <ScrollView contentContainerStyle={styles.questionsContainer} showsVerticalScrollIndicator={false}>
-        {/* TAB 0: CONSENT & DEMOGRAPHICS (Q1 ~ Q16) */}
+        {/* PAGE 1 (TAB 0): RESEARCH CONSENT ONLY */}
         {activeSecIndex === 0 && (
           <>
             <View style={[styles.consentCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
@@ -278,7 +279,20 @@ Your responses will be kept strictly anonymous and confidential.`;
               </Text>
             </View>
 
-            {/* Warning if user selected No */}
+            {/* Question 1: Research Consent */}
+            {palinFormSchema.sections[0].questions.map((q) => (
+              <PalinQuestionRenderer
+                key={q.id}
+                question={q}
+                displayNumber={1}
+                value={answers[q.id]}
+                onChange={(val) => handleAnswerChange(q.id, val)}
+                theme={theme}
+                lang={lang}
+              />
+            ))}
+
+            {/* Warning Box if user selected No or has not consented */}
             {isConsentNo && (
               <View style={[styles.warningBox, { backgroundColor: '#FEF2F2', borderColor: '#FCA5A5', paddingVertical: 14 }]}>
                 <Ionicons name="lock-closed" size={22} color="#DC2626" />
@@ -295,18 +309,50 @@ Your responses will be kept strictly anonymous and confidential.`;
               </View>
             )}
 
-            {/* Questions for Section 0 & Section 1 */}
-            {palinFormSchema.sections[0].questions.map((q) => (
-              <PalinQuestionRenderer
-                key={q.id}
-                question={q}
-                displayNumber={1}
-                value={answers[q.id]}
-                onChange={(val) => handleAnswerChange(q.id, val)}
-                theme={theme}
-                lang={lang}
-              />
-            ))}
+            {/* Navigation Button Below Consent Question */}
+            <View style={styles.bottomNavRow}>
+              <TouchableOpacity
+                style={[
+                  styles.btn,
+                  styles.nextBtn,
+                  {
+                    backgroundColor: !isConsentYes ? '#9CA3AF' : theme.primary,
+                    flex: 1,
+                    opacity: !isConsentYes ? 0.6 : 1,
+                  },
+                ]}
+                onPress={() => {
+                  if (isConsentYes) setActiveSecIndex(1);
+                }}
+                disabled={!isConsentYes}
+                activeOpacity={0.8}
+              >
+                <Ionicons
+                  name={!isConsentYes ? 'lock-closed' : 'arrow-forward-circle-outline'}
+                  size={20}
+                  color="#FFFFFF"
+                  style={{ marginRight: 6 }}
+                />
+                <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '800', fontSize: 15 }]}>
+                  {!isConsentYes
+                    ? (lang === 'en' ? 'Consent Required to Proceed' : '다음 단계로 이동 불가 (동의 필요)')
+                    : (lang === 'en' ? 'Next: Child Background Info' : '다음: 아동 배경정보 작성하기')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+
+        {/* PAGE 2 (TAB 1): CHILD BACKGROUND INFORMATION (Q1 ~ Q15) */}
+        {activeSecIndex === 1 && (
+          <>
+            <View style={[styles.subCard, { backgroundColor: theme.primaryLight, borderColor: theme.primary, borderWidth: 1, marginBottom: 16 }]}>
+              <Text style={[styles.subCardTitle, { color: theme.primary, fontSize: 15 }]}>
+                📋 {lang === 'en' ? 'Child Background Information (Q1 ~ Q15)' : '아동 배경정보 (1 ~ 15번 문항)'}
+              </Text>
+            </View>
+
+            {/* Questions for Section 1 (Q1 ~ Q15) */}
             {palinFormSchema.sections[1].questions.map((q, idx) => (
               <PalinQuestionRenderer
                 key={q.id}
@@ -319,8 +365,18 @@ Your responses will be kept strictly anonymous and confidential.`;
               />
             ))}
 
-            {/* Bottom Nav for Tab 0 */}
+            {/* Bottom Nav for Tab 1 */}
             <View style={styles.bottomNavRow}>
+              <TouchableOpacity
+                style={[styles.btn, styles.prevBtn, { borderColor: theme.cardBorder }]}
+                onPress={() => setActiveSecIndex(0)}
+              >
+                <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
+                <Text style={[styles.btnText, { color: theme.textPrimary }]}>
+                  {lang === 'en' ? 'Prev: Consent' : '이전: 연구 동의'}
+                </Text>
+              </TouchableOpacity>
+
               <TouchableOpacity
                 style={[
                   styles.btn,
@@ -332,7 +388,7 @@ Your responses will be kept strictly anonymous and confidential.`;
                   },
                 ]}
                 onPress={() => {
-                  if (!isLocked) setActiveSecIndex(1);
+                  if (!isLocked) setActiveSecIndex(2);
                 }}
                 disabled={isLocked}
               >
@@ -343,17 +399,15 @@ Your responses will be kept strictly anonymous and confidential.`;
                   style={{ marginRight: 6 }}
                 />
                 <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '800' }]}>
-                  {isLocked
-                    ? (lang === 'en' ? 'Locked - Consent Required' : '진행 불가 (동의 필요)')
-                    : (lang === 'en' ? 'Next: Choose Quiz (Quiz Hub)' : '다음: 검사 선택 화면으로')}
+                  {lang === 'en' ? 'Next: Choose Quiz' : '다음: 검사 선택 화면으로'}
                 </Text>
               </TouchableOpacity>
             </View>
           </>
         )}
 
-        {/* TAB 1: QUIZ SELECTION HUB */}
-        {activeSecIndex === 1 && (
+        {/* TAB 2: QUIZ SELECTION HUB */}
+        {activeSecIndex === 2 && (
           <View style={{ gap: 16 }}>
             {/* Hub Banner */}
             <View style={[styles.consentCard, { backgroundColor: theme.cardBg, borderColor: theme.primary }]}>
@@ -392,7 +446,7 @@ Your responses will be kept strictly anonymous and confidential.`;
               <View style={styles.quizChoiceBtnRow}>
                 <TouchableOpacity
                   style={[styles.quizActionBtn, { backgroundColor: '#8B5CF6' }]}
-                  onPress={() => setActiveSecIndex(2)}
+                  onPress={() => setActiveSecIndex(3)}
                   activeOpacity={0.8}
                 >
                   <Ionicons name="play-circle-outline" size={18} color="#FFF" />
@@ -434,7 +488,7 @@ Your responses will be kept strictly anonymous and confidential.`;
               <View style={styles.quizChoiceBtnRow}>
                 <TouchableOpacity
                   style={[styles.quizActionBtn, { backgroundColor: theme.primary }]}
-                  onPress={() => setActiveSecIndex(3)}
+                  onPress={() => setActiveSecIndex(4)}
                   activeOpacity={0.8}
                 >
                   <Ionicons name="play-circle-outline" size={18} color="#FFF" />
@@ -458,17 +512,17 @@ Your responses will be kept strictly anonymous and confidential.`;
             <View style={styles.bottomNavRow}>
               <TouchableOpacity
                 style={[styles.btn, styles.prevBtn, { borderColor: theme.cardBorder }]}
-                onPress={() => setActiveSecIndex(0)}
+                onPress={() => setActiveSecIndex(1)}
               >
                 <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
-                <Text style={[styles.btnText, { color: theme.textPrimary }]}>이전: 동의 및 배경정보</Text>
+                <Text style={[styles.btnText, { color: theme.textPrimary }]}>이전: 아동 배경정보</Text>
               </TouchableOpacity>
             </View>
           </View>
         )}
 
-        {/* TAB 2: SBIS QUIZ (S1 ~ S5) */}
-        {activeSecIndex === 2 && (
+        {/* TAB 3: SBIS QUIZ (S1 ~ S5) */}
+        {activeSecIndex === 3 && (
           <>
             <View style={[styles.subCard, { backgroundColor: 'rgba(139, 92, 246, 0.1)', borderColor: '#8B5CF6', borderWidth: 1, marginBottom: 16 }]}>
               <Text style={[styles.subCardTitle, { color: '#8B5CF6', fontSize: 15 }]}>
@@ -492,7 +546,7 @@ Your responses will be kept strictly anonymous and confidential.`;
             <View style={styles.bottomNavRow}>
               <TouchableOpacity
                 style={[styles.btn, styles.prevBtn, { borderColor: theme.cardBorder }]}
-                onPress={() => setActiveSecIndex(1)}
+                onPress={() => setActiveSecIndex(2)}
               >
                 <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
                 <Text style={[styles.btnText, { color: theme.textPrimary }]}>검사 선택으로</Text>
@@ -509,8 +563,8 @@ Your responses will be kept strictly anonymous and confidential.`;
           </>
         )}
 
-        {/* TAB 3: PALIN PPRS QUIZ (P1 ~ P19) */}
-        {activeSecIndex === 3 && (
+        {/* TAB 4: PALIN PPRS QUIZ (P1 ~ P19) */}
+        {activeSecIndex === 4 && (
           <>
             <View style={[styles.subCard, { backgroundColor: theme.primaryLight, borderColor: theme.primary, borderWidth: 1, marginBottom: 16 }]}>
               <Text style={[styles.subCardTitle, { color: theme.primary, fontSize: 15 }]}>
@@ -534,7 +588,7 @@ Your responses will be kept strictly anonymous and confidential.`;
             <View style={styles.bottomNavRow}>
               <TouchableOpacity
                 style={[styles.btn, styles.prevBtn, { borderColor: theme.cardBorder }]}
-                onPress={() => setActiveSecIndex(1)}
+                onPress={() => setActiveSecIndex(2)}
               >
                 <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
                 <Text style={[styles.btnText, { color: theme.textPrimary }]}>검사 선택으로</Text>
