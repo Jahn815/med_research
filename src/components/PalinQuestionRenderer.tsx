@@ -7,6 +7,7 @@ import { Language } from '../i18n/translations';
 import { palinTranslationsEn } from '../i18n/palinTranslationsEn';
 import { DatePickerModal } from './DatePickerModal';
 import { MonthYearPickerModal } from './MonthYearPickerModal';
+import { PalinSlider } from './PalinSlider';
 
 interface PalinQuestionRendererProps {
   question: PalinQuestion;
@@ -341,64 +342,16 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
         </View>
       )}
 
-      {/* 4. DROPDOWN / PALIN 0-10 SCALE */}
+      {/* 4. DROPDOWN / PALIN 0-10 NUMBER SLIDER */}
       {question.type === 'dropdown' && (
-        <View style={styles.scaleContainer}>
-          {scale && (
-            <View style={styles.scaleLabelRow}>
-              <Text style={[styles.scaleLabel, { color: theme.textSecondary }]}>
-                0: {scale.low_label}
-              </Text>
-              <Text style={[styles.scaleLabel, { color: theme.textSecondary, textAlign: 'right' }]}>
-                10: {scale.high_label}
-              </Text>
-            </View>
-          )}
-
-          <View style={[styles.scalePillRow, { gap: idealGap }]}>
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
-              const isSelected = value === num;
-              return (
-                <TouchableOpacity
-                  key={num}
-                  style={[
-                    styles.scalePill,
-                    {
-                      width: pillSize,
-                      height: pillSize,
-                      borderRadius: Math.floor(pillSize / 2),
-                      backgroundColor: isSelected ? theme.primary : theme.chipBg,
-                      borderColor: isSelected ? theme.primary : theme.cardBorder,
-                    },
-                  ]}
-                  onPress={() => onChange(num)}
-                  activeOpacity={0.7}
-                >
-                  <Text
-                    style={[
-                      styles.scalePillText,
-                      {
-                        fontSize: pillFontSize,
-                        color: isSelected ? '#FFFFFF' : theme.textPrimary,
-                        fontWeight: isSelected ? '800' : '600',
-                      },
-                    ]}
-                  >
-                    {num}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-
-          {value !== undefined && (
-            <View style={[styles.selectedScaleBadge, { backgroundColor: theme.primaryLight }]}>
-              <Text style={[styles.selectedScaleText, { color: theme.primary }]}>
-                {lang === 'en' ? `Selected Score: ${value} / 10` : `선택된 점수: ${value}점`}
-              </Text>
-            </View>
-          )}
-        </View>
+        <PalinSlider
+          value={typeof value === 'number' ? value : value !== undefined ? Number(value) : undefined}
+          onChange={(val) => onChange(val)}
+          lowLabel={scale?.low_label}
+          highLabel={scale?.high_label}
+          theme={theme}
+          lang={lang}
+        />
       )}
     </View>
   );
