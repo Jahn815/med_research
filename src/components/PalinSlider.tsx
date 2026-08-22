@@ -29,7 +29,8 @@ export const PalinSlider: React.FC<PalinSliderProps> = ({
   theme,
   lang = 'ko',
 }) => {
-  const currentValue = value !== undefined ? Math.min(10, Math.max(0, Number(value))) : 5;
+  const hasValue = value !== undefined && value !== null && typeof value === 'number';
+  const currentValue = hasValue ? Math.min(10, Math.max(0, Number(value))) : 0;
   const [trackWidth, setTrackWidth] = useState<number>(300);
 
   const handleLayout = (e: LayoutChangeEvent) => {
@@ -64,7 +65,7 @@ export const PalinSlider: React.FC<PalinSliderProps> = ({
   ).current;
 
   // Percentage for filled track and thumb position
-  const percent = (currentValue / 10) * 100;
+  const percent = hasValue ? (currentValue / 10) * 100 : 0;
 
   return (
     <View style={styles.container}>
@@ -89,18 +90,20 @@ export const PalinSlider: React.FC<PalinSliderProps> = ({
         {/* Background Track */}
         <View style={[styles.trackBg, { backgroundColor: theme.chipBg, borderColor: theme.cardBorder }]}>
           {/* Active Filled Track */}
-          <View
-            style={[
-              styles.trackFill,
-              { backgroundColor: theme.primary, width: `${percent}%` },
-            ]}
-          />
+          {hasValue && (
+            <View
+              style={[
+                styles.trackFill,
+                { backgroundColor: theme.primary, width: `${percent}%` },
+              ]}
+            />
+          )}
         </View>
 
         {/* Step Ticks */}
         <View style={styles.tickRow} pointerEvents="none">
           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((step) => {
-            const isFilled = step <= currentValue;
+            const isFilled = hasValue && step <= currentValue;
             return (
               <View
                 key={step}
@@ -108,7 +111,7 @@ export const PalinSlider: React.FC<PalinSliderProps> = ({
                   styles.tickMark,
                   {
                     backgroundColor: isFilled ? '#FFFFFF' : theme.textMuted,
-                    opacity: isFilled ? 0.9 : 0.4,
+                    opacity: isFilled ? 0.9 : 0.3,
                   },
                 ]}
               />
@@ -116,26 +119,28 @@ export const PalinSlider: React.FC<PalinSliderProps> = ({
           })}
         </View>
 
-        {/* Sliding Knob */}
-        <View
-          style={[
-            styles.thumb,
-            {
-              left: `${percent}%`,
-              backgroundColor: theme.primary,
-              borderColor: '#FFFFFF',
-            },
-          ]}
-          pointerEvents="none"
-        >
-          <Text style={styles.thumbText}>{currentValue}</Text>
-        </View>
+        {/* Sliding Knob (Rendered only when value has been selected) */}
+        {hasValue && (
+          <View
+            style={[
+              styles.thumb,
+              {
+                left: `${percent}%`,
+                backgroundColor: theme.primary,
+                borderColor: '#FFFFFF',
+              },
+            ]}
+            pointerEvents="none"
+          >
+            <Text style={styles.thumbText}>{currentValue}</Text>
+          </View>
+        )}
       </View>
 
       {/* Step Numbers 0..10 Row */}
       <View style={styles.stepNumbersRow}>
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((step) => {
-          const isSelected = step === currentValue;
+          const isSelected = hasValue && step === currentValue;
           return (
             <TouchableOpacity
               key={step}
@@ -161,9 +166,25 @@ export const PalinSlider: React.FC<PalinSliderProps> = ({
       </View>
 
       {/* Selected Score Indicator Badge */}
-      <View style={[styles.scoreBadge, { backgroundColor: theme.primaryLight }]}>
-        <Text style={[styles.scoreBadgeText, { color: theme.primary }]}>
-          {lang === 'en' ? `Selected Score: ${currentValue} / 10` : `선택된 점수: ${currentValue}점`}
+      <View
+        style={[
+          styles.scoreBadge,
+          {
+            backgroundColor: hasValue ? theme.primaryLight : theme.chipBg,
+            borderColor: hasValue ? theme.primary : theme.cardBorder,
+            borderWidth: hasValue ? 0 : 1,
+          },
+        ]}
+      >
+        <Text
+          style={[
+            styles.scoreBadgeText,
+            { color: hasValue ? theme.primary : theme.textMuted },
+          ]}
+        >
+          {hasValue
+            ? (lang === 'en' ? `Selected Score: ${currentValue} / 10` : `선택된 점수: ${currentValue}점`)
+            : (lang === 'en' ? '👆 Drag or tap slider to select score (0-10)' : '👆 터치하여 점수를 선택하세요 (0~10)')}
         </Text>
       </View>
     </View>
