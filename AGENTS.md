@@ -1,8 +1,8 @@
 # Project Guidelines & Architecture (med_research)
 
 ## Expo Version Compatibility
-- The project is configured for **Expo SDK 54** (`expo@~54.0.37`, `react-native@0.81.5`).
-- Read the versioned documentation at: https://docs.expo.dev/versions/v54.0.0/
+- The project is configured for **Expo SDK 57** (`expo@~57.0.15`, `react-native@0.86.2`).
+- Read the versioned documentation at: https://docs.expo.dev/versions/v57.0.0/
 
 ## Core Rules & Conventions
 
