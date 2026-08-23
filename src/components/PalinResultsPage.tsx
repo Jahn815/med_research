@@ -298,7 +298,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
                     <Text style={styles.factorBadgeText}>Factor 1</Text>
                   </View>
                   <Text style={[styles.factorTitle, { color: theme.textPrimary }]}>
-                    {lang === 'en' ? 'Factor 1 Weighted Average' : 'Factor 1 가중평균 점수'}
+                    {lang === 'en' ? 'Impact of Stuttering on Child' : '말더듬이 아이에게 미치는 영향'}
                   </Text>
                 </View>
                 <View style={styles.scoreContainer}>
@@ -352,7 +352,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
                 <Text style={styles.factorBadgeText}>Factor 2</Text>
               </View>
               <Text style={[styles.factorTitle, { color: theme.textPrimary }]}>
-                {lang === 'en' ? 'Factor 2 Weighted Average' : 'Factor 2 가중평균 점수'}
+                {lang === 'en' ? 'Stuttering Severity & Parent Concern' : '말더듬 정도와 부모의 걱정'}
               </Text>
             </View>
             <View style={styles.scoreContainer}>
@@ -408,7 +408,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
                 <Text style={styles.factorBadgeText}>Factor 3</Text>
               </View>
               <Text style={[styles.factorTitle, { color: theme.textPrimary }]}>
-                {lang === 'en' ? 'Factor 3 Weighted Average' : 'Factor 3 가중평균 점수'}
+                {lang === 'en' ? 'Parent Knowledge & Management Confidence' : '부모의 말더듬에 대한 지식과 관리 자신감'}
               </Text>
             </View>
             <View style={styles.scoreContainer}>
@@ -687,28 +687,31 @@ const styles = StyleSheet.create({
   factorHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 14,
+    gap: 12,
   },
   factorTitleGroup: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
+    alignItems: 'flex-start',
+    gap: 8,
     flex: 1,
   },
   factorBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    marginTop: 3,
   },
   factorBadgeText: {
     color: '#FFF',
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '900',
   },
   factorTitle: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 15.5,
+    fontWeight: '800',
+    lineHeight: 22,
     flex: 1,
   },
   scoreContainer: {
