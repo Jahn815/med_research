@@ -15,6 +15,7 @@
   "devDependencies": {
     "@expo/ngrok": "^4.1.3",
     "@types/react": "~19.2.4",
+    "gh-pages": "^6.3.0",
     "typescript": "^5.3.3"
   },
   "scripts": {
@@ -22,6 +23,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
+    "build:web": "expo export --platform web",
+    "deploy": "expo export --platform web && touch dist/.nojekyll && gh-pages -d dist --dotfiles",
     "build:apk": "eas build -p android --profile preview",
     "build:apk:local": "eas build -p android --profile preview --local"
   },
