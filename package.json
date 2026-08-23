@@ -24,8 +24,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "build:web": "expo export --platform web",
-    "deploy": "expo export --platform web && touch dist/.nojekyll && gh-pages -d dist --dotfiles",
+    "build:web": "cd dashboard && npm run build",
+    "deploy": "cd dashboard && npm run build && touch dist/.nojekyll && npx gh-pages -d dist --dotfiles",
     "build:apk": "eas build -p android --profile preview",
     "build:apk:local": "eas build -p android --profile preview --local"
   },
