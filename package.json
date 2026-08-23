@@ -1,5 +1,6 @@
 {
   "name": "med_research",
+  "homepage": "https://jahn815.github.io/med_research",
   "version": "1.0.0",
   "main": "index.ts",
   "dependencies": {
