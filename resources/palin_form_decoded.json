@@ -82,6 +82,15 @@
           "subsection": null
         },
         {
+          "id": 1043373995,
+          "number": 3,
+          "text": "어느지역에 사십니까? (예: 서울)",
+          "description": null,
+          "type": "short_answer",
+          "options": null,
+          "subsection": null
+        },
+        {
           "id": 999001122,
           "number": 2,
           "text": "보호자(부모) 이름 이니셜 (영문 2자리)",

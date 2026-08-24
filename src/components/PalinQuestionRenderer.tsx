@@ -181,6 +181,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
         const isMonthYearQuestion = question.id === 744630384;
         const isPhoneQuestion = question.id === 1043373993;
         const isEmailQuestion = question.id === 1043373994 || question.text.includes('이메일');
+        const isRegionQuestion = question.id === 1043373995 || question.text.includes('어느지역');
         const isInitialsQuestion = question.id === 999001122 || question.text.includes('이니셜');
 
         const isSingleLine =
@@ -189,6 +190,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
           isMonthYearQuestion ||
           isPhoneQuestion ||
           isEmailQuestion ||
+          isRegionQuestion ||
           isInitialsQuestion ||
           question.id === 1227784826;
 
@@ -200,6 +202,8 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
               ? "e.g., 010-1234-5678"
               : isEmailQuestion
               ? "e.g., example@domain.com"
+              : isRegionQuestion
+              ? "e.g., Seoul"
               : question.number === 4
               ? "e.g., 38"
               : isBirthdateQuestion
@@ -213,6 +217,8 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
             ? "예: 010-1234-5678 (전화번호 입력)"
             : isEmailQuestion
             ? "예: example@domain.com (이메일 주소 입력)"
+            : isRegionQuestion
+            ? "예: 서울 (지역/도시 입력)"
             : question.number === 4
             ? "예: 38 (숫자 또는 연령 입력)"
             : isBirthdateQuestion
