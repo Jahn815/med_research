@@ -641,11 +641,11 @@ export function calculateFactor2(answers: PalinAnswers): Factor2Result {
 
 export function calculateFactor3(answers: PalinAnswers): Factor3Result {
   const factor3Questions = [
-    { id: 1520832689, qNum: 36, text: '15) 당신은 무엇이 아이의 말더듬에 영향을 끼치는지 알고 있습니까?', weight: 0.408 },
-    { id: 1667221451, qNum: 37, text: '16a) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? a) 아이가 말을 더듬을 때 적절히 반응하기', weight: 0.771 },
-    { id: 1434469522, qNum: 38, text: '16b) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? b) 아이의 말더듬에 대한 인식과 걱정에 대처하기', weight: 0.882 },
-    { id: 493302818, qNum: 39, text: '16c) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? c) 아이의 자신감을 키워 주기', weight: 0.836 },
-    { id: 705539961, qNum: 40, text: '16d) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? d) 아이의 유창성을 격려하기', weight: 0.873 },
+    { id: 1520832689, qNum: 36, text: '15) 당신은 무엇이 아이의 말더듬에 영향을 끼치는지 알고 있습니까?', weight: 0.408, isReverse: false },
+    { id: 1667221451, qNum: 37, text: '16a) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? a) 아이가 말을 더듬을 때 적절히 반응하기', weight: 0.771, isReverse: false },
+    { id: 1434469522, qNum: 38, text: '16b) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? b) 아이의 말더듬에 대한 인식과 걱정에 대처하기', weight: 0.882, isReverse: false },
+    { id: 493302818, qNum: 39, text: '16c) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? c) 아이의 자신감을 키워 주기', weight: 0.836, isReverse: false },
+    { id: 705539961, qNum: 40, text: '16d) 당신은 다음의 내용을 얼마나 자신있게 알고 있습니까? d) 아이의 유창성을 격려하기', weight: 0.873, isReverse: false },
   ];
 
   let weightedSum = 0;
