@@ -584,13 +584,13 @@ export function calculateFactor1(answers: PalinAnswers): Factor1Result {
 
 export function calculateFactor2(answers: PalinAnswers): Factor2Result {
   const factor2Questions = [
-    { id: 2094095092, qNum: 29, text: '8) 아이가 말할 때 얼마나 말하는 것을 힘들어합니까?', weight: 0.703 },
-    { id: 648032736, qNum: 30, text: '9) 아이가 유창할 때가 있습니까?', weight: 0.558 },
-    { id: 740503268, qNum: 31, text: '10) 아이가 얼마나 자주 말을 더듬습니까?', weight: 0.797 },
-    { id: 1050082798, qNum: 32, text: '11) 아이가 얼마나 심하게 말을 더듬습니까?', weight: 0.807 },
-    { id: 341804199, qNum: 33, text: '12) 당신은 아이의 말더듬에 대해 얼마나 걱정하고 있습니까?', weight: 0.798 },
-    { id: 905335102, qNum: 34, text: '13) 당신은 아이의 말더듬 때문에 얼마나 아이의 미래에 대해 불안해합니까?', weight: 0.779 },
-    { id: 1048848859, qNum: 35, text: '14) 말더듬이 당신의 가족에 어느 정도 영향을 끼치고 있습니까?', weight: 0.424 },
+    { id: 2094095092, qNum: 29, text: '8) 아이가 말할 때 얼마나 말하는 것을 힘들어합니까?', weight: 0.703, isReverse: true },
+    { id: 648032736, qNum: 30, text: '9) 아이가 유창할 때가 있습니까?', weight: 0.558, isReverse: false },
+    { id: 740503268, qNum: 31, text: '10) 아이가 얼마나 자주 말을 더듬습니까?', weight: 0.797, isReverse: true },
+    { id: 1050082798, qNum: 32, text: '11) 아이가 얼마나 심하게 말을 더듬습니까?', weight: 0.807, isReverse: true },
+    { id: 341804199, qNum: 33, text: '12) 당신은 아이의 말더듬에 대해 얼마나 걱정하고 있습니까?', weight: 0.798, isReverse: true },
+    { id: 905335102, qNum: 34, text: '13) 당신은 아이의 말더듬 때문에 얼마나 아이의 미래에 대해 불안해합니까?', weight: 0.779, isReverse: true },
+    { id: 1048848859, qNum: 35, text: '14) 말더듬이 당신의 가족에 어느 정도 영향을 끼치고 있습니까?', weight: 0.424, isReverse: true },
   ];
 
   let weightedSum = 0;
@@ -606,8 +606,11 @@ export function calculateFactor2(answers: PalinAnswers): Factor2Result {
       val = Number(rawVal);
     }
 
+    let weightedVal = 0;
     if (val !== null) {
-      weightedSum += val * q.weight;
+      const effectiveVal = q.isReverse ? (10 - val) : val;
+      weightedVal = effectiveVal * q.weight;
+      weightedSum += weightedVal;
       answeredCount++;
     }
 
@@ -616,7 +619,7 @@ export function calculateFactor2(answers: PalinAnswers): Factor2Result {
       text: q.text,
       value: val,
       weight: q.weight,
-      weightedValue: val !== null ? Number((val * q.weight).toFixed(3)) : 0,
+      weightedValue: val !== null ? Number(weightedVal.toFixed(3)) : 0,
     };
   });
 
