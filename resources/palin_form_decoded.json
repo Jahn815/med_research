@@ -73,6 +73,15 @@
           "subsection": "3. 부모의 말더듬에 대한 지식과 말더듬 관리에 대한 자신감"
         },
         {
+          "id": 1043373994,
+          "number": 2,
+          "text": "이메일 주소를 입력해주세요.",
+          "description": null,
+          "type": "short_answer",
+          "options": null,
+          "subsection": null
+        },
+        {
           "id": 999001122,
           "number": 2,
           "text": "보호자(부모) 이름 이니셜 (영문 2자리)",

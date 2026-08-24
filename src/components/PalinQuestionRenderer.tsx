@@ -180,6 +180,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
         const isBirthdateQuestion = question.id === 1100613129;
         const isMonthYearQuestion = question.id === 744630384;
         const isPhoneQuestion = question.id === 1043373993;
+        const isEmailQuestion = question.id === 1043373994 || question.text.includes('이메일');
         const isInitialsQuestion = question.id === 999001122 || question.text.includes('이니셜');
 
         const isSingleLine =
@@ -187,6 +188,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
           isBirthdateQuestion ||
           isMonthYearQuestion ||
           isPhoneQuestion ||
+          isEmailQuestion ||
           isInitialsQuestion ||
           question.id === 1227784826;
 
@@ -196,6 +198,8 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
               ? "e.g., HD (Hong Gildong -> HD)"
               : isPhoneQuestion
               ? "e.g., 010-1234-5678"
+              : isEmailQuestion
+              ? "e.g., example@domain.com"
               : question.number === 4
               ? "e.g., 38"
               : isBirthdateQuestion
@@ -207,6 +211,8 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
             ? "예: HD (홍길동 -> HD, 김철수 -> KC)"
             : isPhoneQuestion
             ? "예: 010-1234-5678 (전화번호 입력)"
+            : isEmailQuestion
+            ? "예: example@domain.com (이메일 주소 입력)"
             : question.number === 4
             ? "예: 38 (숫자 또는 연령 입력)"
             : isBirthdateQuestion
@@ -292,8 +298,8 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
               placeholderTextColor={theme.textMuted}
               multiline={!isSingleLine}
               maxLength={isInitialsQuestion ? 2 : undefined}
-              autoCapitalize={isInitialsQuestion ? 'characters' : 'sentences'}
-              keyboardType={isPhoneQuestion ? 'phone-pad' : question.number === 4 ? 'numeric' : 'default'}
+              autoCapitalize={isInitialsQuestion ? 'characters' : isEmailQuestion ? 'none' : 'sentences'}
+              keyboardType={isPhoneQuestion ? 'phone-pad' : isEmailQuestion ? 'email-address' : question.number === 4 ? 'numeric' : 'default'}
             />
 
             {isBirthdateQuestion && (
