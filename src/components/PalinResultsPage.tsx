@@ -33,6 +33,8 @@ interface PalinResultsPageProps {
   onGoToQuizHub?: () => void;
   onTakeSbisQuiz?: () => void;
   onTakePalinQuiz?: () => void;
+  existingDocId?: string | null;
+  onDocIdSaved?: (docId: string) => void;
 }
 
 export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
@@ -48,13 +50,15 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
   onGoToQuizHub,
   onTakeSbisQuiz,
   onTakePalinQuiz,
+  existingDocId,
+  onDocIdSaved,
 }) => {
   const [activeResultsTab, setActiveResultsTab] = useState<'sbis' | 'palin' | 'both'>(
     initialTab === 'both' ? 'sbis' : initialTab
   );
   const [copied, setCopied] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
-  const [savedDocId, setSavedDocId] = useState<string | null>(null);
+  const [savedDocId, setSavedDocId] = useState<string | null>(existingDocId || null);
   const scores = calculatePalinScores(answers);
   const f1 = scores.factor1;
   const f2 = scores.factor2;
@@ -65,6 +69,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
   const handleSaveToCloud = async () => {
     try {
       setSaveStatus('saving');
+      const docIdToUse = existingDocId || savedDocId || undefined;
       const docId = await saveSurveyResponseToFirestore({
         answers,
         scores,
@@ -73,14 +78,65 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           platform: Platform.OS,
           userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : undefined
         }
-      });
+      }, docIdToUse);
       setSavedDocId(docId);
+      if (onDocIdSaved && docId !== existingDocId) {
+        onDocIdSaved(docId);
+      }
       setSaveStatus('saved');
     } catch (err) {
       console.error('Firebase save error:', err);
       setSaveStatus('error');
     }
   };
+
+  // Automatically save/merge response to Firebase whenever results page is active or answers change
+  React.useEffect(() => {
+    let isMounted = true;
+    const autoSave = async () => {
+      const answeredCount = Object.keys(answers).filter(
+        (k) => answers[Number(k)] !== undefined && answers[Number(k)] !== ''
+      ).length;
+
+      if (answeredCount === 0) return;
+
+      try {
+        setSaveStatus('saving');
+        const docIdToUse = existingDocId || savedDocId || undefined;
+        const resDocId = await saveSurveyResponseToFirestore(
+          {
+            answers,
+            scores,
+            locale: lang,
+            metadata: {
+              platform: Platform.OS,
+              userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : undefined,
+            },
+          },
+          docIdToUse
+        );
+
+        if (isMounted) {
+          setSavedDocId(resDocId);
+          if (onDocIdSaved && resDocId !== existingDocId) {
+            onDocIdSaved(resDocId);
+          }
+          setSaveStatus('saved');
+        }
+      } catch (err) {
+        if (isMounted) {
+          console.error('[Firestore] Auto-save error:', err);
+          setSaveStatus('error');
+        }
+      }
+    };
+
+    autoSave();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [answers]);
 
   const handleCopyText = () => {
     const text = generatePalinSummaryText(answers);

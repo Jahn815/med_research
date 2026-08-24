@@ -45,6 +45,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
   const [showResultsPage, setShowResultsPage] = useState<boolean>(false);
   const [resultsInitialTab, setResultsInitialTab] = useState<'sbis' | 'palin' | 'both'>('both');
   const [isConsentExpanded, setIsConsentExpanded] = useState<boolean>(false);
+  const [currentDocId, setCurrentDocId] = useState<string | null>(null);
 
   const isConsentYes = answers[1536400327] === 0;
   const isConsentNo = answers[1536400327] === 1;
@@ -84,6 +85,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
     setAnswers({});
     setActiveSecIndex(0);
     setShowResultsPage(false);
+    setCurrentDocId(null);
   };
 
   const progressPercent = useMemo(() => {
@@ -141,6 +143,8 @@ Your responses will be kept strictly anonymous and confidential.`;
           setShowResultsPage(false);
           setActiveSecIndex(4);
         }}
+        existingDocId={currentDocId}
+        onDocIdSaved={(newDocId) => setCurrentDocId(newDocId)}
       />
     );
   }

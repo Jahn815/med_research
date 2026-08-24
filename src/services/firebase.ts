@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { PalinAnswers } from '../types/palinSurvey';
 import { PalinScores } from './palinSurveyService';
 
@@ -37,26 +37,43 @@ function removeUndefinedFields(obj: any): any {
 }
 
 /**
- * Saves a completed survey response and calculated scores to Cloud Firestore
+ * Saves or merges a completed survey response and calculated scores to Cloud Firestore
  * Collection: 'survey_responses'
+ * If existingDocId is provided, merges into that existing entry to prevent duplicate rows.
  */
-export async function saveSurveyResponseToFirestore(payload: SaveSurveyResponsePayload): Promise<string> {
+export async function saveSurveyResponseToFirestore(
+  payload: SaveSurveyResponsePayload,
+  existingDocId?: string | null
+): Promise<string> {
   try {
     const cleanPayload = removeUndefinedFields({
       answers: payload.answers || {},
       scores: payload.scores || {},
       locale: payload.locale || 'ko',
-      submittedAtIso: new Date().toISOString(),
+      updatedAtIso: new Date().toISOString(),
       metadata: payload.metadata || {}
     });
 
-    const docRef = await addDoc(collection(db, 'survey_responses'), {
-      ...cleanPayload,
-      createdAt: serverTimestamp(),
-    });
-    
-    console.log('[Firestore] Survey response saved with ID:', docRef.id);
-    return docRef.id;
+    if (existingDocId && existingDocId.trim() !== '') {
+      const docRef = doc(db, 'survey_responses', existingDocId);
+      await setDoc(docRef, {
+        ...cleanPayload,
+        updatedAt: serverTimestamp(),
+      }, { merge: true });
+      
+      console.log('[Firestore] Survey response merged for ID:', existingDocId);
+      return existingDocId;
+    } else {
+      const docRef = doc(collection(db, 'survey_responses'));
+      await setDoc(docRef, {
+        ...cleanPayload,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      
+      console.log('[Firestore] New survey response created with ID:', docRef.id);
+      return docRef.id;
+    }
   } catch (error: any) {
     console.error('[Firestore] Detailed error saving survey response:', error?.message || error);
     throw error;
