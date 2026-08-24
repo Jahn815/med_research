@@ -527,13 +527,13 @@ export function getFactor3Level(score: number): {
 
 export function calculateFactor1(answers: PalinAnswers): Factor1Result {
   const factor1Questions = [
-    { id: 1481741321, qNum: 22, text: '1) 아이가 말더듬 때문에 말을 적게 합니까?', weight: 0.751 },
-    { id: 1575572212, qNum: 23, text: '2) 아이가 얼마나 자신의 말에 좌절감을 느낍니까?', weight: 0.775 },
-    { id: 107897978, qNum: 24, text: '3) 아이가 얼마나 자신의 말더듬에 짜증을 냅니까?', weight: 0.786 },
-    { id: 914545063, qNum: 25, text: '4) 아이가 얼마나 자신의 말에 대해 불안감을 느낍니까?', weight: 0.783 },
-    { id: 146388951, qNum: 26, text: '5) 아이가 얼마나 자신 있게 말합니까?', weight: 0.747 },
-    { id: 859143932, qNum: 27, text: '6) 아이가 대체로 얼마나 행복합니까?', weight: 0.59 },
-    { id: 1623691428, qNum: 28, text: '7) 아이가 얼마나 자신의 감정을 잘 이야기할 수 있습니까?', weight: 0.525 },
+    { id: 1481741321, qNum: 22, text: '1) 아이가 말더듬 때문에 말을 적게 합니까?', weight: 0.751, isReverse: true },
+    { id: 1575572212, qNum: 23, text: '2) 아이가 얼마나 자신의 말에 좌절감을 느낍니까?', weight: 0.775, isReverse: true },
+    { id: 107897978, qNum: 24, text: '3) 아이가 얼마나 자신의 말더듬에 짜증을 냅니까?', weight: 0.786, isReverse: true },
+    { id: 914545063, qNum: 25, text: '4) 아이가 얼마나 자신의 말에 대해 불안감을 느낍니까?', weight: 0.783, isReverse: true },
+    { id: 146388951, qNum: 26, text: '5) 아이가 얼마나 자신 있게 말합니까?', weight: 0.747, isReverse: false },
+    { id: 859143932, qNum: 27, text: '6) 아이가 대체로 얼마나 행복합니까?', weight: 0.59, isReverse: false },
+    { id: 1623691428, qNum: 28, text: '7) 아이가 얼마나 자신의 감정을 잘 이야기할 수 있습니까?', weight: 0.525, isReverse: false },
   ];
 
   let weightedSum = 0;
@@ -549,8 +549,11 @@ export function calculateFactor1(answers: PalinAnswers): Factor1Result {
       val = Number(rawVal);
     }
 
+    let weightedVal = 0;
     if (val !== null) {
-      weightedSum += val * q.weight;
+      const effectiveVal = q.isReverse ? (10 - val) : val;
+      weightedVal = effectiveVal * q.weight;
+      weightedSum += weightedVal;
       answeredCount++;
     }
 
@@ -559,7 +562,7 @@ export function calculateFactor1(answers: PalinAnswers): Factor1Result {
       text: q.text,
       value: val,
       weight: q.weight,
-      weightedValue: val !== null ? Number((val * q.weight).toFixed(3)) : 0,
+      weightedValue: val !== null ? Number(weightedVal.toFixed(3)) : 0,
     };
   });
 
