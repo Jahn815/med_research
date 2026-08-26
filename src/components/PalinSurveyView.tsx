@@ -23,6 +23,7 @@ import {
 import { PalinQuestionRenderer } from './PalinQuestionRenderer';
 import { PalinReportModal } from './PalinReportModal';
 import { PalinResultsPage } from './PalinResultsPage';
+import { TermsModal } from './TermsModal';
 
 interface PalinSurveyViewProps {
   theme: ColorTheme;
@@ -45,6 +46,7 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
   const [showResultsPage, setShowResultsPage] = useState<boolean>(false);
   const [resultsInitialTab, setResultsInitialTab] = useState<'sbis' | 'palin' | 'both'>('both');
   const [isConsentExpanded, setIsConsentExpanded] = useState<boolean>(false);
+  const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
   const [currentDocId, setCurrentDocId] = useState<string | null>(null);
 
   const isConsentYes = answers[1536400327] === 0;
@@ -293,31 +295,47 @@ Your responses will be kept strictly anonymous and confidential.`;
                   {lang === 'en' ? 'Research Participation Consent' : '연구 참여 안내 및 동의서'}
                 </Text>
               </View>
-              <Text
-                style={[styles.consentBody, { color: theme.textSecondary }]}
-                numberOfLines={isConsentExpanded ? undefined : 7}
-                ellipsizeMode="tail"
-              >
-                {lang === 'en' ? consentDescriptionEn : palinFormSchema.description}
+              <Text style={[styles.consentBody, { color: theme.textSecondary, marginBottom: 12 }]}>
+                {lang === 'en'
+                  ? 'Completing this research questionnaire requires reviewing and agreeing to the consensual terms and conditions. Please click the button below to read the full research consent terms.'
+                  : '본 연구 및 설문에 참여하시려면 연구 참여 동의 약관(Terms & Conditions)을 확인하시고 동의해주셔야 합니다. 아래 버튼을 눌러 전문을 확인해 주세요.'}
               </Text>
 
-              {/* Expand / Collapse Toggle Button */}
+              {/* Terms & Conditions Modal Launcher Button */}
               <TouchableOpacity
-                style={[styles.seeMoreBtn, { backgroundColor: theme.primaryLight }]}
-                onPress={() => setIsConsentExpanded((prev) => !prev)}
-                activeOpacity={0.7}
+                style={[
+                  styles.seeMoreBtn,
+                  {
+                    backgroundColor: theme.primaryLight,
+                    borderColor: theme.primary,
+                    borderWidth: 1,
+                    paddingVertical: 12,
+                    paddingHorizontal: 16,
+                    borderRadius: 12,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  },
+                ]}
+                onPress={() => setShowTermsModal(true)}
+                activeOpacity={0.8}
               >
                 <Ionicons
-                  name={isConsentExpanded ? 'chevron-up-outline' : 'chevron-down-outline'}
-                  size={14}
+                  name="document-text-outline"
+                  size={18}
                   color={theme.primary}
-                  style={{ marginRight: 4 }}
+                  style={{ marginRight: 6 }}
                 />
-                <Text style={[styles.seeMoreText, { color: theme.primary }]}>
-                  {isConsentExpanded
-                    ? (lang === 'en' ? 'See less ▲' : '접기 ▲')
-                    : (lang === 'en' ? 'See more... ▼' : '자세히 보기... ▼')}
+                <Text style={[styles.seeMoreText, { color: theme.primary, fontWeight: '700', fontSize: 14 }]}>
+                  {lang === 'en'
+                    ? '📄 View Research Consent Terms & Conditions'
+                    : '📄 [연구 참여 동의서 및 약관 전문 보기]'}
                 </Text>
+                <Ionicons
+                  name="chevron-forward"
+                  size={16}
+                  color={theme.primary}
+                  style={{ marginLeft: 4 }}
+                />
               </TouchableOpacity>
             </View>
 
@@ -656,6 +674,17 @@ Your responses will be kept strictly anonymous and confidential.`;
         answers={answers}
         onClose={() => setShowReportModal(false)}
         onReset={handleReset}
+        lang={lang}
+      />
+
+      {/* Terms & Conditions Popup Modal */}
+      <TermsModal
+        visible={showTermsModal}
+        onClose={() => setShowTermsModal(false)}
+        onAgreeAndClose={() => {
+          handleAnswerChange(1536400327, 0);
+        }}
+        theme={theme}
         lang={lang}
       />
     </View>
