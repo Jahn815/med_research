@@ -97,68 +97,75 @@ export const TermsModal: React.FC<TermsModalProps> = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <TouchableWithoutFeedback onPress={onClose}>
-        <View style={styles.overlay}>
-          <TouchableWithoutFeedback onPress={() => {}}>
-            <View style={[styles.modalCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
-              {/* Modal Header */}
-              <View style={[styles.modalHeader, { borderBottomColor: theme.cardBorder }]}>
-                <View style={styles.modalHeaderTitleGroup}>
-                  <Ionicons name="document-text-sharp" size={22} color={theme.primary} />
-                  <Text style={[styles.modalTitle, { color: theme.textPrimary }]}>
-                    {lang === 'en'
-                      ? 'Research Terms & Conditions'
-                      : '연구 참여 동의서 및 약관 전문'}
-                  </Text>
-                </View>
-                <TouchableOpacity style={styles.closeBtn} onPress={onClose} activeOpacity={0.7}>
-                  <Ionicons name="close" size={22} color={theme.textSecondary} />
-                </TouchableOpacity>
-              </View>
+      <View style={styles.overlay}>
+        {/* Backdrop touch area to dismiss modal on background click */}
+        <TouchableOpacity
+          style={StyleSheet.absoluteFill}
+          activeOpacity={1}
+          onPress={onClose}
+        />
 
-              {/* Scrollable Terms Content */}
-              <ScrollView
-                style={styles.scrollArea}
-                contentContainerStyle={styles.scrollContent}
-                showsVerticalScrollIndicator={true}
-              >
-                <Text style={[styles.termsText, { color: theme.textPrimary }]}>
-                  {content}
-                </Text>
-              </ScrollView>
-
-              {/* Modal Footer Actions */}
-              <View style={[styles.modalFooter, { borderTopColor: theme.cardBorder, backgroundColor: theme.chipBg }]}>
-                <TouchableOpacity
-                  style={[styles.cancelBtn, { borderColor: theme.cardBorder }]}
-                  onPress={onClose}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.cancelBtnText, { color: theme.textSecondary }]}>
-                    {lang === 'en' ? 'Close' : '닫기'}
-                  </Text>
-                </TouchableOpacity>
-
-                {onAgreeAndClose && (
-                  <TouchableOpacity
-                    style={[styles.agreeBtn, { backgroundColor: theme.primary }]}
-                    onPress={() => {
-                      onAgreeAndClose();
-                      onClose();
-                    }}
-                    activeOpacity={0.85}
-                  >
-                    <Ionicons name="checkmark-circle-outline" size={18} color="#FFFFFF" style={{ marginRight: 4 }} />
-                    <Text style={styles.agreeBtnText}>
-                      {lang === 'en' ? 'Agree & Proceed' : '동의하고 계속하기'}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </View>
+        {/* Main Modal Card Container */}
+        <View style={[styles.modalCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
+          {/* Modal Header */}
+          <View style={[styles.modalHeader, { borderBottomColor: theme.cardBorder }]}>
+            <View style={styles.modalHeaderTitleGroup}>
+              <Ionicons name="document-text-sharp" size={22} color={theme.primary} />
+              <Text style={[styles.modalTitle, { color: theme.textPrimary }]}>
+                {lang === 'en'
+                  ? 'Research Terms & Conditions'
+                  : '연구 참여 동의서 및 약관 전문'}
+              </Text>
             </View>
-          </TouchableWithoutFeedback>
+            <TouchableOpacity style={styles.closeBtn} onPress={onClose} activeOpacity={0.7}>
+              <Ionicons name="close" size={22} color={theme.textSecondary} />
+            </TouchableOpacity>
+          </View>
+
+          {/* Scrollable Terms Content */}
+          <ScrollView
+            style={styles.scrollArea}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={true}
+            scrollEventThrottle={16}
+            nestedScrollEnabled={true}
+            keyboardShouldPersistTaps="handled"
+          >
+            <Text style={[styles.termsText, { color: theme.textPrimary }]} selectable={true}>
+              {content}
+            </Text>
+          </ScrollView>
+
+          {/* Modal Footer Actions */}
+          <View style={[styles.modalFooter, { borderTopColor: theme.cardBorder, backgroundColor: theme.chipBg }]}>
+            <TouchableOpacity
+              style={[styles.cancelBtn, { borderColor: theme.cardBorder }]}
+              onPress={onClose}
+              activeOpacity={0.8}
+            >
+              <Text style={[styles.cancelBtnText, { color: theme.textSecondary }]}>
+                {lang === 'en' ? 'Close' : '닫기'}
+              </Text>
+            </TouchableOpacity>
+
+            {onAgreeAndClose && (
+              <TouchableOpacity
+                style={[styles.agreeBtn, { backgroundColor: theme.primary }]}
+                onPress={() => {
+                  onAgreeAndClose();
+                  onClose();
+                }}
+                activeOpacity={0.85}
+              >
+                <Ionicons name="checkmark-circle-outline" size={18} color="#FFFFFF" style={{ marginRight: 4 }} />
+                <Text style={styles.agreeBtnText}>
+                  {lang === 'en' ? 'Agree & Proceed' : '동의하고 계속하기'}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
-      </TouchableWithoutFeedback>
+      </View>
     </Modal>
   );
 };
@@ -184,6 +191,8 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     elevation: 12,
     overflow: 'hidden',
+    flexDirection: 'column',
+    zIndex: 10,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -208,11 +217,13 @@ const styles = StyleSheet.create({
   },
   scrollArea: {
     flex: 1,
+    width: '100%',
     paddingHorizontal: 24,
     paddingVertical: 20,
   },
   scrollContent: {
-    paddingBottom: 24,
+    paddingBottom: 32,
+    flexGrow: 1,
   },
   termsText: {
     fontSize: 15.5,
