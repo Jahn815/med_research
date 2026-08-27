@@ -1,3 +1,5 @@
+import { Platform, Linking } from 'react-native';
+
 export interface SendEmailOptions {
   to: string;
   subject: string;
@@ -13,10 +15,8 @@ export interface SendEmailResult {
 }
 
 /**
- * Sends an email using Gmail SMTP via EmailJS / Serverless SMTP relay service.
- * Standard Gmail SMTP Details:
- * Host: smtp.gmail.com
- * Port: 465 (SSL) or 587 (TLS)
+ * Sends an email using Gmail SMTP via EmailJS / Serverless SMTP relay service,
+ * or safely opens the Gmail composer on Web & Native mobile.
  */
 export async function sendEmailViaGmailSMTP(
   options: SendEmailOptions
@@ -69,19 +69,39 @@ export async function sendEmailViaGmailSMTP(
     }
   }
 
-  // Fallback / Direct Web Launch if API keys aren't set yet:
+  // Fallback: Safely launch Gmail Web Composer or Native App
   const encodedSubject = encodeURIComponent(subject);
   const encodedBody = encodeURIComponent(bodyText);
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodeURIComponent(
     to
   )}&su=${encodedSubject}&body=${encodedBody}`;
+  const mailtoUrl = `mailto:${to}?subject=${encodedSubject}&body=${encodedBody}`;
 
-  if (typeof window !== 'undefined') {
-    window.open(gmailUrl, '_blank');
+  try {
+    if (Platform.OS === 'web') {
+      if (typeof window !== 'undefined' && typeof window.open === 'function') {
+        window.open(gmailUrl, '_blank');
+      } else if (typeof window !== 'undefined') {
+        window.location.href = mailtoUrl;
+      }
+    } else {
+      const canOpenGmail = await Linking.canOpenURL(gmailUrl).catch(() => false);
+      if (canOpenGmail) {
+        await Linking.openURL(gmailUrl);
+      } else {
+        await Linking.openURL(mailtoUrl);
+      }
+    }
+
+    return {
+      success: true,
+      message: 'Gmail 작성 창이 열렸습니다. 발송 버튼을 눌러주세요!',
+    };
+  } catch (err) {
+    console.error('Error opening email client:', err);
+    return {
+      success: false,
+      message: '이메일 앱을 여는 중 오류가 발생했습니다. (Could not open email application)',
+    };
   }
-
-  return {
-    success: true,
-    message: 'Gmail 작성 창이 열렸습니다. 발송 버튼을 눌러주세요!',
-  };
 }
