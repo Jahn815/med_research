@@ -644,100 +644,102 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           )}
         </View>
 
-        {/* RECIPIENT EMAIL SENDING CARD (GMAIL) */}
-        <View style={[styles.emailCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
-          <View style={styles.emailCardHeader}>
-            <Ionicons name="logo-google" size={20} color="#EA4335" />
-            <Text style={[styles.emailCardTitle, { color: theme.textPrimary }]}>
+        {/* RECIPIENT EMAIL SENDING CARD (MOBILE APP ONLY) */}
+        {Platform.OS !== 'web' && (
+          <View style={[styles.emailCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
+            <View style={styles.emailCardHeader}>
+              <Ionicons name="mail-unread-sharp" size={20} color={theme.primary} />
+              <Text style={[styles.emailCardTitle, { color: theme.textPrimary }]}>
+                {lang === 'en'
+                  ? 'Send Test Results via Email (Optional)'
+                  : '앱에서 검사 결과 이메일 전송 (선택 항목)'}
+              </Text>
+            </View>
+            <Text style={[styles.emailCardDesc, { color: theme.textSecondary }]}>
               {lang === 'en'
-                ? 'Send Test Results via Gmail (Optional)'
-                : 'Gmail로 검사 결과 보내기 (선택 항목)'}
+                ? "If you would like to send the test results to someone else, please enter the recipient's email address. (If sending to multiple people, please separate emails with a comma.)"
+                : '검사 결과를 다른 사람에게 보내고 싶다면, 받는 분의 이메일을 적어주세요. (여러 사람에게 보내려면 이메일 사이에 쉼표를 넣어주세요)'}
             </Text>
-          </View>
-          <Text style={[styles.emailCardDesc, { color: theme.textSecondary }]}>
-            {lang === 'en'
-              ? "If you would like to send the test results to someone else, please enter the recipient's email address. (If sending to multiple people, please separate emails with a comma.)"
-              : '검사 결과를 다른 사람에게 보내고 싶다면, 받는 분의 이메일을 적어주세요. (여러 사람에게 보내려면 이메일 사이에 쉼표를 넣어주세요)'}
-          </Text>
 
-          <TextInput
-            style={[
-              styles.emailInput,
-              {
-                backgroundColor: theme.inputBg,
-                borderColor: theme.inputBorder,
-                color: theme.textPrimary,
-                minHeight: 70,
-                height: Math.max(70, emailInputHeight),
-              },
-            ]}
-            value={recipientEmails}
-            onChangeText={(text) => setRecipientEmails(text)}
-            onContentSizeChange={(e) => {
-              setEmailInputHeight(Math.max(70, e.nativeEvent.contentSize.height + 16));
-            }}
-            placeholder={
-              lang === 'en'
-                ? 'e.g., teacher@school.com, doctor@clinic.com'
-                : '예: teacher@school.com, doctor@clinic.com (이메일 주소 입력)'
-            }
-            placeholderTextColor={theme.textMuted}
-            multiline={true}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            textAlignVertical="top"
-          />
-
-          <TouchableOpacity
-            style={[
-              styles.sendEmailBtn,
-              {
-                backgroundColor:
-                  emailStatus === 'sent'
-                    ? '#10B981'
-                    : emailStatus === 'error'
-                    ? '#EF4444'
-                    : '#EA4335',
-              },
-            ]}
-            onPress={handleEmailResults}
-            disabled={emailStatus === 'sending'}
-            activeOpacity={0.85}
-          >
-            <Ionicons
-              name={
-                emailStatus === 'sending'
-                  ? 'sync'
-                  : emailStatus === 'sent'
-                  ? 'checkmark-circle'
-                  : 'logo-google'
-              }
-              size={18}
-              color="#FFFFFF"
-              style={{ marginRight: 8 }}
-            />
-            <Text style={styles.sendEmailBtnText}>
-              {emailStatus === 'sending'
-                ? (lang === 'en' ? 'Sending via Gmail SMTP...' : 'Gmail SMTP로 전송 중...')
-                : emailStatus === 'sent'
-                ? (lang === 'en' ? 'Email Sent Successfully!' : '이메일 발송 완료!')
-                : (lang === 'en' ? 'Send via Gmail SMTP' : 'Gmail SMTP로 검사 결과 발송')}
-            </Text>
-          </TouchableOpacity>
-
-          {emailStatusMsg ? (
-            <Text
-              style={{
-                marginTop: 8,
-                fontSize: 12.5,
-                fontWeight: '600',
-                color: emailStatus === 'sent' ? '#10B981' : emailStatus === 'error' ? '#EF4444' : theme.textSecondary,
+            <TextInput
+              style={[
+                styles.emailInput,
+                {
+                  backgroundColor: theme.inputBg,
+                  borderColor: theme.inputBorder,
+                  color: theme.textPrimary,
+                  minHeight: 70,
+                  height: Math.max(70, emailInputHeight),
+                },
+              ]}
+              value={recipientEmails}
+              onChangeText={(text) => setRecipientEmails(text)}
+              onContentSizeChange={(e) => {
+                setEmailInputHeight(Math.max(70, e.nativeEvent.contentSize.height + 16));
               }}
+              placeholder={
+                lang === 'en'
+                  ? 'e.g., teacher@school.com, doctor@clinic.com'
+                  : '예: teacher@school.com, doctor@clinic.com (이메일 주소 입력)'
+              }
+              placeholderTextColor={theme.textMuted}
+              multiline={true}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              textAlignVertical="top"
+            />
+
+            <TouchableOpacity
+              style={[
+                styles.sendEmailBtn,
+                {
+                  backgroundColor:
+                    emailStatus === 'sent'
+                      ? '#10B981'
+                      : emailStatus === 'error'
+                      ? '#EF4444'
+                      : theme.primary,
+                },
+              ]}
+              onPress={handleEmailResults}
+              disabled={emailStatus === 'sending'}
+              activeOpacity={0.85}
             >
-              {emailStatusMsg}
-            </Text>
-          ) : null}
-        </View>
+              <Ionicons
+                name={
+                  emailStatus === 'sending'
+                    ? 'sync'
+                    : emailStatus === 'sent'
+                    ? 'checkmark-circle'
+                    : 'paper-plane-sharp'
+                }
+                size={18}
+                color="#FFFFFF"
+                style={{ marginRight: 8 }}
+              />
+              <Text style={styles.sendEmailBtnText}>
+                {emailStatus === 'sending'
+                  ? (lang === 'en' ? 'Sending Email Directly...' : '앱에서 이메일 전송 중...')
+                  : emailStatus === 'sent'
+                  ? (lang === 'en' ? 'Email Sent Successfully!' : '이메일 발송 완료!')
+                  : (lang === 'en' ? 'Send Email Directly' : '앱에서 바로 이메일 보내기')}
+              </Text>
+            </TouchableOpacity>
+
+            {emailStatusMsg ? (
+              <Text
+                style={{
+                  marginTop: 8,
+                  fontSize: 12.5,
+                  fontWeight: '600',
+                  color: emailStatus === 'sent' ? '#10B981' : emailStatus === 'error' ? '#EF4444' : theme.textSecondary,
+                }}
+              >
+                {emailStatusMsg}
+              </Text>
+            ) : null}
+          </View>
+        )}
 
         {/* ACTION BUTTONS */}
         <View style={styles.actionsGroup}>
