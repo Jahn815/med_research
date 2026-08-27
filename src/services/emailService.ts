@@ -4,149 +4,89 @@ export interface SendEmailOptions {
   to: string;
   subject: string;
   bodyText: string;
-  bodyHtml?: string;
-  senderName?: string;
 }
 
 export interface SendEmailResult {
   success: boolean;
   message: string;
   log: string;
-  statusCode?: number;
 }
 
 /**
- * Direct Mobile App Email Dispatcher with detailed diagnostic logging.
+ * Directly launches the Gmail App (or Gmail Composer) pre-filled with recipient,
+ * subject, and survey results report on Mobile App.
  */
 export async function sendEmailViaGmailSMTP(
   options: SendEmailOptions
 ): Promise<SendEmailResult> {
-  const { to, subject, bodyText, senderName = 'Maldeodeum Research Team' } = options;
-  let logOutput = `[${new Date().toLocaleTimeString()}] Email Dispatch Initialized\n`;
-  logOutput += `Target Recipient: ${to}\nSubject: ${subject}\nPlatform: ${Platform.OS}\n`;
+  const { to, subject, bodyText } = options;
+  let log = `[${new Date().toLocaleTimeString()}] Gmail App Launch Request\n`;
+  log += `Recipient: ${to}\nSubject: ${subject}\nPlatform: ${Platform.OS}\n`;
 
   if (!to || !to.includes('@')) {
-    const errorMsg = '유효한 이메일 주소를 입력해주세요. (Invalid recipient email address)';
-    logOutput += `[ERROR] ${errorMsg}\n`;
+    const errorMsg = '유효한 이메일 주소를 입력해주세요. (Please enter a valid recipient email address.)';
+    log += `[ERROR] ${errorMsg}\n`;
     return {
       success: false,
       message: errorMsg,
-      log: logOutput,
+      log,
     };
   }
 
-  // EmailJS configuration variables
-  const serviceId = process.env.EXPO_PUBLIC_EMAILJS_SERVICE_ID;
-  const templateId = process.env.EXPO_PUBLIC_EMAILJS_TEMPLATE_ID;
-  const userId = process.env.EXPO_PUBLIC_EMAILJS_PUBLIC_KEY;
-
-  logOutput += `Config - ServiceID: ${serviceId || '(not set)'}, TemplateID: ${templateId || '(not set)'}, PublicKey: ${userId ? '(present)' : '(not set)'}\n`;
-
-  if (userId && serviceId && templateId) {
-    try {
-      logOutput += `[HTTP POST] Sending payload to https://api.emailjs.com/api/v1.0/email/send ...\n`;
-      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          service_id: serviceId,
-          template_id: templateId,
-          user_id: userId,
-          template_params: {
-            to_email: to,
-            sender_name: senderName,
-            subject: subject,
-            message: bodyText,
-          },
-        }),
-      });
-
-      const responseText = await response.text().catch(() => '');
-      logOutput += `[HTTP Response] Status Code: ${response.status} ${response.statusText}\nResponse Data: ${responseText || '(empty)'}\n`;
-
-      if (response.ok || response.status === 200) {
-        logOutput += `[SUCCESS] Email successfully dispatched via EmailJS API!\n`;
-        return {
-          success: true,
-          message: '앱에서 이메일이 성공적으로 전송되었습니다! ✉️',
-          log: logOutput,
-          statusCode: response.status,
-        };
-      } else {
-        const errorMsg = `EmailJS API Error [HTTP ${response.status}]: ${responseText || 'Bad Request'}`;
-        logOutput += `[FAIL] ${errorMsg}\n`;
-
-        // Native Mobile Mailto Fallback
-        return await tryMailtoFallback(to, subject, bodyText, logOutput, errorMsg);
-      }
-    } catch (err: any) {
-      const errorMsg = `Fetch exception: ${err?.message || String(err)}`;
-      logOutput += `[EXCEPTION] ${errorMsg}\n`;
-      return await tryMailtoFallback(to, subject, bodyText, logOutput, errorMsg);
-    }
-  } else {
-    const missingKeysMsg = 'EmailJS API 키(EXPO_PUBLIC_EMAILJS_PUBLIC_KEY 등)가 .env에 설정되지 않았습니다.';
-    logOutput += `[WARNING] ${missingKeysMsg}\nAttempting mobile native mail application launcher...\n`;
-    return await tryMailtoFallback(to, subject, bodyText, logOutput, missingKeysMsg);
-  }
-}
-
-async function tryMailtoFallback(
-  to: string,
-  subject: string,
-  bodyText: string,
-  existingLog: string,
-  reasonMsg: string
-): Promise<SendEmailResult> {
-  let log = existingLog;
+  const encodedTo = encodeURIComponent(to);
   const encodedSubject = encodeURIComponent(subject);
   const encodedBody = encodeURIComponent(bodyText);
-  const mailtoUrl = `mailto:${encodeURIComponent(to)}?subject=${encodedSubject}&body=${encodedBody}`;
 
-  log += `[FALLBACK] Launching mailto scheme: ${mailtoUrl.slice(0, 60)}...\n`;
+  // 1. Native Gmail App Scheme (Android / iOS)
+  const gmailAppScheme = `googlegmail:///co?to=${encodedTo}&subject=${encodedSubject}&body=${encodedBody}`;
+  // 2. Gmail Web Composer URL
+  const gmailWebUrl = `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodedTo}&su=${encodedSubject}&body=${encodedBody}`;
+  // 3. Standard mailto URL fallback
+  const mailtoUrl = `mailto:${encodedTo}?subject=${encodedSubject}&body=${encodedBody}`;
 
-  if (Platform.OS !== 'web') {
-    try {
-      const canOpen = await Linking.canOpenURL(mailtoUrl).catch((e) => {
-        log += `[Linking Check Error] ${e?.message || String(e)}\n`;
-        return false;
-      });
+  try {
+    // Attempt Gmail App scheme
+    log += `[1] Checking Gmail app scheme (googlegmail://)...\n`;
+    const canOpenGmailApp = await Linking.canOpenURL('googlegmail://').catch(() => false);
 
-      log += `[Linking Check] canOpenURL: ${canOpen}\n`;
-
-      if (canOpen) {
-        await Linking.openURL(mailtoUrl);
-        log += `[SUCCESS] Native mail application launched successfully via Linking.openURL!\n`;
-        return {
-          success: true,
-          message: '메일 앱으로 연결되었습니다. 메일 앱에서 [전송]을 누르면 이메일이 발송됩니다.',
-          log: log,
-        };
-      } else {
-        log += `[FAIL] Device cannot open mailto URLs. No email app installed or supported.\n`;
-        return {
-          success: false,
-          message: `전송 실패: ${reasonMsg} (디바이스에 메일 앱이 없거나 지원되지 않습니다)`,
-          log: log,
-        };
-      }
-    } catch (err: any) {
-      const linkErr = `Linking.openURL error: ${err?.message || String(err)}`;
-      log += `[FAIL] ${linkErr}\n`;
+    if (canOpenGmailApp) {
+      log += `[Gmail App Found] Opening native Gmail app...\n`;
+      await Linking.openURL(gmailAppScheme);
       return {
-        success: false,
-        message: `전송 실패: ${reasonMsg}`,
-        log: log,
+        success: true,
+        message: 'Gmail 앱이 열렸습니다. [전송]을 누르면 이메일이 발송됩니다.',
+        log,
       };
     }
-  }
 
-  log += `[FAIL] Web platform requires API keys for background send.\n`;
-  return {
-    success: false,
-    message: `전송 실패: ${reasonMsg}`,
-    log: log,
-  };
+    // Fallback to mailto / Gmail Web URL on mobile
+    log += `[2] Gmail app scheme not found, trying mailto / Gmail URL...\n`;
+    const canOpenMailto = await Linking.canOpenURL(mailtoUrl).catch(() => false);
+
+    if (canOpenMailto) {
+      log += `[Opening Mail App] Launching mailto scheme...\n`;
+      await Linking.openURL(mailtoUrl);
+      return {
+        success: true,
+        message: '이메일 앱이 열렸습니다. [전송]을 누르면 발송됩니다.',
+        log,
+      };
+    } else {
+      log += `[Opening Gmail Web] Launching browser Gmail composer...\n`;
+      await Linking.openURL(gmailWebUrl);
+      return {
+        success: true,
+        message: 'Gmail 웹 작성 창이 열렸습니다.',
+        log,
+      };
+    }
+  } catch (err: any) {
+    const errorDetail = err?.message || String(err);
+    log += `[EXCEPTION] ${errorDetail}\n`;
+    return {
+      success: false,
+      message: `Gmail 연결 실패: ${errorDetail}`,
+      log,
+    };
+  }
 }
