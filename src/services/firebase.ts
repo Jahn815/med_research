@@ -79,3 +79,71 @@ export async function saveSurveyResponseToFirestore(
     throw error;
   }
 }
+
+/**
+ * Sends an automated, anonymous email via Firebase Cloud Firestore '/mail' trigger collection
+ * Collection: 'mail'
+ */
+export async function sendEmailViaFirebase(
+  to: string,
+  subject: string,
+  bodyText: string
+): Promise<{ success: boolean; message: string; docId: string; log: string }> {
+  let log = `[${new Date().toLocaleTimeString()}] Firebase Email Trigger Initialized\n`;
+  log += `Target Recipient: ${to}\nFirebase Project: ${firebaseConfig.projectId}\nCollection: /mail\n`;
+
+  try {
+    const recipients = to
+      .split(',')
+      .map((e) => e.trim())
+      .filter((e) => e.includes('@'));
+
+    if (recipients.length === 0) {
+      const err = '유효한 이메일 주소를 입력해주세요.';
+      log += `[ERROR] ${err}\n`;
+      return {
+        success: false,
+        message: err,
+        docId: '',
+        log,
+      };
+    }
+
+    const mailRef = doc(collection(db, 'mail'));
+    const mailPayload = {
+      to: recipients,
+      message: {
+        subject: subject,
+        text: bodyText,
+        html: `<div style="font-family: Arial, sans-serif; line-height: 1.6; white-space: pre-wrap; font-size: 14px;">${bodyText.replace(/\n/g, '<br/>')}</div>`,
+      },
+      createdAt: serverTimestamp(),
+      createdAtIso: new Date().toISOString(),
+      sender: 'Maldeodeum Research Team',
+    };
+
+    log += `[Firestore WRITE] Document Path: /mail/${mailRef.id}\n`;
+    log += `Payload: To [${recipients.join(', ')}], Subject: "${subject}"\n`;
+
+    await setDoc(mailRef, mailPayload);
+
+    log += `[SUCCESS] Document created in Firestore /mail collection with ID: ${mailRef.id}\n`;
+
+    return {
+      success: true,
+      message: '파이어베이스(Firebase)를 통해 이메일 발송 요청이 성공적으로 완료되었습니다! ✉️',
+      docId: mailRef.id,
+      log,
+    };
+  } catch (err: any) {
+    const errorMsg = err?.message || String(err);
+    log += `[EXCEPTION] Firebase write failed: ${errorMsg}\n`;
+    console.error('[Firebase] Email trigger error:', errorMsg);
+    return {
+      success: false,
+      message: `파이어베이스 이메일 발송 오류: ${errorMsg}`,
+      docId: '',
+      log,
+    };
+  }
+}
