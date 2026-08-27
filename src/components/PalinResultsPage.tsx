@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Platform,
+  Linking,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ColorTheme } from '../theme/colors';
@@ -151,6 +152,33 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
     } else {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleEmailResults = () => {
+    const rawEmails = answers[1043373996];
+    let emails = '';
+    if (typeof rawEmails === 'string' && rawEmails.trim() !== '') {
+      emails = rawEmails.trim();
+    }
+
+    const summaryText = generatePalinSummaryText(answers);
+    const subject = encodeURIComponent(
+      lang === 'en'
+        ? '[Stuttering Study] Test Results & Factor Analysis Report'
+        : '[말더듬 연구 설문] 검사 결과 및 요인 분석 보고서'
+    );
+    const body = encodeURIComponent(summaryText);
+    const mailtoUrl = `mailto:${emails}?subject=${subject}&body=${body}`;
+
+    if (Platform.OS === 'web') {
+      if (typeof window !== 'undefined') {
+        window.location.href = mailtoUrl;
+      }
+    } else {
+      Linking.openURL(mailtoUrl).catch((err) => {
+        console.error('Failed to open email app:', err);
+      });
     }
   };
 
@@ -629,6 +657,17 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           >
             <Ionicons name={copied ? 'checkmark-circle' : 'copy-outline'} size={18} color="#FFF" />
             <Text style={styles.actionBtnText}>{copied ? t.copied : t.copySummary}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.actionBtn, { backgroundColor: '#8B5CF6' }]}
+            onPress={handleEmailResults}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="mail-outline" size={18} color="#FFF" />
+            <Text style={styles.actionBtnText}>
+              {lang === 'en' ? 'Email Results Report' : '검사 결과 이메일 발송'}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
