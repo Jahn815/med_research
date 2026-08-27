@@ -179,15 +179,20 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
         : '[말더듬 연구 설문] 검사 결과 및 요인 분석 보고서'
     );
     const body = encodeURIComponent(summaryText);
+
+    // Direct Gmail Web Composer URL
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodeURIComponent(emails)}&su=${subject}&body=${body}`;
     const mailtoUrl = `mailto:${emails}?subject=${subject}&body=${body}`;
 
     if (Platform.OS === 'web') {
       if (typeof window !== 'undefined') {
-        window.location.href = mailtoUrl;
+        window.open(gmailUrl, '_blank');
       }
     } else {
-      Linking.openURL(mailtoUrl).catch((err) => {
-        console.error('Failed to open email app:', err);
+      Linking.openURL(gmailUrl).catch(() => {
+        Linking.openURL(mailtoUrl).catch((err) => {
+          console.error('Failed to open email app:', err);
+        });
       });
     }
   };
@@ -618,14 +623,14 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           )}
         </View>
 
-        {/* RECIPIENT EMAIL SENDING CARD */}
+        {/* RECIPIENT EMAIL SENDING CARD (GMAIL) */}
         <View style={[styles.emailCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
           <View style={styles.emailCardHeader}>
-            <Ionicons name="mail-unread-sharp" size={20} color={theme.primary} />
+            <Ionicons name="logo-google" size={20} color="#EA4335" />
             <Text style={[styles.emailCardTitle, { color: theme.textPrimary }]}>
               {lang === 'en'
-                ? 'Send Test Results via Email (Optional)'
-                : '검사 결과 이메일 전송 (선택 항목)'}
+                ? 'Send Test Results via Gmail (Optional)'
+                : 'Gmail로 검사 결과 보내기 (선택 항목)'}
             </Text>
           </View>
           <Text style={[styles.emailCardDesc, { color: theme.textSecondary }]}>
@@ -663,13 +668,13 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           />
 
           <TouchableOpacity
-            style={[styles.sendEmailBtn, { backgroundColor: '#8B5CF6' }]}
+            style={[styles.sendEmailBtn, { backgroundColor: '#EA4335' }]}
             onPress={handleEmailResults}
             activeOpacity={0.85}
           >
-            <Ionicons name="paper-plane" size={18} color="#FFFFFF" style={{ marginRight: 6 }} />
+            <Ionicons name="logo-google" size={18} color="#FFFFFF" style={{ marginRight: 8 }} />
             <Text style={styles.sendEmailBtnText}>
-              {lang === 'en' ? 'Send Results to Email' : '검사 결과 이메일 발송하기'}
+              {lang === 'en' ? 'Open in Gmail & Send' : 'Gmail 작성 창 열어서 발송하기'}
             </Text>
           </TouchableOpacity>
         </View>
