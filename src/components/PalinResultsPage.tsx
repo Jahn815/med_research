@@ -19,6 +19,7 @@ import {
   palinFormSchema,
 } from '../services/palinSurveyService';
 import { saveSurveyResponseToFirestore } from '../services/firebase';
+import { sendEmailViaGmailSMTP } from '../services/emailService';
 import { Language, i18n } from '../i18n/translations';
 import { palinTranslationsEn } from '../i18n/palinTranslationsEn';
 
@@ -169,31 +170,51 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
     }
   };
 
-  const handleEmailResults = () => {
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [emailStatusMsg, setEmailStatusMsg] = useState<string>('');
+
+  const handleEmailResults = async () => {
     const emails = recipientEmails ? recipientEmails.trim() : '';
 
+    if (!emails) {
+      setEmailStatus('error');
+      setEmailStatusMsg(
+        lang === 'en'
+          ? 'Please enter a recipient email address above.'
+          : '받는 분의 이메일 주소를 위에 입력해주세요.'
+      );
+      return;
+    }
+
+    setEmailStatus('sending');
+    setEmailStatusMsg('');
+
     const summaryText = generatePalinSummaryText(mergedAnswers);
-    const subject = encodeURIComponent(
+    const subject =
       lang === 'en'
         ? '[Stuttering Study] Test Results & Factor Analysis Report'
-        : '[말더듬 연구 설문] 검사 결과 및 요인 분석 보고서'
-    );
-    const body = encodeURIComponent(summaryText);
+        : '[말더듬 연구 설문] 검사 결과 및 요인 분석 보고서';
 
-    // Direct Gmail Web Composer URL
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodeURIComponent(emails)}&su=${subject}&body=${body}`;
-    const mailtoUrl = `mailto:${emails}?subject=${subject}&body=${body}`;
-
-    if (Platform.OS === 'web') {
-      if (typeof window !== 'undefined') {
-        window.open(gmailUrl, '_blank');
-      }
-    } else {
-      Linking.openURL(gmailUrl).catch(() => {
-        Linking.openURL(mailtoUrl).catch((err) => {
-          console.error('Failed to open email app:', err);
-        });
+    try {
+      const res = await sendEmailViaGmailSMTP({
+        to: emails,
+        subject,
+        bodyText: summaryText,
       });
+
+      if (res.success) {
+        setEmailStatus('sent');
+        setEmailStatusMsg(res.message);
+      } else {
+        setEmailStatus('error');
+        setEmailStatusMsg(res.message);
+      }
+    } catch (err) {
+      console.error('Email send error:', err);
+      setEmailStatus('error');
+      setEmailStatusMsg(
+        lang === 'en' ? 'Failed to send email via Gmail SMTP.' : 'Gmail SMTP 이메일 발송에 실패하였습니다.'
+      );
     }
   };
 
@@ -668,15 +689,54 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           />
 
           <TouchableOpacity
-            style={[styles.sendEmailBtn, { backgroundColor: '#EA4335' }]}
+            style={[
+              styles.sendEmailBtn,
+              {
+                backgroundColor:
+                  emailStatus === 'sent'
+                    ? '#10B981'
+                    : emailStatus === 'error'
+                    ? '#EF4444'
+                    : '#EA4335',
+              },
+            ]}
             onPress={handleEmailResults}
+            disabled={emailStatus === 'sending'}
             activeOpacity={0.85}
           >
-            <Ionicons name="logo-google" size={18} color="#FFFFFF" style={{ marginRight: 8 }} />
+            <Ionicons
+              name={
+                emailStatus === 'sending'
+                  ? 'sync'
+                  : emailStatus === 'sent'
+                  ? 'checkmark-circle'
+                  : 'logo-google'
+              }
+              size={18}
+              color="#FFFFFF"
+              style={{ marginRight: 8 }}
+            />
             <Text style={styles.sendEmailBtnText}>
-              {lang === 'en' ? 'Open in Gmail & Send' : 'Gmail 작성 창 열어서 발송하기'}
+              {emailStatus === 'sending'
+                ? (lang === 'en' ? 'Sending via Gmail SMTP...' : 'Gmail SMTP로 전송 중...')
+                : emailStatus === 'sent'
+                ? (lang === 'en' ? 'Email Sent Successfully!' : '이메일 발송 완료!')
+                : (lang === 'en' ? 'Send via Gmail SMTP' : 'Gmail SMTP로 검사 결과 발송')}
             </Text>
           </TouchableOpacity>
+
+          {emailStatusMsg ? (
+            <Text
+              style={{
+                marginTop: 8,
+                fontSize: 12.5,
+                fontWeight: '600',
+                color: emailStatus === 'sent' ? '#10B981' : emailStatus === 'error' ? '#EF4444' : theme.textSecondary,
+              }}
+            >
+              {emailStatusMsg}
+            </Text>
+          ) : null}
         </View>
 
         {/* ACTION BUTTONS */}
