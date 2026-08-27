@@ -131,17 +131,17 @@ export async function sendEmailViaFirebase(
 
     return {
       success: true,
-      message: '파이어베이스(Firebase)를 통해 이메일 발송 요청이 성공적으로 완료되었습니다! ✉️',
+      message: '이메일 발송 요청이 성공적으로 완료되었습니다! ✉️',
       docId: mailRef.id,
       log,
     };
   } catch (err: any) {
     const errorMsg = err?.message || String(err);
-    log += `[EXCEPTION] Firebase write failed: ${errorMsg}\n`;
-    console.error('[Firebase] Email trigger error:', errorMsg);
+    log += `[EXCEPTION] Email write failed: ${errorMsg}\n`;
+    console.error('[Database] Email trigger error:', errorMsg);
     return {
       success: false,
-      message: `파이어베이스 이메일 발송 오류: ${errorMsg}`,
+      message: `이메일 발송 오류: ${errorMsg}`,
       docId: '',
       log,
     };

@@ -653,15 +653,15 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           )}
         </View>
 
-        {/* RECIPIENT EMAIL SENDING CARD (FIREBASE AUTOMATED DISPATCH) */}
+        {/* RECIPIENT EMAIL SENDING CARD */}
         {Platform.OS !== 'web' && (
           <View style={[styles.emailCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
             <View style={styles.emailCardHeader}>
-              <Ionicons name="flame-sharp" size={20} color="#FF9800" />
+              <Ionicons name="mail-unread-sharp" size={20} color={theme.primary} />
               <Text style={[styles.emailCardTitle, { color: theme.textPrimary }]}>
                 {lang === 'en'
-                  ? 'Send Test Results via Firebase (Optional)'
-                  : '파이어베이스(Firebase)로 이메일 보내기 (선택 항목)'}
+                  ? 'Send Test Results via Email (Optional)'
+                  : '검사 결과 이메일 전송 (선택 항목)'}
               </Text>
             </View>
             <Text style={[styles.emailCardDesc, { color: theme.textSecondary }]}>
@@ -707,7 +707,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
                       ? '#10B981'
                       : emailStatus === 'error'
                       ? '#EF4444'
-                      : '#FF9800',
+                      : theme.primary,
                 },
               ]}
               onPress={handleEmailResults}
@@ -720,7 +720,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
                     ? 'sync'
                     : emailStatus === 'sent'
                     ? 'checkmark-circle'
-                    : 'flame'
+                    : 'paper-plane-sharp'
                 }
                 size={18}
                 color="#FFFFFF"
@@ -728,10 +728,10 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
               />
               <Text style={styles.sendEmailBtnText}>
                 {emailStatus === 'sending'
-                  ? (lang === 'en' ? 'Sending via Firebase...' : '파이어베이스로 이메일 전송 중...')
+                  ? (lang === 'en' ? 'Sending Email...' : '이메일 전송 중...')
                   : emailStatus === 'sent'
-                  ? (lang === 'en' ? 'Email Sent via Firebase!' : '파이어베이스 이메일 발송 완료!')
-                  : (lang === 'en' ? 'Send Email via Firebase' : '파이어베이스로 이메일 보내기')}
+                  ? (lang === 'en' ? 'Email Sent Successfully!' : '이메일 발송 완료!')
+                  : (lang === 'en' ? 'Send Email' : '검사 결과 이메일 보내기')}
               </Text>
             </TouchableOpacity>
 
@@ -825,12 +825,12 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
             />
             <Text style={styles.actionBtnText}>
               {saveStatus === 'saving'
-                ? lang === 'en' ? 'Saving to Database...' : 'DB에 저장 중...'
+                ? lang === 'en' ? 'Saving to Cloud...' : '클라우드 저장 중...'
                 : saveStatus === 'saved'
-                ? lang === 'en' ? 'Saved to Database!' : 'DB 저장 완료!'
+                ? lang === 'en' ? 'Saved to Cloud!' : '클라우드 저장 완료!'
                 : saveStatus === 'error'
-                ? lang === 'en' ? 'Error Saving (Check Config)' : '저장 실패 (설정 확인)'
-                : lang === 'en' ? 'Save to Firebase Cloud DB' : '파이어베이스 클라우드 DB에 저장'}
+                ? lang === 'en' ? 'Error Saving' : '저장 실패'
+                : lang === 'en' ? 'Save Results to Cloud' : '클라우드에 결과 저장하기'}
             </Text>
           </TouchableOpacity>
 
