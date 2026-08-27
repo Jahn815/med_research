@@ -633,14 +633,6 @@
           "description": null,
           "type": "short_answer",
           "options": null
-        },
-        {
-          "id": 1043373996,
-          "number": 20,
-          "text": "검사 결과를 다른 사람에게 보내고 싶다면, 받는 분의 이메일을 적어주세요. (여러 사람에게 보내려면 이메일 사이에 쉼표를 넣어주세요)",
-          "description": null,
-          "type": "paragraph",
-          "options": null
         }
       ]
     },

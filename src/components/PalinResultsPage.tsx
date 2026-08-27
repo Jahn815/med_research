@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Platform,
   Linking,
+  TextInput,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ColorTheme } from '../theme/colors';
@@ -60,7 +61,20 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
   const [copied, setCopied] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [savedDocId, setSavedDocId] = useState<string | null>(existingDocId || null);
-  const scores = calculatePalinScores(answers);
+  const [recipientEmails, setRecipientEmails] = useState<string>(
+    typeof answers[1043373996] === 'string' ? String(answers[1043373996]) : ''
+  );
+  const [emailInputHeight, setEmailInputHeight] = useState<number>(70);
+
+  const mergedAnswers: PalinAnswers = React.useMemo(() => {
+    const res: PalinAnswers = { ...answers };
+    if (recipientEmails && recipientEmails.trim() !== '') {
+      res[1043373996] = recipientEmails.trim();
+    }
+    return res;
+  }, [answers, recipientEmails]);
+
+  const scores = calculatePalinScores(mergedAnswers);
   const f1 = scores.factor1;
   const f2 = scores.factor2;
   const f3 = scores.factor3;
@@ -72,7 +86,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
       setSaveStatus('saving');
       const docIdToUse = existingDocId || savedDocId || undefined;
       const docId = await saveSurveyResponseToFirestore({
-        answers,
+        answers: mergedAnswers,
         scores,
         locale: lang,
         metadata: {
@@ -95,8 +109,8 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
   React.useEffect(() => {
     let isMounted = true;
     const autoSave = async () => {
-      const answeredCount = Object.keys(answers).filter(
-        (k) => answers[Number(k)] !== undefined && answers[Number(k)] !== ''
+      const answeredCount = Object.keys(mergedAnswers).filter(
+        (k) => mergedAnswers[Number(k)] !== undefined && mergedAnswers[Number(k)] !== ''
       ).length;
 
       if (answeredCount === 0) return;
@@ -106,7 +120,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
         const docIdToUse = existingDocId || savedDocId || undefined;
         const resDocId = await saveSurveyResponseToFirestore(
           {
-            answers,
+            answers: mergedAnswers,
             scores,
             locale: lang,
             metadata: {
@@ -137,10 +151,10 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [answers]);
+  }, [mergedAnswers]);
 
   const handleCopyText = () => {
-    const text = generatePalinSummaryText(answers);
+    const text = generatePalinSummaryText(mergedAnswers);
     if (Platform.OS === 'web') {
       try {
         navigator.clipboard.writeText(text);
@@ -156,13 +170,9 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
   };
 
   const handleEmailResults = () => {
-    const rawEmails = answers[1043373996];
-    let emails = '';
-    if (typeof rawEmails === 'string' && rawEmails.trim() !== '') {
-      emails = rawEmails.trim();
-    }
+    const emails = recipientEmails ? recipientEmails.trim() : '';
 
-    const summaryText = generatePalinSummaryText(answers);
+    const summaryText = generatePalinSummaryText(mergedAnswers);
     const subject = encodeURIComponent(
       lang === 'en'
         ? '[Stuttering Study] Test Results & Factor Analysis Report'
@@ -608,6 +618,62 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           )}
         </View>
 
+        {/* RECIPIENT EMAIL SENDING CARD */}
+        <View style={[styles.emailCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
+          <View style={styles.emailCardHeader}>
+            <Ionicons name="mail-unread-sharp" size={20} color={theme.primary} />
+            <Text style={[styles.emailCardTitle, { color: theme.textPrimary }]}>
+              {lang === 'en'
+                ? 'Send Test Results via Email (Optional)'
+                : '검사 결과 이메일 전송 (선택 항목)'}
+            </Text>
+          </View>
+          <Text style={[styles.emailCardDesc, { color: theme.textSecondary }]}>
+            {lang === 'en'
+              ? "If you would like to send the test results to someone else, please enter the recipient's email address. (If sending to multiple people, please separate emails with a comma.)"
+              : '검사 결과를 다른 사람에게 보내고 싶다면, 받는 분의 이메일을 적어주세요. (여러 사람에게 보내려면 이메일 사이에 쉼표를 넣어주세요)'}
+          </Text>
+
+          <TextInput
+            style={[
+              styles.emailInput,
+              {
+                backgroundColor: theme.inputBg,
+                borderColor: theme.inputBorder,
+                color: theme.textPrimary,
+                minHeight: 70,
+                height: Math.max(70, emailInputHeight),
+              },
+            ]}
+            value={recipientEmails}
+            onChangeText={(text) => setRecipientEmails(text)}
+            onContentSizeChange={(e) => {
+              setEmailInputHeight(Math.max(70, e.nativeEvent.contentSize.height + 16));
+            }}
+            placeholder={
+              lang === 'en'
+                ? 'e.g., teacher@school.com, doctor@clinic.com'
+                : '예: teacher@school.com, doctor@clinic.com (이메일 주소 입력)'
+            }
+            placeholderTextColor={theme.textMuted}
+            multiline={true}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            textAlignVertical="top"
+          />
+
+          <TouchableOpacity
+            style={[styles.sendEmailBtn, { backgroundColor: '#8B5CF6' }]}
+            onPress={handleEmailResults}
+            activeOpacity={0.85}
+          >
+            <Ionicons name="paper-plane" size={18} color="#FFFFFF" style={{ marginRight: 6 }} />
+            <Text style={styles.sendEmailBtnText}>
+              {lang === 'en' ? 'Send Results to Email' : '검사 결과 이메일 발송하기'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         {/* ACTION BUTTONS */}
         <View style={styles.actionsGroup}>
           <TouchableOpacity
@@ -657,17 +723,6 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           >
             <Ionicons name={copied ? 'checkmark-circle' : 'copy-outline'} size={18} color="#FFF" />
             <Text style={styles.actionBtnText}>{copied ? t.copied : t.copySummary}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.actionBtn, { backgroundColor: '#8B5CF6' }]}
-            onPress={handleEmailResults}
-            activeOpacity={0.8}
-          >
-            <Ionicons name="mail-outline" size={18} color="#FFF" />
-            <Text style={styles.actionBtnText}>
-              {lang === 'en' ? 'Email Results Report' : '검사 결과 이메일 발송'}
-            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -987,6 +1042,49 @@ const styles = StyleSheet.create({
     gap: 12,
     alignItems: 'center',
     marginTop: 8,
+  },
+  emailCard: {
+    padding: 18,
+    borderRadius: 16,
+    borderWidth: 1,
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emailCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 8,
+  },
+  emailCardTitle: {
+    fontSize: 15.5,
+    fontWeight: '800',
+  },
+  emailCardDesc: {
+    fontSize: 12.5,
+    lineHeight: 18,
+    marginBottom: 12,
+  },
+  emailInput: {
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  sendEmailBtn: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 13,
+    borderRadius: 12,
+  },
+  sendEmailBtnText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '800',
   },
   switchQuizTitle: {
     fontSize: 14,
