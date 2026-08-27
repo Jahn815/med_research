@@ -172,8 +172,6 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
 
   const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [emailStatusMsg, setEmailStatusMsg] = useState<string>('');
-  const [emailLog, setEmailLog] = useState<string>('');
-  const [showLogDetails, setShowLogDetails] = useState<boolean>(false);
 
   const handleEmailResults = async () => {
     const emails = recipientEmails ? recipientEmails.trim() : '';
@@ -190,7 +188,6 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
 
     setEmailStatus('sending');
     setEmailStatusMsg('');
-    setEmailLog('');
 
     const summaryText = generatePalinSummaryText(mergedAnswers);
     const subject =
@@ -205,15 +202,12 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
         bodyText: summaryText,
       });
 
-      setEmailLog(res.log || '');
-
       if (res.success) {
         setEmailStatus('sent');
         setEmailStatusMsg(res.message);
       } else {
         setEmailStatus('error');
         setEmailStatusMsg(res.message);
-        setShowLogDetails(true);
       }
     } catch (err: any) {
       console.error('Email send error:', err);
@@ -222,8 +216,6 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
       setEmailStatusMsg(
         lang === 'en' ? `Failed to send email: ${errDetail}` : `이메일 발송 오류: ${errDetail}`
       );
-      setEmailLog(`[EXCEPTION] ${errDetail}\n`);
-      setShowLogDetails(true);
     }
   };
 
@@ -746,48 +738,6 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
               >
                 {emailStatusMsg}
               </Text>
-            ) : null}
-
-            {emailLog ? (
-              <View style={{ marginTop: 10 }}>
-                <TouchableOpacity
-                  style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingVertical: 4 }}
-                  onPress={() => setShowLogDetails(!showLogDetails)}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons
-                    name={showLogDetails ? 'chevron-down' : 'chevron-forward'}
-                    size={14}
-                    color={theme.textSecondary}
-                  />
-                  <Text style={{ fontSize: 12, fontWeight: '700', color: theme.textSecondary }}>
-                    {lang === 'en' ? '🔍 Diagnostic Log (Tap to View)' : '🔍 전송 상세 진단 로그 (터치하여 열기/접기)'}
-                  </Text>
-                </TouchableOpacity>
-
-                {showLogDetails && (
-                  <View
-                    style={{
-                      backgroundColor: '#1E293B',
-                      borderRadius: 10,
-                      padding: 12,
-                      marginTop: 6,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: '#38BDF8',
-                        fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-                        fontSize: 11,
-                        lineHeight: 16,
-                      }}
-                      selectable={true}
-                    >
-                      {emailLog}
-                    </Text>
-                  </View>
-                )}
-              </View>
             ) : null}
           </View>
         )}
