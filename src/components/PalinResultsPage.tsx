@@ -653,15 +653,15 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
           )}
         </View>
 
-        {/* RECIPIENT EMAIL SENDING CARD (GMAIL MOBILE APP) */}
+        {/* RECIPIENT EMAIL SENDING CARD (GMAIL SMTP DIRECT DISPATCH) */}
         {Platform.OS !== 'web' && (
           <View style={[styles.emailCard, { backgroundColor: theme.cardBg, borderColor: theme.cardBorder }]}>
             <View style={styles.emailCardHeader}>
-              <Ionicons name="logo-google" size={20} color="#EA4335" />
+              <Ionicons name="server-sharp" size={20} color="#EA4335" />
               <Text style={[styles.emailCardTitle, { color: theme.textPrimary }]}>
                 {lang === 'en'
-                  ? 'Send Test Results via Gmail (Optional)'
-                  : 'Gmail 앱으로 검사 결과 보내기 (선택 항목)'}
+                  ? 'Send Test Results via Gmail SMTP (Optional)'
+                  : 'Gmail SMTP로 검사 결과 보내기 (선택 항목)'}
               </Text>
             </View>
             <Text style={[styles.emailCardDesc, { color: theme.textSecondary }]}>
@@ -720,7 +720,7 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
                     ? 'sync'
                     : emailStatus === 'sent'
                     ? 'checkmark-circle'
-                    : 'logo-google'
+                    : 'mail-sharp'
                 }
                 size={18}
                 color="#FFFFFF"
@@ -728,10 +728,10 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
               />
               <Text style={styles.sendEmailBtnText}>
                 {emailStatus === 'sending'
-                  ? (lang === 'en' ? 'Opening Gmail App...' : 'Gmail 앱으로 연결 중...')
+                  ? (lang === 'en' ? 'Sending via Gmail SMTP...' : 'Gmail SMTP로 전송 중...')
                   : emailStatus === 'sent'
-                  ? (lang === 'en' ? 'Gmail App Opened!' : 'Gmail 앱 연결 완료!')
-                  : (lang === 'en' ? 'Open Gmail & Send' : 'Gmail 앱 열어서 이메일 보내기')}
+                  ? (lang === 'en' ? 'Email Sent via Gmail SMTP!' : 'Gmail SMTP로 이메일 발송 완료!')
+                  : (lang === 'en' ? 'Send via Gmail SMTP' : 'Gmail SMTP로 검사 결과 보내기')}
               </Text>
             </TouchableOpacity>
 
