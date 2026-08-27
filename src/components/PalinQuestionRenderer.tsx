@@ -177,10 +177,12 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
 
       {/* 2. TEXT INPUT (SHORT ANSWER OR PARAGRAPH) */}
       {(question.type === 'short_answer' || question.type === 'paragraph') && (() => {
+        const [contentHeight, setContentHeight] = useState<number>(80);
         const isBirthdateQuestion = question.id === 1100613129;
         const isMonthYearQuestion = question.id === 744630384;
         const isPhoneQuestion = question.id === 1043373993;
-        const isEmailQuestion = question.id === 1043373994 || question.text.includes('이메일');
+        const isEmailQuestion = question.id === 1043373994;
+        const isRecipientEmailsQuestion = question.id === 1043373996 || question.text.includes('다른 사람에게 보내고');
         const isRegionQuestion = question.id === 1043373995 || question.text.includes('어느지역');
         const isInitialsQuestion = question.id === 999001122 || question.text.includes('이니셜');
 
@@ -202,6 +204,8 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
               ? "e.g., 010-1234-5678"
               : isEmailQuestion
               ? "e.g., example@domain.com"
+              : isRecipientEmailsQuestion
+              ? "e.g., teacher@school.com, doctor@clinic.com"
               : isRegionQuestion
               ? "e.g., Seoul"
               : question.number === 4
@@ -217,6 +221,8 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
             ? "예: 010-1234-5678 (전화번호 입력)"
             : isEmailQuestion
             ? "예: example@domain.com (이메일 주소 입력)"
+            : isRecipientEmailsQuestion
+            ? "예: teacher@school.com, doctor@clinic.com (이메일 주소 여러 개 입력 가능)"
             : isRegionQuestion
             ? "예: 서울 (지역/도시 입력)"
             : question.number === 4
@@ -294,18 +300,26 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
                   backgroundColor: theme.inputBg,
                   borderColor: theme.inputBorder,
                   color: theme.textPrimary,
-                  height: isSingleLine ? 46 : 90,
+                  minHeight: isSingleLine ? 46 : 80,
+                  height: isSingleLine ? 46 : Math.max(80, contentHeight),
                   textAlignVertical: isSingleLine ? 'center' : 'top',
+                  paddingTop: isSingleLine ? 0 : 12,
+                  paddingBottom: isSingleLine ? 0 : 12,
                 },
               ]}
               value={value !== undefined ? String(value) : ''}
               onChangeText={handleTextChange}
+              onContentSizeChange={(e) => {
+                if (!isSingleLine) {
+                  setContentHeight(Math.max(80, e.nativeEvent.contentSize.height + 16));
+                }
+              }}
               placeholder={placeholder}
               placeholderTextColor={theme.textMuted}
               multiline={!isSingleLine}
               maxLength={isInitialsQuestion ? 2 : undefined}
-              autoCapitalize={isInitialsQuestion ? 'characters' : isEmailQuestion ? 'none' : 'sentences'}
-              keyboardType={isPhoneQuestion ? 'phone-pad' : isEmailQuestion ? 'email-address' : question.number === 4 ? 'numeric' : 'default'}
+              autoCapitalize={isInitialsQuestion ? 'characters' : (isEmailQuestion || isRecipientEmailsQuestion) ? 'none' : 'sentences'}
+              keyboardType={isPhoneQuestion ? 'phone-pad' : isEmailQuestion ? 'email-address' : isRecipientEmailsQuestion ? 'email-address' : question.number === 4 ? 'numeric' : 'default'}
             />
 
             {isBirthdateQuestion && (

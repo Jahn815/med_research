@@ -186,6 +186,9 @@ export const palinTranslationsEn: Record<number, { text: string; description?: s
   1043373995: {
     text: 'Which region/city do you live in? (e.g., Seoul)',
   },
+  1043373996: {
+    text: "If you would like to send the test results to someone else, please enter the recipient's email address. (If sending to multiple people, please separate emails with a comma.)",
+  },
   999001122: {
     text: "Parent/Guardian Initials (2 English letters)",
     description: "Please enter 2 English alphabet letters for parent/guardian initials (e.g., HD for Hong Gildong). No numbers or symbols allowed.",
