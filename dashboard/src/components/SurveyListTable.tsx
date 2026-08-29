@@ -6,12 +6,14 @@ interface SurveyListTableProps {
   responses: FirestoreSurveyDoc[];
   onSelectResponse: (doc: FirestoreSurveyDoc) => void;
   onOpenSeedModal?: () => void;
+  onOpenExportModal?: () => void;
 }
 
 export const SurveyListTable: React.FC<SurveyListTableProps> = ({
   responses,
   onSelectResponse,
   onOpenSeedModal,
+  onOpenExportModal,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
@@ -73,6 +75,16 @@ export const SurveyListTable: React.FC<SurveyListTableProps> = ({
           >
             {sortOrder === 'desc' ? '최신순' : '오래된순'}
           </button>
+
+          {onOpenExportModal && (
+            <button
+              onClick={onOpenExportModal}
+              className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-xs font-semibold flex items-center gap-1.5 shadow-sm transition"
+            >
+              <span>📊</span>
+              <span>SQL / 엑셀 데이터 추출</span>
+            </button>
+          )}
 
           {onOpenSeedModal && (
             <button

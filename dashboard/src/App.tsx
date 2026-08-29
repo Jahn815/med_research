@@ -5,6 +5,7 @@ import { AverageStatsHeader } from './components/AverageStatsHeader';
 import { SurveyListTable } from './components/SurveyListTable';
 import { SurveyDetailModal } from './components/SurveyDetailModal';
 import { SeedMockDataModal } from './components/SeedMockDataModal';
+import { ExportDataModal } from './components/ExportDataModal';
 
 export function App() {
   const [responses, setResponses] = useState<FirestoreSurveyDoc[]>([]);
@@ -12,6 +13,7 @@ export function App() {
   const [error, setError] = useState<string | null>(null);
   const [selectedDoc, setSelectedDoc] = useState<FirestoreSurveyDoc | null>(null);
   const [isSeedModalOpen, setIsSeedModalOpen] = useState<boolean>(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
 
   const loadData = useCallback(async () => {
     setIsLoading(true);
@@ -43,9 +45,18 @@ export function App() {
             <span className="text-xs text-slate-400 font-mono">med_research</span>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-slate-500">
-            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span>Firestore Live</span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsExportModalOpen(true)}
+              className="px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-indigo-200"
+            >
+              <span>📊</span>
+              <span>SQL / 엑셀 데이터 추출</span>
+            </button>
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 ml-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>Live</span>
+            </div>
           </div>
         </div>
       </header>
@@ -80,6 +91,7 @@ export function App() {
               responses={responses}
               onSelectResponse={(doc) => setSelectedDoc(doc)}
               onOpenSeedModal={() => setIsSeedModalOpen(true)}
+              onOpenExportModal={() => setIsExportModalOpen(true)}
             />
           </>
         )}
@@ -102,6 +114,15 @@ export function App() {
             setIsSeedModalOpen(false);
             loadData();
           }}
+        />
+      )}
+
+      {/* Export Data Modal */}
+      {isExportModalOpen && (
+        <ExportDataModal
+          isOpen={isExportModalOpen}
+          onClose={() => setIsExportModalOpen(false)}
+          responses={responses}
         />
       )}
     </div>
