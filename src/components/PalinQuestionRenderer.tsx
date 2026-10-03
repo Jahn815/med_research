@@ -18,6 +18,7 @@ interface PalinQuestionRendererProps {
   displayNumber?: number;
   prefix?: string;
   hideBadge?: boolean;
+  required?: boolean;
 }
 
 export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
@@ -29,6 +30,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
   displayNumber,
   prefix = 'Q',
   hideBadge = false,
+  required = false,
 }) => {
   const enTrans = lang === 'en' ? palinTranslationsEn[question.id] : undefined;
 
@@ -97,6 +99,7 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
     }
   };
 
+
   return (
     <View
       style={[
@@ -112,8 +115,17 @@ export const PalinQuestionRenderer: React.FC<PalinQuestionRendererProps> = ({
       {/* Question Header */}
       <View style={[styles.headerRow, hideBadge && { justifyContent: 'center', width: '100%', marginBottom: 12 }]}>
         {!hideBadge && (
-          <View style={[styles.qNumBadge, { backgroundColor: theme.primaryLight }]}>
-            <Text style={[styles.qNumText, { color: theme.primary }]}>{badgeText}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <View style={[styles.qNumBadge, { backgroundColor: theme.primaryLight }]}>
+              <Text style={[styles.qNumText, { color: theme.primary }]}>{badgeText}</Text>
+            </View>
+            {required && (
+              <View style={{ backgroundColor: '#FEE2E2', paddingHorizontal: 5, paddingVertical: 2, borderRadius: 5 }}>
+                <Text style={{ fontSize: 10, fontWeight: '800', color: '#DC2626' }}>
+                  {lang === 'en' ? 'Required' : '필수'}
+                </Text>
+              </View>
+            )}
           </View>
         )}
         <Text

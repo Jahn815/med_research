@@ -63,6 +63,23 @@ export const PalinSurveyView: React.FC<PalinSurveyViewProps> = ({
   const t = i18n[currentLang];
   const allQuestions = useMemo(() => getAllPalinQuestions(), []);
 
+  // Required question IDs — Background Info display Q1,2,4-6,8-11,13,16-18
+  const REQUIRED_QUESTION_IDS = useMemo(() => new Set([
+    1043373993,  // Q1  전화번호
+    1043373994,  // Q2  이메일
+    999001122,   // Q4  이니셜
+    712970807,   // Q5  진단 여부
+    148068858,   // Q6  보고자 관계
+    1525865811,  // Q8  최종학력
+    1100613129,  // Q9  아동 나이
+    134861503,   // Q10 성별
+    528139896,   // Q11 가족력
+    1016082815,  // Q13 치료 여부
+    1665081174,  // Q16 변화
+    1512095907,  // Q17 인식
+    1466102584,  // Q18 기타문제
+  ]), []);
+
   const sbisIds = [2015490662, 1544182638, 1140751121, 2129570078, 676432939];
   const sbisAnsweredCount = useMemo(() => {
     return sbisIds.filter((id) => answers[id] !== undefined && answers[id] !== '').length;
@@ -423,47 +440,103 @@ Your responses will be kept strictly anonymous and confidential.`;
                 onChange={(val) => handleAnswerChange(q.id, val)}
                 theme={theme}
                 lang={lang}
+                required={REQUIRED_QUESTION_IDS.has(q.id)}
               />
             ))}
 
-            {/* Bottom Nav for Tab 1 */}
-            <View style={styles.bottomNavRow}>
-              <TouchableOpacity
-                style={[styles.btn, styles.prevBtn, { borderColor: theme.cardBorder }]}
-                onPress={() => setActiveSecIndex(0)}
-              >
-                <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
-                <Text style={[styles.btnText, { color: theme.textPrimary }]}>
-                  {lang === 'en' ? 'Prev: Consent' : '이전: 연구 동의'}
-                </Text>
-              </TouchableOpacity>
+            {/* Required Questions Status */}
+            {(() => {
+              const requiredIds = Array.from(REQUIRED_QUESTION_IDS);
+              const sectionQIds = palinFormSchema.sections[1].questions.map((q) => q.id);
+              const sectionRequiredIds = requiredIds.filter((id) => sectionQIds.includes(id));
+              const unansweredCount = sectionRequiredIds.filter(
+                (id) => answers[id] === undefined || answers[id] === ''
+              ).length;
+              if (unansweredCount > 0) {
+                return (
+                  <View style={[styles.warningBox, { backgroundColor: '#FEF3C7', borderColor: '#F59E0B', paddingVertical: 10 }]}>
+                    <Ionicons name="alert-circle" size={20} color="#D97706" />
+                    <View style={{ flex: 1 }}>
+                      <Text style={{ fontSize: 13, fontWeight: '700', color: '#92400E' }}>
+                        {lang === 'en'
+                          ? `${unansweredCount} required question(s) not yet answered`
+                          : `필수 문항 ${unansweredCount}개가 아직 미응답 상태입니다`}
+                      </Text>
+                      <Text style={{ fontSize: 11, color: '#92400E', marginTop: 2 }}>
+                        {lang === 'en'
+                          ? 'Please answer all required (*) questions before proceeding.'
+                          : '* 표시된 필수 문항을 모두 작성해주세요.'}
+                      </Text>
+                    </View>
+                  </View>
+                );
+              }
+              return (
+                <View style={[styles.warningBox, { backgroundColor: '#ECFDF5', borderColor: '#10B981', paddingVertical: 10 }]}>
+                  <Ionicons name="checkmark-circle" size={20} color="#059669" />
+                  <Text style={{ fontSize: 13, fontWeight: '700', color: '#065F46' }}>
+                    {lang === 'en' ? 'All required questions answered ✓' : '필수 문항을 모두 작성했습니다 ✓'}
+                  </Text>
+                </View>
+              );
+            })()}
 
-              <TouchableOpacity
-                style={[
-                  styles.btn,
-                  styles.nextBtn,
-                  {
-                    backgroundColor: isLocked ? '#9CA3AF' : theme.primary,
-                    flex: 1,
-                    opacity: isLocked ? 0.7 : 1,
-                  },
-                ]}
-                onPress={() => {
-                  if (!isLocked) setActiveSecIndex(2);
-                }}
-                disabled={isLocked}
-              >
-                <Ionicons
-                  name={isLocked ? 'lock-closed' : 'grid-outline'}
-                  size={18}
-                  color="#FFFFFF"
-                  style={{ marginRight: 6 }}
-                />
-                <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '800' }]}>
-                  {lang === 'en' ? 'Next: Choose Quiz' : '다음: 검사 선택 화면으로'}
-                </Text>
-              </TouchableOpacity>
-            </View>
+            {/* Bottom Nav for Tab 1 */}
+            {(() => {
+              const sectionQIds = palinFormSchema.sections[1].questions.map((q) => q.id);
+              const sectionRequiredIds = Array.from(REQUIRED_QUESTION_IDS).filter((id) => sectionQIds.includes(id));
+              const unansweredRequired = sectionRequiredIds.filter(
+                (id) => answers[id] === undefined || answers[id] === ''
+              ).length;
+              const isRequiredBlocked = unansweredRequired > 0;
+              const isNextBlocked = isLocked || isRequiredBlocked;
+
+              return (
+                <View style={styles.bottomNavRow}>
+                  <TouchableOpacity
+                    style={[styles.btn, styles.prevBtn, { borderColor: theme.cardBorder }]}
+                    onPress={() => setActiveSecIndex(0)}
+                  >
+                    <Ionicons name="chevron-back" size={18} color={theme.textPrimary} />
+                    <Text style={[styles.btnText, { color: theme.textPrimary }]}>
+                      {lang === 'en' ? 'Prev: Consent' : '이전: 연구 동의'}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.btn,
+                      styles.nextBtn,
+                      {
+                        backgroundColor: isNextBlocked ? '#9CA3AF' : theme.primary,
+                        flex: 1,
+                        opacity: isNextBlocked ? 0.7 : 1,
+                      },
+                    ]}
+                    onPress={() => {
+                      if (!isNextBlocked) setActiveSecIndex(2);
+                    }}
+                    disabled={isNextBlocked}
+                  >
+                    <Ionicons
+                      name={isNextBlocked ? 'lock-closed' : 'grid-outline'}
+                      size={18}
+                      color="#FFFFFF"
+                      style={{ marginRight: 6 }}
+                    />
+                    <Text style={[styles.btnText, { color: '#FFFFFF', fontWeight: '800' }]}>
+                      {isLocked
+                        ? (lang === 'en' ? 'Consent Required' : '동의 필요')
+                        : isRequiredBlocked
+                        ? (lang === 'en'
+                            ? `${unansweredRequired} required field(s) remaining`
+                            : `필수 문항 ${unansweredRequired}개 미완료`)
+                        : (lang === 'en' ? 'Next: Choose Quiz' : '다음: 검사 선택 화면으로')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            })()}
           </>
         )}
 
