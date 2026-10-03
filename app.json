@@ -2,7 +2,7 @@
   "expo": {
     "name": "말더듬아동 부모 설문지",
     "slug": "stuttering-parent-questionnaire",
-    "version": "1.0.0",
+    "version": "0.3.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
