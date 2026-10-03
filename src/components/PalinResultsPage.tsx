@@ -423,14 +423,15 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
                   </Text>
                 </View>
                 <View style={styles.scoreContainer}>
-                  <Text style={[styles.factorScoreValue, { color: theme.primary }]}>
-                    {f1.score}
-                  </Text>
                   <View style={[styles.levelBadge, { backgroundColor: f1.badgeColor }]}>
                     <Text style={styles.levelBadgeText}>
                       {lang === 'en' ? f1.levelLabelEn : f1.levelLabelKr}
                     </Text>
                   </View>
+                  <Text style={[styles.factorScoreSmall, { color: theme.primary }]}>
+                    {f1.score}
+                  </Text>
+
                 </View>
               </View>
 
@@ -477,14 +478,15 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
               </Text>
             </View>
             <View style={styles.scoreContainer}>
-              <Text style={[styles.factorScoreValue, { color: theme.accent }]}>
-                {f2.score}
-              </Text>
               <View style={[styles.levelBadge, { backgroundColor: f2.badgeColor }]}>
                 <Text style={styles.levelBadgeText}>
                   {lang === 'en' ? f2.levelLabelEn : f2.levelLabelKr}
                 </Text>
               </View>
+              <Text style={[styles.factorScoreSmall, { color: theme.accent }]}>
+                {f2.score}
+              </Text>
+
             </View>
           </View>
 
@@ -533,14 +535,15 @@ export const PalinResultsPage: React.FC<PalinResultsPageProps> = ({
               </Text>
             </View>
             <View style={styles.scoreContainer}>
-              <Text style={[styles.factorScoreValue, { color: '#8B5CF6' }]}>
-                {f3.score}
-              </Text>
               <View style={[styles.levelBadge, { backgroundColor: f3.badgeColor }]}>
                 <Text style={styles.levelBadgeText}>
                   {lang === 'en' ? f3.levelLabelEn : f3.levelLabelKr}
                 </Text>
               </View>
+              <Text style={[styles.factorScoreSmall, { color: '#8B5CF6' }]}>
+                {f3.score}
+              </Text>
+
             </View>
           </View>
 
@@ -943,17 +946,22 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     textAlign: 'right',
   },
-  levelBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 8,
-    alignSelf: 'flex-end',
+  factorScoreSmall: {
+    fontSize: 13,
+    fontWeight: '700',
+    textAlign: 'center',
     marginTop: 4,
+  },
+  levelBadge: {
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 12,
+    alignSelf: 'flex-end',
   },
   levelBadgeText: {
     color: '#FFF',
-    fontSize: 11,
-    fontWeight: '800',
+    fontSize: 18,
+    fontWeight: '900',
   },
   scaleAssessmentCard: {
     padding: 12,
